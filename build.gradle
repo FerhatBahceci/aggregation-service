@@ -1,0 +1,61 @@
+import org.springframework.cloud.contract.verifier.config.TestFramework
+import org.springframework.cloud.contract.verifier.config.TestMode
+
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'org.springframework.boot' version '3.0.5'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.cloud.contract' version '4.0.2'
+}
+
+group = 'com.fedex'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2022.0.2")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'com.ninja-squad:springmockk:4.0.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'io.rest-assured:spring-web-test-client'
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-verifier'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('contractTest') {
+    useJUnitPlatform()
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+contracts {
+    testMode = TestMode.EXPLICIT
+    baseClassForTests = 'com.fedex.aggregation.service'
+    testFramework = TestFramework.JUNIT5
+    baseClassForTests = 'com.fedex.aggregation.service.AggregationBase'
+}
+
+

@@ -1,0 +1,7 @@
+provider-api:
+  shipment:
+    http://localhost:8080
+  tracking:
+    http://localhost:8080
+  pricing:
+    http://localhost:8080

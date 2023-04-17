@@ -1,0 +1,23 @@
+{
+  "id" : "df310120-0659-42c7-8847-d30ac3f2021f",
+  "request" : {
+    "urlPath" : "/aggregation",
+    "method" : "GET",
+    "queryParameters" : {
+      "pricing" : {
+        "equalTo" : "SE,GB,ES"
+      },
+      "track" : {
+        "equalTo" : "123456789,123456799"
+      },
+      "shipments" : {
+        "equalTo" : "123456789,123456799"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "df310120-0659-42c7-8847-d30ac3f2021f"
+}

@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  fedex:
+    image: xyzassessment/backend-services
+    ports:
+      - "8080:8080"
+    hostname: fedex-service
