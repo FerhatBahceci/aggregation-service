@@ -1,5 +1,5 @@
 {
-  "id" : "df310120-0659-42c7-8847-d30ac3f2021f",
+  "id" : "7551f280-8200-44fb-a385-3bff527c2e2b",
   "request" : {
     "urlPath" : "/aggregation",
     "method" : "GET",
@@ -19,5 +19,5 @@
     "status" : 200,
     "transformers" : [ "response-template", "spring-cloud-contract" ]
   },
-  "uuid" : "df310120-0659-42c7-8847-d30ac3f2021f"
+  "uuid" : "7551f280-8200-44fb-a385-3bff527c2e2b"
 }

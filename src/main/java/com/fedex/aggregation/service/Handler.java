@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,14 +34,16 @@ public class Handler {
                 ), AggregatedResponse.class);
     }
 
-    private List<Long> getOrderIdParams(ServerRequest request, String queryParam) {
-        List<Long> orderIds = List.of();
+    //If the same value is present multiple times in the query, the response will only contain it once --> Using Set for all paramBuilders for ensuring distinct values
+
+    private Set<Long> getOrderIdParams(ServerRequest request, String queryParam) {
+        Set<Long> orderIds = Set.of();
         var orderIdQueryParams = request.queryParam(queryParam).orElse(""); //These parameters are all optional and could be missing
         if (!orderIdQueryParams.isBlank()) {
             orderIds = Arrays.stream(orderIdQueryParams
                             .split(","))
                     .map(Long::valueOf)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
         }
         return orderIds;
     }
