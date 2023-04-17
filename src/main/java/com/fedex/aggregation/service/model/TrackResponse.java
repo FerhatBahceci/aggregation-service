@@ -1,6 +1,8 @@
 package com.fedex.aggregation.service.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Map;
 
 public class TrackResponse {
@@ -8,7 +10,7 @@ public class TrackResponse {
     private final Map<Long, Status> track;
 
     @JsonCreator
-    public TrackResponse(Map<Long, Status> track){
+    public TrackResponse(Map<Long, Status> track) {
         this.track = track;
     }
 
@@ -18,8 +20,8 @@ public class TrackResponse {
 
     public enum Status {
         NEW,
-        IN,
-        TRANSIT,
+        @JsonProperty("IN TRANSIT") //Required due to space
+        IN_TRANSIT,
         COLLECTING,
         COLLECTED,
         DELIVERING,

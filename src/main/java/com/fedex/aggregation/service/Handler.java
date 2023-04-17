@@ -36,25 +36,33 @@ public class Handler {
                 ), AggregatedResponse.class);
     }
 
-    private Set<String> getPricingParams(ServerRequest request) {
-        var requestedCountryCodes = Arrays.stream(request.queryParam("pricing")
-                        .orElse("") //These parameters are all optional and could be missing
-                        .split(","))
-                .collect(Collectors.toSet());
-
-        requestedCountryCodes.forEach(countryCode -> {
-            if (!validCountryCodes.contains(countryCode)) {
-                throw new IllegalArgumentException("Invalid ISOCountryCode: " + countryCode);
-            }
-        });
-        return requestedCountryCodes;
-    }
-
     private List<Long> getOrderIdParams(ServerRequest request, String queryParam) {
-        return Arrays.stream(request.queryParam(queryParam)
-                        .orElse("") //These parameters are all optional and could be missing
-                        .split(","))
-                .map(Long::valueOf)
-                .collect(Collectors.toList());
+        List<Long> orderIds = List.of();
+        var orderIdQueryParams = request.queryParam(queryParam).orElse(""); //These parameters are all optional and could be missing
+        if (!orderIdQueryParams.isBlank()) {
+            orderIds = Arrays.stream(orderIdQueryParams
+                            .split(","))
+                    .map(Long::valueOf)
+                    .collect(Collectors.toList());
+        }
+        return orderIds;
     }
+
+    private Set<String> getPricingParams(ServerRequest request) {
+        Set<String> countryCodes = Set.of();
+        var pricingQueryParam = request.queryParam("pricing").orElse(""); //These parameters are all optional and could be missing
+        if (!pricingQueryParam.isBlank()) {
+            countryCodes = validateCountryCodes(Arrays.stream(pricingQueryParam.split(",")).collect(Collectors.toSet())); // Ensures distinct countryCodes.
+        }
+        return countryCodes;
+    }
+
+    private Set<String> validateCountryCodes(Set<String> countryCodes) {
+        countryCodes.forEach(countryCode -> {
+            if (!validCountryCodes.contains(countryCode))
+                throw new IllegalArgumentException("Invalid ISOCountryCode: " + countryCode);
+        });
+        return countryCodes;
+    }
+
 }
