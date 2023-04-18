@@ -56,6 +56,12 @@ contracts {
     baseClassForTests = 'com.fedex.aggregation.service'
     testFramework = TestFramework.JUNIT5
     baseClassForTests = 'com.fedex.aggregation.service.AggregationBase'
+/*
+    baseClassMappings {
+        baseClassMapping =
+        this.baseClassMapping(".*actuator.*", "com.plugsurfing.payter_service.contracts.base.ActuatorBase")
+        this.baseClassMapping(".*payter.*", "com.plugsurfing.payter_service.contracts.base.PayterBase")
+    }*/
 }
 
 
