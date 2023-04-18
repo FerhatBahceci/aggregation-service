@@ -7,10 +7,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Component
 public class ShipmentClientImpl implements ShipmentGateway {
+
+    private final AtomicInteger requestCounter  = new AtomicInteger();
 
     private final WebClient client;
 

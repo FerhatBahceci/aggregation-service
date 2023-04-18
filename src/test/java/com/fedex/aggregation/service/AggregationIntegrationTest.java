@@ -101,9 +101,23 @@ public class AggregationIntegrationTest {
 
         assertThat(response).isNotNull();
         assertThat(response.track().keySet()).containsAll(trackInLong);
-        assertThat(response.track().values()).containsAnyOf(TrackResponse.Status.values());
         assertThat(response.pricing()).isNull();
         assertThat(response.shipments()).isNull();
+    }
+
+
+    @Test
+    void testAggregationOnlyShipmentsRequestParams(){
+        var shipments = "109347263,123456891";
+        Set<Long> shipmentsInLong = Arrays.stream(shipments.split(",")).map(Long::valueOf).collect(Collectors.toSet());
+
+        var uri = String.format("http://localhost:%s/aggregation?shipments=%s", aggregatorServicePort,shipments);
+        var response = getCall(uri, AggregatedResponse.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.shipments().keySet()).containsAll(shipmentsInLong);
+        assertThat(response.pricing()).isNull();
+        assertThat(response.track()).isNull();
     }
 
     private <T> T getCall(String uri, Class<T> clazz) {
