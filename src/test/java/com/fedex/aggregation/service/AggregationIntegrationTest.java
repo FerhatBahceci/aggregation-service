@@ -96,8 +96,8 @@ public class AggregationIntegrationTest {
 
         var track = "109347263,123456891";
         Set<Long> trackInLong = Arrays.stream(track.split(",")).map(Long::valueOf).collect(Collectors.toSet());
-        var uri = String.format("http://localhost:%s/aggregation?track=%s", aggregatorServicePort, track);
 
+        var uri = String.format("http://localhost:%s/aggregation?track=%s", aggregatorServicePort, track);
         var response = getCall(uri, AggregatedResponse.class);
 
         assertThat(response).isNotNull();
