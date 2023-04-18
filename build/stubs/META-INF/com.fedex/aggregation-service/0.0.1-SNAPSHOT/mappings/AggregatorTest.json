@@ -1,5 +1,5 @@
 {
-  "id" : "21a0c7ae-d153-4695-8073-693c5f78564b",
+  "id" : "120e2f50-d562-430d-8e98-b62d2d62d4c2",
   "request" : {
     "urlPath" : "/aggregation",
     "method" : "GET",
@@ -20,5 +20,5 @@
     "body" : "{\"pricing\":{\"CN\":20.503467806384,\"NL\":14.242090605778},\"track\":{\"123456799\":\"COLLECTING\",\"123456789\":null},\"shipments\":{\"123456799\":null,\"123456789\":[\"box\",\"box\",\"pallet\"]}}",
     "transformers" : [ "response-template", "spring-cloud-contract" ]
   },
-  "uuid" : "21a0c7ae-d153-4695-8073-693c5f78564b"
+  "uuid" : "120e2f50-d562-430d-8e98-b62d2d62d4c2"
 }
