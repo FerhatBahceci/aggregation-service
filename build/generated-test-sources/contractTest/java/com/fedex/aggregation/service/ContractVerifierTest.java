@@ -17,7 +17,7 @@ import static io.restassured.RestAssured.*;
 public class ContractVerifierTest extends AggregationBase {
 
 	@Test
-	public void validate_aggregatorTest() throws Exception {
+	public void validate_aggregatorError() throws Exception {
 		// given:
 			RequestSpecification request = given();
 
@@ -34,13 +34,9 @@ public class ContractVerifierTest extends AggregationBase {
 
 		// and:
 			DocumentContext parsedJson = JsonPath.parse(response.getBody().asString());
-			assertThatJson(parsedJson).field("['pricing']").field("['CN']").isEqualTo(20.503467806384);
-			assertThatJson(parsedJson).field("['pricing']").field("['NL']").isEqualTo(14.242090605778);
-			assertThatJson(parsedJson).field("['track']").field("['123456799']").isEqualTo("COLLECTING");
-			assertThatJson(parsedJson).field("['track']").field("['123456789']").isNull();
-			assertThatJson(parsedJson).field("['shipments']").field("['123456799']").isNull();
-			assertThatJson(parsedJson).field("['shipments']").array("['123456789']").arrayField().isEqualTo("box").value();
-			assertThatJson(parsedJson).field("['shipments']").array("['123456789']").arrayField().isEqualTo("pallet").value();
+			assertThatJson(parsedJson).field("['pricing']").isNull();
+			assertThatJson(parsedJson).field("['track']").isNull();
+			assertThatJson(parsedJson).field("['shipments']").isNull();
 	}
 
 }

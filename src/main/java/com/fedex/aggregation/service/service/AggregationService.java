@@ -1,7 +1,5 @@
 package com.fedex.aggregation.service.service;
 
-/*This could possibly be a GraphQL endpoint that puzzles all the calls together by implementing datasources resolvers and schemas.*/
-
 import com.fedex.aggregation.service.gateway.PricingGateway;
 import com.fedex.aggregation.service.gateway.ShipmentGateway;
 import com.fedex.aggregation.service.gateway.TrackingGateway;
@@ -12,9 +10,7 @@ import com.fedex.aggregation.service.model.TrackResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
 import java.util.Set;
-
 import static java.util.Objects.nonNull;
 
 @Service
@@ -36,7 +32,6 @@ public class AggregationService {
             Set<String> pricing,
             Set<Long> track,
             Set<Long> shipments) {
-
         var defaultPricingResponse = new PricingResponse(null);
         var defaultTrackResponse = new TrackResponse(null);
         var defaultShipmentResponse = new ShipmentResponse(null);

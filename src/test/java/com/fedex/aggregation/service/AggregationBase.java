@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import static com.fedex.aggregation.service.DummyData.*;
+import reactor.core.publisher.Mono;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -36,8 +36,12 @@ abstract class AggregationBase {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = this.port;
 
-        when(pricingGateway.getPricing(COUNTRY_CODES)).thenReturn(PRICING_RESPONSE);
-        when(trackingGateway.getTracking(ORDER_ID_1_2)).thenReturn(TRACK_RESPONSE);
-        when(shipmentGateway.getShipment(ORDER_ID_1_2)).thenReturn(SHIPMENT_RESPONSE);
+        when(pricingGateway.getPricing(any())).thenReturn(createError());
+        when(trackingGateway.getTracking(any())).thenReturn(createError());
+        when(shipmentGateway.getShipment(any())).thenReturn(createError());
+    }
+
+    private <T> Mono<T> createError() {
+        return Mono.error(new IllegalArgumentException("Error from fedex BE service!"));
     }
 }
