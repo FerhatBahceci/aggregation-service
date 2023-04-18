@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+
 import java.util.Set;
 
 @Component
@@ -30,7 +31,8 @@ public class PricingClientImpl implements PricingGateway {
                         builder.path("/pricing").queryParam("q", countryCodes).build()
                 )
                 .retrieve()
-                .bodyToFlux(PricingResponse.class);
+                .bodyToFlux(PricingResponse.class)
+                .limitRate(5);
     }
 }
 

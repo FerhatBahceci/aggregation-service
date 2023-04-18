@@ -2,7 +2,6 @@ package com.fedex.aggregation.service.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Map;
 
 public class TrackResponse {

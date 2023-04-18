@@ -34,6 +34,7 @@ public class TrackingClientImpl implements TrackingGateway {
                 .header("Content-Type", "application/json;charset=UTF-8")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .retrieve()
-                .bodyToFlux(TrackResponse.class);
+                .bodyToFlux(TrackResponse.class)
+                .limitRate(5);
     }
 }

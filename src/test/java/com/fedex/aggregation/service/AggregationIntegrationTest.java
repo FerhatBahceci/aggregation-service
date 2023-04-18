@@ -1,8 +1,8 @@
 package com.fedex.aggregation.service;
 
 import com.fedex.aggregation.service.model.AggregatedResponse;
-import org.junit.After;
 import org.junit.ClassRule;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,8 +39,8 @@ public class AggregationIntegrationTest {
         environment.start();
     }
 
-    @After
-    void after() {
+    @AfterAll
+    public static void cleanUp(){
         environment.stop();
         environment.withRemoveImages(DockerComposeContainer.RemoveImages.ALL);
     }

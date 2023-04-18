@@ -31,6 +31,7 @@ public class ShipmentClientImpl implements ShipmentGateway {
                         builder.path("/shipments").queryParam("q", orderIds).build()
                 )
                 .retrieve()
-                .bodyToFlux(ShipmentResponse.class);
+                .bodyToFlux(ShipmentResponse.class)
+                .limitRate(5);
     }
 }
