@@ -29,14 +29,14 @@ public class AggregationService {
         this.trackingGateway = trackingClient;
     }
 
-    public Flux<AggregatedResponse> getAggregation(
+    public Mono<AggregatedResponse> getAggregation(
             Set<String> pricing,
             Set<Long> track,
             Set<Long> shipments) {
         var defaultPricingResponse = new PricingResponse(null);
         var defaultTrackResponse = new TrackResponse(null);
         var defaultShipmentResponse = new ShipmentResponse(null);
-        return pricingGateway.getPricing(pricing)
+        return Mono.from(pricingGateway.getPricing(pricing)
                 .switchIfEmpty(Mono.just(defaultPricingResponse))
                 .onErrorReturn(defaultPricingResponse)  // For cases where the backing api fails to return a good result, due to either error or timeout, the field will still be included in the returned object, but the value will be ‘null’.
                 .flatMap(pricingResponse -> trackingGateway.getTracking(track)
@@ -53,6 +53,6 @@ public class AggregationService {
                                         )
                                 )
                         )
-                );
+                ));
     }
 }
