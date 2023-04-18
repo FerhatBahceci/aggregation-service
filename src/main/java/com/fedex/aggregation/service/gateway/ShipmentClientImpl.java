@@ -4,7 +4,7 @@ import com.fedex.aggregation.service.model.ShipmentResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -21,19 +21,19 @@ public class ShipmentClientImpl implements ShipmentGateway {
     }
 
     @Override
-    public Mono<ShipmentResponse> getShipment(Set<Long> orderIds) {
+    public Flux<ShipmentResponse> getShipment(Set<Long> orderIds) {
         return !orderIds.isEmpty()
                 ? getShipment(orderIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                : Mono.empty();
+                : Flux.empty();
     }
 
-    private Mono<ShipmentResponse> getShipment(String orderIds) {
+    private Flux<ShipmentResponse> getShipment(String orderIds) {
         return client
                 .get()
                 .uri(builder ->
                         builder.path("/shipments").queryParam("q", orderIds).build()
                 )
                 .retrieve()
-                .bodyToMono(ShipmentResponse.class);
+                .bodyToFlux(ShipmentResponse.class);
     }
 }

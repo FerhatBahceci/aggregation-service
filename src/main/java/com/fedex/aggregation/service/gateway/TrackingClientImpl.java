@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,13 +19,13 @@ public class TrackingClientImpl implements TrackingGateway {
     }
 
     @Override
-    public Mono<TrackResponse> getTracking(Set<Long> orderIds) {
+    public Flux<TrackResponse> getTracking(Set<Long> orderIds) {
         return !orderIds.isEmpty()
                 ? getTracking(orderIds.stream().map(Object::toString).collect(Collectors.joining(",")))
-                : Mono.empty();
+                : Flux.empty();
     }
 
-    private Mono<TrackResponse> getTracking(String orderIds) {
+    private Flux<TrackResponse> getTracking(String orderIds) {
         return client
                 .get()
                 .uri(builder ->
@@ -34,6 +34,6 @@ public class TrackingClientImpl implements TrackingGateway {
                 .header("Content-Type", "application/json;charset=UTF-8")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .retrieve()
-                .bodyToMono(TrackResponse.class);
+                .bodyToFlux(TrackResponse.class);
     }
 }

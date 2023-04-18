@@ -9,6 +9,7 @@ import com.fedex.aggregation.service.model.ShipmentResponse;
 import com.fedex.aggregation.service.model.TrackResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.util.Set;
 import static java.util.Objects.nonNull;
@@ -28,7 +29,7 @@ public class AggregationService {
         this.trackingGateway = trackingClient;
     }
 
-    public Mono<AggregatedResponse> getAggregation(
+    public Flux<AggregatedResponse> getAggregation(
             Set<String> pricing,
             Set<Long> track,
             Set<Long> shipments) {

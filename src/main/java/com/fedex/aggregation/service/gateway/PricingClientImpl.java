@@ -4,7 +4,7 @@ import com.fedex.aggregation.service.model.PricingResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 import java.util.Set;
 
 @Component
@@ -17,20 +17,20 @@ public class PricingClientImpl implements PricingGateway {
     }
 
     @Override
-    public Mono<PricingResponse> getPricing(Set<String> countryCodes) {
+    public Flux<PricingResponse> getPricing(Set<String> countryCodes) {
         return !countryCodes.isEmpty()
                 ? getPricing(String.join(",", countryCodes))
-                : Mono.empty();
+                : Flux.empty();
     }
 
-    private Mono<PricingResponse> getPricing(String countryCodes) {
+    private Flux<PricingResponse> getPricing(String countryCodes) {
         return client
                 .get()
                 .uri(builder ->
                         builder.path("/pricing").queryParam("q", countryCodes).build()
                 )
                 .retrieve()
-                .bodyToMono(PricingResponse.class);
+                .bodyToFlux(PricingResponse.class);
     }
 }
 

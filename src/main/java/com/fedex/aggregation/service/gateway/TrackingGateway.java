@@ -1,9 +1,9 @@
 package com.fedex.aggregation.service.gateway;
 
 import com.fedex.aggregation.service.model.TrackResponse;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 import java.util.Set;
 
 public interface TrackingGateway {
-    Mono<TrackResponse> getTracking(Set<Long> track);
+    Flux<TrackResponse> getTracking(Set<Long> track);
 }
