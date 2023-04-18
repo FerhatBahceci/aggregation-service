@@ -36,8 +36,8 @@ abstract class AggregationBase {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = this.port;
 
-        when(pricingGateway.getPricing(any())).thenReturn(PRICING_RESPONSE);
-        when(trackingGateway.getTracking(any())).thenReturn(TRACK_RESPONSE);
-        when(shipmentGateway.getShipment(any())).thenReturn(SHIPMENT_RESPONSE);
+        when(pricingGateway.getPricing(COUNTRY_CODES)).thenReturn(PRICING_RESPONSE);
+        when(trackingGateway.getTracking(ORDER_ID_1_2)).thenReturn(TRACK_RESPONSE);
+        when(shipmentGateway.getShipment(ORDER_ID_1_2)).thenReturn(SHIPMENT_RESPONSE);
     }
 }

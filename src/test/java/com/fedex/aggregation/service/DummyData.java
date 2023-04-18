@@ -6,10 +6,13 @@ import com.fedex.aggregation.service.model.TrackResponse;
 import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 interface DummyData {
     Long ORDER_ID_1 = 123456789L;
     Long ORDER_ID_2 = 123456799L;
+    Set<Long> ORDER_ID_1_2 = Set.of(ORDER_ID_1, ORDER_ID_2);
+    Set<String> COUNTRY_CODES = Set.of("CN", "NL");
 
     Mono<PricingResponse> PRICING_RESPONSE = Mono.just(new PricingResponse(new HashMap<>() {{
         put("NL", 14.242090605778d);

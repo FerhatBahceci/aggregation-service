@@ -8,7 +8,7 @@ Contract.make {
         method GET()
         url("/aggregation") {
             queryParameters {
-                parameter("pricing", "SE,GB,ES")
+                parameter("pricing", "CN,NL")
                 parameter("track", "123456789,123456799")
                 parameter("shipments", "123456789,123456799")
             }

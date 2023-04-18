@@ -24,7 +24,7 @@ public class ContractVerifierTest extends AggregationBase {
 
 		// when:
 			Response response = given().spec(request)
-					.queryParam("pricing","SE,GB,ES")
+					.queryParam("pricing","CN,NL")
 					.queryParam("track","123456789,123456799")
 					.queryParam("shipments","123456789,123456799")
 					.get("/aggregation");
