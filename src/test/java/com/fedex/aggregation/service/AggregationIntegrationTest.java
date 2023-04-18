@@ -14,7 +14,7 @@ import java.io.File;
 import static com.fedex.aggregation.service.config.WebClientFactory.createWebClient;
 
 @ActiveProfiles("local")
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AggregationIntegrationTest {
 
     private static final String serviceName = "fedex_1";
