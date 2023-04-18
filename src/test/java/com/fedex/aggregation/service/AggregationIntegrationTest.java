@@ -47,7 +47,50 @@ public class AggregationIntegrationTest {
         Set<String> pricingSet = Arrays.stream(pricing.split(",")).collect(Collectors.toSet());
         Set<Long> trackInLong = Arrays.stream(track.split(",")).map(Long::valueOf).collect(Collectors.toSet());
         Set<Long> shipmentsInLong = Arrays.stream(shipments.split(",")).map(Long::valueOf).collect(Collectors.toSet());
+
         var uri = String.format("http://localhost:%s/aggregation?pricing=%s&track=%s&shipments=%s", aggregatorServicePort, pricing, track, shipments);
+        var response = getCall(uri, AggregatedResponse.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.pricing().keySet()).containsAll(pricingSet);
+        assertThat(response.track().keySet()).containsAll(trackInLong);
+        assertThat(response.track().values()).containsAnyOf(TrackResponse.Status.values());
+        assertThat(response.shipments().keySet()).containsAll(shipmentsInLong);
+    }
+
+    @Test
+    void testAggregationEmptyRequest() {
+
+        var uri = String.format("http://localhost:%s/aggregation", aggregatorServicePort);
+        var response = getCall(uri, AggregatedResponse.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.pricing()).isNull();
+        assertThat(response.track()).isNull();
+        assertThat(response.shipments()).isNull();
+    }
+
+    @Test
+    void testAggregationOnlyPricingRequestParams() {
+
+        var pricing = "NL,CN";
+        Set<String> pricingSet = Arrays.stream(pricing.split(",")).collect(Collectors.toSet());
+
+        var uri = String.format("http://localhost:%s/aggregation?pricing=%s", aggregatorServicePort, pricing);
+        var response = getCall(uri, AggregatedResponse.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.pricing().keySet()).containsAll(pricingSet);
+        assertThat(response.track()).isNull();
+        assertThat(response.shipments()).isNull();
+    }
+
+    @Test
+    void testAggregationOnlyTrackRequestParams() {
+
+        var track = "109347263,123456891";
+        Set<Long> trackInLong = Arrays.stream(track.split(",")).map(Long::valueOf).collect(Collectors.toSet());
+        var uri = String.format("http://localhost:%s/aggregation?track=%s", aggregatorServicePort,  track);
 
         var response = webClient
                 .get()
@@ -57,9 +100,18 @@ public class AggregationIntegrationTest {
                 .block();
 
         assertThat(response).isNotNull();
-        assertThat(response.pricing().keySet()).containsAll(pricingSet);
         assertThat(response.track().keySet()).containsAll(trackInLong);
         assertThat(response.track().values()).containsAnyOf(TrackResponse.Status.values());
-        assertThat(response.shipments().keySet()).containsAll(shipmentsInLong);
+        assertThat(response.pricing()).isNull();
+        assertThat(response.shipments()).isNull();
+    }
+
+    private <T> T getCall(String uri, Class<T> clazz) {
+        return webClient
+                .get()
+                .uri(uri)
+                .retrieve()
+                .bodyToMono(clazz)
+                .block();
     }
 }

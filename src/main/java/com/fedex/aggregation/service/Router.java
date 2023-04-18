@@ -25,6 +25,3 @@ public class Router {
         return route(GET("/aggregation"), handler::getAggregation);
     }
 }
-
-
-//TODO add swagger so that this endpoint is exposed and can be tested easily!
