@@ -17,7 +17,7 @@ import static io.restassured.RestAssured.*;
 public class ContractVerifierTest extends AggregationBase {
 
 	@Test
-	public void validate_aggregatorError() throws Exception {
+	public void validate_aggregationError() throws Exception {
 		// given:
 			RequestSpecification request = given();
 
