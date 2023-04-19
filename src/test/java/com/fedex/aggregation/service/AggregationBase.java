@@ -2,7 +2,7 @@ package com.fedex.aggregation.service;
 
 import com.fedex.aggregation.service.gateway.PricingGateway;
 import com.fedex.aggregation.service.gateway.ShipmentGateway;
-import com.fedex.aggregation.service.gateway.TrackingGateway;
+import com.fedex.aggregation.service.gateway.TrackGateway;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +25,7 @@ abstract class AggregationBase {
     PricingGateway pricingGateway;
 
     @MockBean
-    TrackingGateway trackingGateway;
+    TrackGateway trackGateway;
 
     @MockBean
     ShipmentGateway shipmentGateway;
@@ -37,7 +37,7 @@ abstract class AggregationBase {
         RestAssured.port = this.port;
 
         when(pricingGateway.getPricing(any())).thenReturn(createError());
-        when(trackingGateway.getTracking(any())).thenReturn(createError());
+        when(trackGateway.getTracking(any())).thenReturn(createError());
         when(shipmentGateway.getShipment(any())).thenReturn(createError());
     }
 

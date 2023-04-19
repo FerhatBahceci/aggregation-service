@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 @Component
 public class PricingClientImpl implements PricingGateway {
     private final WebClient client;
+    private final OverLoadingPreventionHandler<PricingResponse> overloadingPreventionHandler = new OverLoadingPreventionHandler<>();
 
     public PricingClientImpl(@Qualifier("pricingClient") WebClient client) {
         this.client = client;
@@ -16,7 +17,6 @@ public class PricingClientImpl implements PricingGateway {
 
     @Override
     public Mono<PricingResponse> getPricing(String countryCodes) {
-
         return !countryCodes.isBlank()
                 ?
                 client

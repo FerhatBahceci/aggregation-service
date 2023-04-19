@@ -7,8 +7,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 @Component
 public class ShipmentClientImpl implements ShipmentGateway {
-
     private final WebClient client;
+    private final OverLoadingPreventionHandler<ShipmentResponse> overloadingPreventionHandler = new OverLoadingPreventionHandler<>();
 
     public ShipmentClientImpl(@Qualifier("shipmentClient") WebClient webClient) {
         this.client = webClient;

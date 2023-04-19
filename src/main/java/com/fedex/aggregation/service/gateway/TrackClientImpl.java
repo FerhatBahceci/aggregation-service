@@ -8,10 +8,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
-public class TrackingClientImpl implements TrackingGateway {
+public class TrackClientImpl implements TrackGateway {
     private final WebClient client;
+    private final OverLoadingPreventionHandler<TrackResponse> overloadingPreventionHandler = new OverLoadingPreventionHandler<>();
 
-    public TrackingClientImpl(@Qualifier("shipmentClient") WebClient client) {
+    public TrackClientImpl(@Qualifier("shipmentClient") WebClient client) {
         this.client = client;
     }
 

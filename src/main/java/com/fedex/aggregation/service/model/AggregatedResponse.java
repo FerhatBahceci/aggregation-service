@@ -22,12 +22,10 @@ public class AggregatedResponse {
         this.pricing = pricing;
         return this;
     }
-
     public AggregatedResponse setTrack(Map<Long, TrackResponse.Status> track) {
         this.track = track;
         return this;
     }
-
     public AggregatedResponse setShipments(Map<Long, List<String>> shipments) {
         this.shipments = shipments;
         return this;

@@ -14,7 +14,7 @@ import static com.fedex.aggregation.service.gateway.SingleRequest.create;
 /*
 The OverLoadingPreventionHandler is per instance of aggregation-service. In production, it is most likely that we would have X amount of aggregation-service's up and running.
 This would then not prevent from overloading the exposed provider API (Fedex BE services). For that we would need to know more details about the amount of instances for both subscribing (downstream) and publishing (upstream) side, amount of events emitted, processing frequency etc .
- Backpressure using Sink could be handled for instance programmatically letting the upstream tell the downstream when it is ready to produce/emit elements to the subscriber so that the subscriber is able to process that emitted throughput.
+ Backpressure using Sink could be handled for instance programmatically letting the upstream tell the downstream when it is ready to produce/emit elements to the subscriber so that the subscriber is able to process that emitted throughput in its processing frequency capability.
 */
 
 public class OverLoadingPreventionHandler<T> {
