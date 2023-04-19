@@ -38,25 +38,34 @@ public class AggregationService {
 
         final Mono<PricingResponse> pricingResponseMono =
                 pricingGateway.getPricing(pricing)
+/*
+                        .delayUntil()
+*/
                         .switchIfEmpty(Mono.just(defaultPricingResponse))
                         .onErrorReturn(defaultPricingResponse);
 
         final Mono<TrackResponse> trackResponseMono =
                 trackingGateway.getTracking(track)
+/*
+                        .delayUntil()
+*/
                         .switchIfEmpty(Mono.just(defaultTrackResponse))
                         .onErrorReturn(defaultTrackResponse);
 
         final Mono<ShipmentResponse> shipmentResponseMono =
                 shipmentGateway.getShipment(shipments)
+/*
+                        .delayUntil()
+*/
                         .switchIfEmpty(Mono.just(defaultShipmentResponse))
                         .onErrorReturn(defaultShipmentResponse);
 
         return Mono.just(new AggregatedResponse())
                 .zipWith(pricingResponseMono)
-                .map(setPricing -> setPricing.getT1().setPricing(setPricing.getT2().getPricing()))
+                .map(p -> p.getT1().setPricing(p.getT2().getPricing()))
                 .zipWith(trackResponseMono)
-                .map(setTrack -> setTrack.getT1().setTrack(setTrack.getT2().getTrack()))
+                .map(t -> t.getT1().setTrack(t.getT2().getTrack()))
                 .zipWith(shipmentResponseMono)
-                .map(setShipment -> setShipment.getT1().setShipments(setShipment.getT2().getShipments()));
+                .map(s -> s.getT1().setShipments(s.getT2().getShipments()));
     }
 }

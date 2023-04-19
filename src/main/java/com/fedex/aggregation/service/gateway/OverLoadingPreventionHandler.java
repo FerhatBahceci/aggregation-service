@@ -2,31 +2,44 @@ package com.fedex.aggregation.service.gateway;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static com.fedex.aggregation.service.gateway.SingleRequest.create;
 
 public class OverLoadingPreventionHandler<T> {
-    private final ConcurrentLinkedQueue<Mono<T>> callQueue = new ConcurrentLinkedQueue<>();
+    private static final int cap = 5;
+    private final ConcurrentLinkedQueue<Mono<T>> callbackQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<String> queryParamsQueue = new ConcurrentLinkedQueue<>();
 
-    public Flux<T> getBulkCallsOrWait(Set<String> queryParams) {
+    public Flux<T> getBulkCallsOrSuspend(Function<String, Mono<T>> callbackConstructor, Set<String> queryParams) {
 
-        // 1. Check in callQueue if there is 5 calls to be made? It should not be since we should consume 5 calls into one bulked call once cap of 5 is reached and store it in the callQueue
+        Flux<T> response = Flux.empty();
+        List<String> tmpQueryParams = new ArrayList<>();
+        queryParamsQueue.addAll(queryParams);
 
-        // 2. Check queryParams IF it is possible to pack N amounts of calls and put them in the callQueue. 5 queryParams per call, for instance /aggregation?track=123456789,123456799,123456799,123456799,123456799 is one call Mono<T> that should be put into the queue.
-
-        // 3.
-
-
-        if (queryParams.size() % 5 == 0) {
-
-
-        } else {
-
+        while (queryParamsQueue.size() >= cap) {
+            var tmpPollQueryParam = queryParamsQueue.poll();
+            tmpQueryParams.add(tmpPollQueryParam);
         }
 
-        return Flux.empty();
-    }
+        while (tmpQueryParams.size() >= cap) { //Here we are ensuring that maximum 5 params are included in the optional q?=
+            var currentTmpQueryParams = tmpQueryParams.subList(0, 5);
+            SingleRequest request = create(currentTmpQueryParams);
+            Mono<T> preparedCall = callbackConstructor.apply(request.getQueryParamString());
+            callbackQueue.offer(preparedCall);
+            tmpQueryParams.removeAll(currentTmpQueryParams);
+        }
 
+        if (callbackQueue.size() >= cap) {  //Here we are ensuring that we are merging 5 publishers into one call
+            List<Mono<T>> preparedCalls = Stream.of(0, 1, 2, 3, 4).map(i -> callbackQueue.poll()).toList();  //TODO make a nicer way of iterating exactly CAP amount of times
+            response = Flux.merge(preparedCalls);
+        }
+
+        return response;
+    }
 }
