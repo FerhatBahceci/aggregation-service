@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Component
 public class PricingClientImpl implements PricingGateway {
-
     private final WebClient client;
 
     public PricingClientImpl(@Qualifier("pricingClient") WebClient client) {

@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class TrackingClientImpl implements TrackingGateway {
-
     private final WebClient client;
 
     public TrackingClientImpl(@Qualifier("shipmentClient") WebClient client) {

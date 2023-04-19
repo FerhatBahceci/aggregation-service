@@ -59,9 +59,9 @@ public class AggregationIntegrationTest {
         var response = getCall(uri, AggregatedResponse.class);
 
         assertThat(response).isNotNull();
-        if (nonNull(response.pricing())) assertThat(response.pricing().keySet()).containsAll(pricingSet);
-        if (nonNull(response.track())) assertThat(response.track().keySet()).containsAll(trackInLong);
-        if (nonNull(response.shipments())) assertThat(response.shipments().keySet()).containsAll(shipmentsInLong);
+        if (nonNull(response.getPricing())) assertThat(response.getPricing().keySet()).containsAll(pricingSet);
+        if (nonNull(response.getTrack())) assertThat(response.getTrack().keySet()).containsAll(trackInLong);
+        if (nonNull(response.getShipments())) assertThat(response.getShipments().keySet()).containsAll(shipmentsInLong);
     }
 
     @Test
@@ -71,9 +71,9 @@ public class AggregationIntegrationTest {
         var response = getCall(uri, AggregatedResponse.class);
 
         assertThat(response).isNotNull();
-        assertThat(response.pricing()).isNull();
-        assertThat(response.track()).isNull();
-        assertThat(response.shipments()).isNull();
+        assertThat(response.getPricing()).isNull();
+        assertThat(response.getTrack()).isNull();
+        assertThat(response.getShipments()).isNull();
     }
 
     @Test
@@ -86,9 +86,9 @@ public class AggregationIntegrationTest {
         var response = getCall(uri, AggregatedResponse.class);
 
         assertThat(response).isNotNull();
-        if (nonNull(response.pricing())) assertThat(response.pricing().keySet()).containsAll(pricingSet);
-        assertThat(response.track()).isNull();
-        assertThat(response.shipments()).isNull();
+        if (nonNull(response.getPricing())) assertThat(response.getPricing().keySet()).containsAll(pricingSet);
+        assertThat(response.getTrack()).isNull();
+        assertThat(response.getShipments()).isNull();
     }
 
     @Test
@@ -101,9 +101,9 @@ public class AggregationIntegrationTest {
         var response = getCall(uri, AggregatedResponse.class);
 
         assertThat(response).isNotNull();
-        if (nonNull(response.track())) assertThat(response.track().keySet()).containsAll(trackInLong);
-        assertThat(response.pricing()).isNull();
-        assertThat(response.shipments()).isNull();
+        if (nonNull(response.getTrack())) assertThat(response.getTrack().keySet()).containsAll(trackInLong);
+        assertThat(response.getPricing()).isNull();
+        assertThat(response.getShipments()).isNull();
     }
 
 
@@ -116,9 +116,9 @@ public class AggregationIntegrationTest {
         var response = getCall(uri, AggregatedResponse.class);
 
         assertThat(response).isNotNull();
-        if (nonNull(response.shipments())) assertThat(response.shipments().keySet()).containsAll(shipmentsInLong);
-        assertThat(response.pricing()).isNull();
-        assertThat(response.track()).isNull();
+        if (nonNull(response.getShipments())) assertThat(response.getShipments().keySet()).containsAll(shipmentsInLong);
+        assertThat(response.getPricing()).isNull();
+        assertThat(response.getTrack()).isNull();
     }
 
     private <T> T getCall(String uri, Class<T> clazz) {

@@ -10,8 +10,8 @@ import com.fedex.aggregation.service.model.TrackResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
 import java.util.Set;
-import static java.util.Objects.nonNull;
 
 @Service
 public class AggregationService {
@@ -35,23 +35,28 @@ public class AggregationService {
         var defaultPricingResponse = new PricingResponse(null);
         var defaultTrackResponse = new TrackResponse(null);
         var defaultShipmentResponse = new ShipmentResponse(null);
-        return pricingGateway.getPricing(pricing)
-                .switchIfEmpty(Mono.just(defaultPricingResponse))
-                .onErrorReturn(defaultPricingResponse)  // For cases where the backing api fails to return a good result, due to either error or timeout, the field will still be included in the returned object, but the value will be ‘null’.
-                .flatMap(pricingResponse -> trackingGateway.getTracking(track)
+
+        final Mono<PricingResponse> pricingResponseMono =
+                pricingGateway.getPricing(pricing)
+                        .switchIfEmpty(Mono.just(defaultPricingResponse))
+                        .onErrorReturn(defaultPricingResponse);
+
+        final Mono<TrackResponse> trackResponseMono =
+                trackingGateway.getTracking(track)
                         .switchIfEmpty(Mono.just(defaultTrackResponse))
-                        .onErrorReturn(defaultTrackResponse)
-                        .flatMap(trackResponse -> shipmentGateway.getShipment(shipments)
-                                .switchIfEmpty(Mono.just(defaultShipmentResponse))
-                                .onErrorReturn(defaultShipmentResponse)
-                                .map(shipmentResponse ->
-                                        new AggregatedResponse(
-                                                nonNull(pricingResponse) ? pricingResponse.getPricing() : null,
-                                                nonNull(trackResponse) ? trackResponse.getTrack() : null,
-                                                nonNull(shipmentResponse) ? shipmentResponse.getShipments() : null
-                                        )
-                                )
-                        )
-                );
+                        .onErrorReturn(defaultTrackResponse);
+
+        final Mono<ShipmentResponse> shipmentResponseMono =
+                shipmentGateway.getShipment(shipments)
+                        .switchIfEmpty(Mono.just(defaultShipmentResponse))
+                        .onErrorReturn(defaultShipmentResponse);
+
+        return Mono.just(new AggregatedResponse())
+                .zipWith(pricingResponseMono)
+                .map(setPricing -> setPricing.getT1().setPricing(setPricing.getT2().getPricing()))
+                .zipWith(trackResponseMono)
+                .map(setTrack -> setTrack.getT1().setTrack(setTrack.getT2().getTrack()))
+                .zipWith(shipmentResponseMono)
+                .map(setShipment -> setShipment.getT1().setShipments(setShipment.getT2().getShipments()));
     }
 }
