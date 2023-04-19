@@ -20,16 +20,21 @@ public class SingleRequest {
         this.request5 = request5;
     }
 
+    public SingleRequest() {
+    }
+
     public String getQueryParamString() {
         return String.join(",", request1, request2, request3, request4, request5);
     }
 
     public static SingleRequest create(List<String> queryParams) {
-        return new SingleRequest(
-                queryParams.get(0),
-                queryParams.get(1),
-                queryParams.get(2),
-                queryParams.get(3),
-                queryParams.get(4));
+        return !queryParams.isEmpty() ?
+                new SingleRequest(
+                        queryParams.get(0),
+                        queryParams.get(1),
+                        queryParams.get(2),
+                        queryParams.get(3),
+                        queryParams.get(4))
+                : new SingleRequest();
     }
 }

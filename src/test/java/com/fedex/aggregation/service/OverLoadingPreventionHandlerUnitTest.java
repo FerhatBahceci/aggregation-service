@@ -4,20 +4,24 @@ package com.fedex.aggregation.service;
 import com.fedex.aggregation.service.gateway.OverLoadingPreventionHandler;
 import com.fedex.aggregation.service.gateway.PricingGateway;
 import com.fedex.aggregation.service.gateway.ShipmentGateway;
-import com.fedex.aggregation.service.gateway.TrackingGateway;
+import com.fedex.aggregation.service.gateway.TrackGateway;
 import com.fedex.aggregation.service.model.PricingResponse;
 import com.fedex.aggregation.service.model.ShipmentResponse;
 import com.fedex.aggregation.service.model.TrackResponse;
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import reactor.core.publisher.Flux;
+import java.util.Set;
+import static com.fedex.aggregation.service.TestData.PRICING_RESPONSE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@SpringBootTest(
+        classes = Application.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 public class OverLoadingPreventionHandlerUnitTest {
 
     @LocalServerPort
@@ -26,7 +30,7 @@ public class OverLoadingPreventionHandlerUnitTest {
     PricingGateway pricingGateway;
 
     @MockBean
-    TrackingGateway trackingGateway;
+    TrackGateway trackingGateway;
 
     @MockBean
     ShipmentGateway shipmentGateway;
@@ -37,20 +41,12 @@ public class OverLoadingPreventionHandlerUnitTest {
 
     @Test
     void testOverLoadingPreventionHandler() {
-        pricingHandler.getBulkCallsOrSuspend(pricingGateway::getPricing)
+
+        when(pricingGateway.getPricing(any())).thenReturn(PRICING_RESPONSE);
+
+        Flux<PricingResponse> response = pricingHandler.getBulkCallsOrSuspend(pricingGateway::getPricing, Set.of("SE,NL"));
+
 
     }
-
-    @BeforeEach
-    void setUp() {
-
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = this.port;
-
-        when(pricingGateway.getPricing(any())).thenReturn(createError());
-        when(trackingGateway.getTracking(any())).thenReturn(createError());
-        when(shipmentGateway.getShipment(any())).thenReturn(createError());
-    }
-
 }
 */

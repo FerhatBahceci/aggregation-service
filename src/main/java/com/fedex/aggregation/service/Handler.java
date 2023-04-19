@@ -2,6 +2,8 @@ package com.fedex.aggregation.service;
 
 import com.fedex.aggregation.service.model.AggregatedResponse;
 import com.fedex.aggregation.service.service.AggregationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -10,6 +12,8 @@ import reactor.core.publisher.Mono;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.fedex.aggregation.service.util.StringUtil.getList;
+import static com.fedex.aggregation.service.util.StringUtil.getSet;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Component
@@ -18,6 +22,8 @@ public class Handler {
     private final AggregationService aggregationService;
 
     private static final Set<String> validCountryCodes = Set.of(Locale.getISOCountries());
+
+    private static final Logger log = LoggerFactory.getLogger(Handler.class);
 
     public Handler(@Autowired AggregationService aggregationService) {
         this.aggregationService = aggregationService;
@@ -38,37 +44,35 @@ public class Handler {
         List<String> validatedOrderIds = new ArrayList<>();
         var orderIdQueryParams = request.queryParam(queryParam).orElse(""); //These parameters are all optional and could be missing
         if (!orderIdQueryParams.isBlank()) {
-            List<Long> orderIds = new ArrayList<>(Arrays.stream(orderIdQueryParams
-                            .split(","))
-                    .map(Long::valueOf)
-                    .collect(Collectors.toSet()));
+            List<Long> orderIds = getList(orderIdQueryParams);
             validatedOrderIds = validateOrderIds(orderIds);
         }
         return String.join(",", validatedOrderIds);
     }
 
-
     private String getPricingParams(ServerRequest request) {
         Set<String> countryCodes = Set.of();
         var pricingQueryParam = request.queryParam("pricing").orElse(""); //These parameters are all optional and could be missing
         if (!pricingQueryParam.isBlank()) {
-            countryCodes = validateCountryCodes(Arrays.stream(pricingQueryParam.split(",")).collect(Collectors.toSet())); // Ensures distinct countryCodes.
+            countryCodes = validateCountryCodes(getSet(pricingQueryParam)); // Ensures distinct countryCodes.
         }
         return String.join(",", countryCodes);
     }
 
     private Set<String> validateCountryCodes(Set<String> countryCodes) {
         countryCodes.forEach(countryCode -> {
-            if (!validCountryCodes.contains(countryCode))
-                throw new IllegalArgumentException("Invalid ISOCountryCode: " + countryCode);
+            if (!validCountryCodes.contains(countryCode)) {
+                log.info("IllegalArgument, Invalid ISOCountryCode: {}" + countryCode);
+            }
         });
         return countryCodes;
     }
 
     private List<String> validateOrderIds(List<Long> orderIds) {
         orderIds.forEach(orderId -> {
-            if (String.valueOf(orderId).length() != 9)
-                throw new IllegalArgumentException("Invalid OrderId: " + orderId);
+            if (String.valueOf(orderId).length() != 9) {
+                log.info("IllegalArgument, Invalid OrderIde: {}", orderId);
+            }
         });
         return orderIds.stream().map(Object::toString).collect(Collectors.toList());
     }

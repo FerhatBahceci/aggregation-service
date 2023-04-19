@@ -11,12 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import static java.util.Objects.nonNull;
+
 @Service
 public class AggregationService {
-
     private final PricingGateway pricingGateway;
     private final ShipmentGateway shipmentGateway;
     private final TrackGateway trackGateway;
+    private static final PricingResponse defaultPricingResponse = new PricingResponse(null);
+    private static final TrackResponse defaultTrackResponse = new TrackResponse(null);
+    private static final ShipmentResponse defaultShipmentResponse = new ShipmentResponse(null);
+    public static AggregatedResponse defaultAggregatedResponse = new AggregatedResponse();
 
     public AggregationService(@Autowired PricingGateway pricingClient,
                               @Autowired ShipmentGateway shipmentClient,
@@ -30,40 +35,35 @@ public class AggregationService {
             String pricing,
             String track,
             String shipments) {
-        var defaultPricingResponse = new PricingResponse(null);
-        var defaultTrackResponse = new TrackResponse(null);
-        var defaultShipmentResponse = new ShipmentResponse(null);
 
-        final Mono<PricingResponse> pricingResponseMono =
-                pricingGateway.getPricing(pricing)
-/*
-                        .delayUntil()
-*/
-                        .switchIfEmpty(Mono.just(defaultPricingResponse))
-                        .onErrorReturn(defaultPricingResponse);
+        if (nonNull(pricing) || nonNull(track) || nonNull(shipments)) {
+            final Mono<PricingResponse> pricingResponseMono = nonNull(pricing) ?
+                    pricingGateway.getPricing(pricing)
+                            .switchIfEmpty(Mono.just(defaultPricingResponse))
+                            .onErrorReturn(defaultPricingResponse)
+                    : Mono.just(defaultPricingResponse);
 
-        final Mono<TrackResponse> trackResponseMono =
-                trackGateway.getTracking(track)
-/*
-                        .delayUntil()
-*/
-                        .switchIfEmpty(Mono.just(defaultTrackResponse))
-                        .onErrorReturn(defaultTrackResponse);
+            final Mono<TrackResponse> trackResponseMono = nonNull(track) ?
+                    trackGateway.getTracking(track)
+                            .switchIfEmpty(Mono.just(defaultTrackResponse))
+                            .onErrorReturn(defaultTrackResponse)
+                    : Mono.just(defaultTrackResponse);
 
-        final Mono<ShipmentResponse> shipmentResponseMono =
-                shipmentGateway.getShipment(shipments)
-/*
-                        .delayUntil()
-*/
-                        .switchIfEmpty(Mono.just(defaultShipmentResponse))
-                        .onErrorReturn(defaultShipmentResponse);
+            final Mono<ShipmentResponse> shipmentResponseMono = nonNull(shipments) ?
+                    shipmentGateway.getShipment(shipments)
+                            .switchIfEmpty(Mono.just(defaultShipmentResponse))
+                            .onErrorReturn(defaultShipmentResponse)
+                    : Mono.just(defaultShipmentResponse);
 
-        return Mono.just(new AggregatedResponse())
-                .zipWith(pricingResponseMono)
-                .map(p -> p.getT1().setPricing(p.getT2().getPricing()))
-                .zipWith(trackResponseMono)
-                .map(t -> t.getT1().setTrack(t.getT2().getTrack()))
-                .zipWith(shipmentResponseMono)
-                .map(s -> s.getT1().setShipments(s.getT2().getShipments()));
+            return Mono.just(new AggregatedResponse())
+                    .zipWith(pricingResponseMono)
+                    .map(p -> p.getT1().setPricing(p.getT2().getPricing()))
+                    .zipWith(trackResponseMono)
+                    .map(t -> t.getT1().setTrack(t.getT2().getTrack()))
+                    .zipWith(shipmentResponseMono)
+                    .map(s -> s.getT1().setShipments(s.getT2().getShipments()));
+        } else {
+            return Mono.just(defaultAggregatedResponse);
+        }
     }
 }
