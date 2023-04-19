@@ -13,31 +13,31 @@ public class AppConfig {
 
     @Bean
     public Sinks.Many<PricingResponse> pricingSink() {
-        return Sinks.many().replay().latest();
+        return Sinks.many().multicast().directBestEffort();
     }
 
     @Bean
     public Flux<PricingResponse> pricingFlux(Sinks.Many<PricingResponse> sink) {
-        return sink.asFlux().cache();
+        return sink.asFlux();
     }
 
     @Bean
     public Sinks.Many<ShipmentResponse> shipmentSink() {
-        return Sinks.many().replay().latest();
+        return Sinks.many().multicast().directBestEffort();
     }
 
     @Bean
     public Flux<ShipmentResponse> shipmentFlux(Sinks.Many<ShipmentResponse> sink) {
-        return sink.asFlux().cache();
+        return sink.asFlux();
     }
 
     @Bean
     public Sinks.Many<TrackResponse> trackSink() {
-        return Sinks.many().replay().latest();
+        return Sinks.many().multicast().directBestEffort();
     }
 
     @Bean
     public Flux<TrackResponse> trackFlux(Sinks.Many<TrackResponse> sink) {
-        return sink.asFlux().cache();
+        return sink.asFlux();
     }
 }

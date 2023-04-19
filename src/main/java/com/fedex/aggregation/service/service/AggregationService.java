@@ -57,9 +57,9 @@ public class AggregationService {
 
             return Mono.just(new AggregatedResponse())
                     .zipWith(pricingResponseMono)
-                    .map(p -> p.getT1().setPricing(p.getT2().getPricing()))
+                    .mapNotNull(p -> p.getT1().setPricing(p.getT2().getPricing()))
                     .zipWith(trackResponseMono)
-                    .map(t -> t.getT1().setTrack(t.getT2().getTrack()))
+                    .mapNotNull(t -> t.getT1().setTrack(t.getT2().getTrack()))
                     .zipWith(shipmentResponseMono)
                     .map(s -> s.getT1().setShipments(s.getT2().getShipments()));
         } else {
