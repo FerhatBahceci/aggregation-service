@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import static com.fedex.aggregation.service.gateway.PricingClientImpl.defaultPricingResponse;
+import static com.fedex.aggregation.service.gateway.ShipmentClientImpl.defaultShipmentResponse;
+import static com.fedex.aggregation.service.gateway.TrackClientImpl.defaultTrackResponse;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -18,9 +21,6 @@ public class AggregationService {
     private final PricingGateway pricingGateway;
     private final ShipmentGateway shipmentGateway;
     private final TrackGateway trackGateway;
-    private static final PricingResponse defaultPricingResponse = new PricingResponse(null);
-    private static final TrackResponse defaultTrackResponse = new TrackResponse(null);
-    private static final ShipmentResponse defaultShipmentResponse = new ShipmentResponse(null);
     public static AggregatedResponse defaultAggregatedResponse = new AggregatedResponse();
 
     public AggregationService(@Autowired PricingGateway pricingClient,

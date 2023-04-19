@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
+
 import static com.fedex.aggregation.service.util.StringUtil.getSet;
 
 @Component
@@ -15,6 +16,7 @@ public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> imp
     private final WebClient client;
     private final Sinks.Many<ShipmentResponse> shipmentSink;
     private final Flux<ShipmentResponse> flux;
+    public static final ShipmentResponse defaultShipmentResponse = new ShipmentResponse(null);
 
     public ShipmentClientImpl(@Qualifier("shipmentClient") WebClient webClient,
                               @Autowired Sinks.Many<ShipmentResponse> shipmentSink,
@@ -39,7 +41,7 @@ public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> imp
                         )
                         .retrieve()
                         .bodyToMono(ShipmentResponse.class)
-
+                        .onErrorReturn(defaultShipmentResponse)
                 : Mono.empty();
     }
 }

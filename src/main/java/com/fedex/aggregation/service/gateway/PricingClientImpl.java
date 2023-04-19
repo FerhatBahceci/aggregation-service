@@ -17,6 +17,8 @@ public class PricingClientImpl extends BulkRequestHandler<PricingResponse> imple
     private final Sinks.Many<PricingResponse> pricingSink;
     private final Flux<PricingResponse> flux;
 
+    public static final PricingResponse defaultPricingResponse = new PricingResponse(null);
+
     public PricingClientImpl(@Qualifier("pricingClient") WebClient client,
                              @Autowired Sinks.Many<PricingResponse> pricingSink,
                              @Autowired Flux<PricingResponse> flux) {
@@ -41,6 +43,7 @@ public class PricingClientImpl extends BulkRequestHandler<PricingResponse> imple
                         )
                         .retrieve()
                         .bodyToMono(PricingResponse.class)
+                        .onErrorReturn(defaultPricingResponse)
                 : Mono.empty();
     }
 }

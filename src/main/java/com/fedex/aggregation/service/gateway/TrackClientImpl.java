@@ -19,6 +19,7 @@ public class TrackClientImpl extends BulkRequestHandler<TrackResponse> implement
     private final Sinks.Many<TrackResponse> trackSink;
 
     private final Flux<TrackResponse> flux;
+    public static final TrackResponse defaultTrackResponse = new TrackResponse(null);
 
     public TrackClientImpl(@Qualifier("shipmentClient") WebClient client,
                            @Autowired Sinks.Many<TrackResponse> trackSink,
@@ -44,6 +45,7 @@ public class TrackClientImpl extends BulkRequestHandler<TrackResponse> implement
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .retrieve()
                         .bodyToMono(TrackResponse.class)
+                        .onErrorReturn(defaultTrackResponse)
                 : Mono.empty();
     }
 }
