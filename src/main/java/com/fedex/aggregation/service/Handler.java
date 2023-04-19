@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -36,25 +34,27 @@ public class Handler {
 
     //If the same value is present multiple times in the query, the response will only contain it once --> Using Set for all paramBuilders for ensuring distinct values
 
-    private Set<Long> getOrderIdParams(ServerRequest request, String queryParam) {
-        Set<Long> orderIds = Set.of();
+    private String getOrderIdParams(ServerRequest request, String queryParam) {
+        List<String> validatedOrderIds = new ArrayList<>();
         var orderIdQueryParams = request.queryParam(queryParam).orElse(""); //These parameters are all optional and could be missing
         if (!orderIdQueryParams.isBlank()) {
-            orderIds = Arrays.stream(orderIdQueryParams
+            List<Long> orderIds = new ArrayList<>(Arrays.stream(orderIdQueryParams
                             .split(","))
                     .map(Long::valueOf)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toSet()));
+            validatedOrderIds = validateOrderIds(orderIds);
         }
-        return orderIds;
+        return String.join(",", validatedOrderIds);
     }
 
-    private Set<String> getPricingParams(ServerRequest request) {
+
+    private String getPricingParams(ServerRequest request) {
         Set<String> countryCodes = Set.of();
         var pricingQueryParam = request.queryParam("pricing").orElse(""); //These parameters are all optional and could be missing
         if (!pricingQueryParam.isBlank()) {
             countryCodes = validateCountryCodes(Arrays.stream(pricingQueryParam.split(",")).collect(Collectors.toSet())); // Ensures distinct countryCodes.
         }
-        return countryCodes;
+        return String.join(",", countryCodes);
     }
 
     private Set<String> validateCountryCodes(Set<String> countryCodes) {
@@ -65,4 +65,11 @@ public class Handler {
         return countryCodes;
     }
 
+    private List<String> validateOrderIds(List<Long> orderIds) {
+        orderIds.forEach(orderId -> {
+            if (String.valueOf(orderId).length() != 9)
+                throw new IllegalArgumentException("Invalid OrderId: " + orderId);
+        });
+        return orderIds.stream().map(Object::toString).collect(Collectors.toList());
+    }
 }

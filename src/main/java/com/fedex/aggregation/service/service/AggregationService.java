@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.util.Set;
-
 @Service
 public class AggregationService {
 
@@ -29,9 +27,9 @@ public class AggregationService {
     }
 
     public Mono<AggregatedResponse> getAggregation(
-            Set<String> pricing,
-            Set<Long> track,
-            Set<Long> shipments) {
+            String pricing,
+            String track,
+            String shipments) {
         var defaultPricingResponse = new PricingResponse(null);
         var defaultTrackResponse = new TrackResponse(null);
         var defaultShipmentResponse = new ShipmentResponse(null);

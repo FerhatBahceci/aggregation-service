@@ -6,8 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class TrackingClientImpl implements TrackingGateway {
@@ -18,21 +16,17 @@ public class TrackingClientImpl implements TrackingGateway {
     }
 
     @Override
-    public Mono<TrackResponse> getTracking(Set<Long> orderIds) {
-        return !orderIds.isEmpty()
-                ? getTracking(orderIds.stream().map(Object::toString).collect(Collectors.joining(",")))
+    public Mono<TrackResponse> getTracking(String orderIds) {
+        return !orderIds.isBlank() ?
+                client
+                        .get()
+                        .uri(builder ->
+                                builder.path("/track").queryParam("q", orderIds).build()
+                        )
+                        .header("Content-Type", "application/json;charset=UTF-8")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .retrieve()
+                        .bodyToMono(TrackResponse.class)
                 : Mono.empty();
-    }
-
-    private Mono<TrackResponse> getTracking(String orderIds) {
-        return client
-                .get()
-                .uri(builder ->
-                        builder.path("/track").queryParam("q", orderIds).build()
-                )
-                .header("Content-Type", "application/json;charset=UTF-8")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .retrieve()
-                .bodyToMono(TrackResponse.class);
     }
 }

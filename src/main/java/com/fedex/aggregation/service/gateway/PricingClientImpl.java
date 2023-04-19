@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import java.util.Set;
 
 @Component
 public class PricingClientImpl implements PricingGateway {
@@ -16,20 +15,18 @@ public class PricingClientImpl implements PricingGateway {
     }
 
     @Override
-    public Mono<PricingResponse> getPricing(Set<String> countryCodes) {
-        return !countryCodes.isEmpty()
-                ? getPricing(String.join(",", countryCodes))
-                : Mono.empty();
-    }
+    public Mono<PricingResponse> getPricing(String countryCodes) {
 
-    private Mono<PricingResponse> getPricing(String countryCodes) {
-        return client
-                .get()
-                .uri(builder ->
-                        builder.path("/pricing").queryParam("q", countryCodes).build()
-                )
-                .retrieve()
-                .bodyToMono(PricingResponse.class);
+        return !countryCodes.isBlank()
+                ?
+                client
+                        .get()
+                        .uri(builder ->
+                                builder.path("/pricing").queryParam("q", countryCodes).build()
+                        )
+                        .retrieve()
+                        .bodyToMono(PricingResponse.class)
+                : Mono.empty();
     }
 }
 
