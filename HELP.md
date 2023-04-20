@@ -3,18 +3,5 @@
 ### Reference Documentation
 For further reference, please consider the following sections:
 
-* [Official Gradle documentation](https://docs.gradle.org)
-* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/3.0.5/gradle-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/3.0.5/gradle-plugin/reference/html/#build-image)
-* [Spring Reactive Web](https://docs.spring.io/spring-boot/docs/3.0.5/reference/htmlsingle/#web.reactive)
 
-### Guides
-The following guides illustrate how to use some features concretely:
-
-* [Building a Reactive RESTful Web Service](https://spring.io/guides/gs/reactive-rest-service/)
-
-### Additional Links
-These additional references should also help you:
-
-* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
-
+http://localhost:8081/aggregation?pricing=AF,AL,DZ,AS,AD,AO,AI,AQ,AG,AR,AM,AW,AU,AT,AZ,BS,BH,BD,BB,BY,BZ,SE,BE,ES,NO,DK,IT,PL&track=123456799,123456791,123456792,123456793,123456794,123456795,123456796,123456797,123456798,123456719,123456729,123456739,123456749,123456759,123456769,123456789,223456799,323456799,423456799,523456799,623456799,723456799,823456799,125456799,123656799,123466799&shipments=123456799,123456791,123456792,123456793,123456794,123456795,123456796,123456797,123456798,123456719,123456729,123456739,123456749,123456759,123456769,123456789,223456799,323456799,423456799,523456799,623456799,723456799,823456799,125456799,123656799,123466799

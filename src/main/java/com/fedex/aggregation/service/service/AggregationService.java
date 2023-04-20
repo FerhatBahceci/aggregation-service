@@ -7,8 +7,11 @@ import com.fedex.aggregation.service.model.AggregatedResponse;
 import com.fedex.aggregation.service.model.PricingResponse;
 import com.fedex.aggregation.service.model.ShipmentResponse;
 import com.fedex.aggregation.service.model.TrackResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static com.fedex.aggregation.service.gateway.PricingClientImpl.defaultPricingResponse;
@@ -18,6 +21,7 @@ import static java.util.Objects.nonNull;
 
 @Service
 public class AggregationService {
+    private static final Logger logger = LoggerFactory.getLogger(AggregationService.class);
     private final PricingGateway pricingGateway;
     private final ShipmentGateway shipmentGateway;
     private final TrackGateway trackGateway;
@@ -31,39 +35,43 @@ public class AggregationService {
         this.trackGateway = trackingClient;
     }
 
-    public Mono<AggregatedResponse> getAggregation(
+    public Flux<AggregatedResponse> getAggregation(
             String pricing,
             String track,
             String shipments) {
 
         if (nonNull(pricing) || nonNull(track) || nonNull(shipments)) {
-            final Mono<PricingResponse> pricingResponseMono = nonNull(pricing) ?
+            final Flux<PricingResponse> pricingResponseFlux = nonNull(pricing) ?
                     pricingGateway.getPricing(pricing)
                             .switchIfEmpty(Mono.just(defaultPricingResponse))
                             .onErrorReturn(defaultPricingResponse)
-                    : Mono.just(defaultPricingResponse);
+                    : Flux.just(defaultPricingResponse);
 
-            final Mono<TrackResponse> trackResponseMono = nonNull(track) ?
+            final Flux<TrackResponse> trackResponseFlux = nonNull(track) ?
                     trackGateway.getTracking(track)
                             .switchIfEmpty(Mono.just(defaultTrackResponse))
                             .onErrorReturn(defaultTrackResponse)
-                    : Mono.just(defaultTrackResponse);
+                    : Flux.just(defaultTrackResponse);
 
-            final Mono<ShipmentResponse> shipmentResponseMono = nonNull(shipments) ?
+            final Flux<ShipmentResponse> shipmentResponseFlux = nonNull(shipments) ?
                     shipmentGateway.getShipment(shipments)
                             .switchIfEmpty(Mono.just(defaultShipmentResponse))
                             .onErrorReturn(defaultShipmentResponse)
-                    : Mono.just(defaultShipmentResponse);
+                    : Flux.just(defaultShipmentResponse);
 
-            return Mono.just(new AggregatedResponse())
-                    .zipWith(pricingResponseMono)
+            pricingResponseFlux.subscribe(s -> logger.info("PricingResponse={}}", s.getPricing()));
+            trackResponseFlux.subscribe(s -> logger.info("TrackResponse={}}", s.getTrack()));
+            shipmentResponseFlux.subscribe(s -> logger.info("ShipmentResponse={}}", s.getShipments()));
+
+            return Flux.just(new AggregatedResponse())
+                    .zipWith(pricingResponseFlux)
                     .mapNotNull(p -> p.getT1().setPricing(p.getT2().getPricing()))
-                    .zipWith(trackResponseMono)
+                    .zipWith(trackResponseFlux)
                     .mapNotNull(t -> t.getT1().setTrack(t.getT2().getTrack()))
-                    .zipWith(shipmentResponseMono)
+                    .zipWith(shipmentResponseFlux)
                     .map(s -> s.getT1().setShipments(s.getT2().getShipments()));
         } else {
-            return Mono.just(defaultAggregatedResponse);
+            return Flux.just(defaultAggregatedResponse);
         }
     }
 }

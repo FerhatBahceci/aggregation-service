@@ -1,18 +1,20 @@
 package com.fedex.aggregation.service.gateway;
 
 import com.fedex.aggregation.service.model.ShipmentResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
 public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> implements ShipmentGateway {
+    private static final Logger logger = LoggerFactory.getLogger(ShipmentClientImpl.class);
     private final WebClient client;
     private final Sinks.Many<ShipmentResponse> shipmentSink;
     private final Flux<ShipmentResponse> flux;
@@ -27,21 +29,22 @@ public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> imp
     }
 
     @Override
-    public Mono<ShipmentResponse> getShipment(String orderIds) {
+    public Flux<ShipmentResponse> getShipment(String orderIds) {
         getBulkCallsOrWait(this::get, getStringSet(orderIds), shipmentSink);
-        return Mono.from(flux);
+        return flux;
     }
 
-    public Mono<ShipmentResponse> get(String orderIds) {
-        return !orderIds.isBlank() ?
+    public Flux<ShipmentResponse> get(String orderIds) {
+        logger.info("Calling Shipment API with following orderIds={}", orderIds);
+        return (!orderIds.isBlank() ?
                 client
                         .get()
                         .uri(builder ->
                                 builder.path("/shipments").queryParam("q", orderIds).build()
                         )
                         .retrieve()
-                        .bodyToMono(ShipmentResponse.class)
+                        .bodyToFlux(ShipmentResponse.class)
                         .onErrorReturn(defaultShipmentResponse)
-                : Mono.empty();
+                : Flux.empty());
     }
 }

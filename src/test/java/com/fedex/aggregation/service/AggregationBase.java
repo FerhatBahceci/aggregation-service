@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -19,16 +19,16 @@ import static org.mockito.Mockito.when;
 abstract class AggregationBase {
 
     @LocalServerPort
-    private  Integer port = 0;
+    private Integer port = 0;
 
     @MockBean
-    private  PricingGateway pricingGateway;
+    private PricingGateway pricingGateway;
 
     @MockBean
-    private  TrackGateway trackGateway;
+    private TrackGateway trackGateway;
 
     @MockBean
-    private  ShipmentGateway shipmentGateway;
+    private ShipmentGateway shipmentGateway;
 
     @BeforeEach
     void setUp() {
@@ -41,7 +41,7 @@ abstract class AggregationBase {
         when(shipmentGateway.getShipment(any())).thenReturn(createError());
     }
 
-    private <T> Mono<T> createError() {
-        return Mono.error(new IllegalArgumentException("Error from fedex BE service!"));
+    private <T> Flux<T> createError() {
+        return Flux.error(new IllegalArgumentException("Error from fedex BE service!"));
     }
 }
