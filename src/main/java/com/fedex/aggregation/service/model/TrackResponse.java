@@ -27,4 +27,9 @@ public class TrackResponse {
         DELIVERING,
         DELIVERED;
     }
+
+    @Override
+    public String toString() {
+        return "TrackResponse={track=" + track + "}";
+    }
 }

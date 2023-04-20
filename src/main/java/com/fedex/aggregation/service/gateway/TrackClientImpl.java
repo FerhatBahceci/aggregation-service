@@ -48,6 +48,7 @@ public class TrackClientImpl extends BulkRequestHandler<TrackResponse> implement
                         .retrieve()
                         .bodyToFlux(TrackResponse.class)
                         .onErrorReturn(defaultTrackResponse)
+                        .log()
                 : Flux.empty());
     }
 }

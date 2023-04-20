@@ -46,7 +46,6 @@ public class BulkRequestHandler<T> {
             }
 
             Flux.concat(callbacksToExecute).subscribe(sink::tryEmitNext);
-
         }
     }
 

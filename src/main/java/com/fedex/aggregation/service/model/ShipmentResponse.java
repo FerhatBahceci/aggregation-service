@@ -1,6 +1,7 @@
 package com.fedex.aggregation.service.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.List;
 import java.util.Map;
 
@@ -14,5 +15,10 @@ public class ShipmentResponse {
 
     public Map<Long, List<String>> getShipments() {
         return shipments;
+    }
+
+    @Override
+    public String toString() {
+        return "ShipmentResponse={shipments=" + shipments + "}";
     }
 }

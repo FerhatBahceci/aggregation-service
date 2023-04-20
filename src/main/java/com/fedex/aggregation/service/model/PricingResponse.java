@@ -16,4 +16,9 @@ public class PricingResponse {
         return pricing;
     }
 
+    @Override
+    public String toString() {
+        return "PricingResponse={pricing=" + pricing + "}";
+    }
+
 }

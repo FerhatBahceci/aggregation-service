@@ -46,6 +46,7 @@ public class PricingClientImpl extends BulkRequestHandler<PricingResponse> imple
                         .retrieve()
                         .bodyToFlux(PricingResponse.class)
                         .onErrorReturn(defaultPricingResponse)
+                        .log()
                 : Flux.empty());
     }
 }

@@ -45,6 +45,7 @@ public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> imp
                         .retrieve()
                         .bodyToFlux(ShipmentResponse.class)
                         .onErrorReturn(defaultShipmentResponse)
+                        .log()
                 : Flux.empty());
     }
 }
