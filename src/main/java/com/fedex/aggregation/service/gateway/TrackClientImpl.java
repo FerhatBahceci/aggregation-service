@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
@@ -36,7 +37,7 @@ public class TrackClientImpl extends BulkRequestHandler<TrackResponse> implement
         return flux;
     }
 
-    public Flux<TrackResponse> get(String orderIds) {
+    public Mono<TrackResponse> get(String orderIds) {
         logger.info("Calling Track API with following orderIds={}", orderIds);
         return (!orderIds.isBlank() ?
                 client
@@ -46,9 +47,9 @@ public class TrackClientImpl extends BulkRequestHandler<TrackResponse> implement
                         )
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .retrieve()
-                        .bodyToFlux(TrackResponse.class)
+                        .bodyToMono(TrackResponse.class)
                         .onErrorReturn(defaultTrackResponse)
                         .log()
-                : Flux.empty());
+                : Mono.empty());
     }
 }

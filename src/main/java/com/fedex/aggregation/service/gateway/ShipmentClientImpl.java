@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
@@ -34,7 +35,7 @@ public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> imp
         return flux;
     }
 
-    public Flux<ShipmentResponse> get(String orderIds) {
+    public Mono<ShipmentResponse> get(String orderIds) {
         logger.info("Calling Shipment API with following orderIds={}", orderIds);
         return (!orderIds.isBlank() ?
                 client
@@ -43,9 +44,9 @@ public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> imp
                                 builder.path("/shipments").queryParam("q", orderIds).build()
                         )
                         .retrieve()
-                        .bodyToFlux(ShipmentResponse.class)
+                        .bodyToMono(ShipmentResponse.class)
                         .onErrorReturn(defaultShipmentResponse)
                         .log()
-                : Flux.empty());
+                : Mono.empty());
     }
 }

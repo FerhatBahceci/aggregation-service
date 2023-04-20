@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
@@ -34,7 +35,7 @@ public class PricingClientImpl extends BulkRequestHandler<PricingResponse> imple
         return flux;
     }
 
-    private Flux<PricingResponse> get(String countryCodes) {
+    private Mono<PricingResponse> get(String countryCodes) {
         logger.info("Calling Pricing API with following countryCodes={}", countryCodes);
         return (!countryCodes.isBlank()
                 ?
@@ -44,10 +45,10 @@ public class PricingClientImpl extends BulkRequestHandler<PricingResponse> imple
                                 builder.path("/pricing").queryParam("q", countryCodes).build()
                         )
                         .retrieve()
-                        .bodyToFlux(PricingResponse.class)
+                        .bodyToMono(PricingResponse.class)
                         .onErrorReturn(defaultPricingResponse)
                         .log()
-                : Flux.empty());
+                : Mono.empty());
     }
 }
 

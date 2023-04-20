@@ -1,6 +1,7 @@
 package com.fedex.aggregation.service.gateway;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,10 +20,10 @@ This would not prevent from overloading the exposed provider API (Fedex BE servi
 
 public class BulkRequestHandler<T> {
     public static final int cap = 5;
-    private final ConcurrentLinkedQueue<Flux<T>> callbackQueue = new ConcurrentLinkedQueue<>();
+    private final ConcurrentLinkedQueue<Mono<T>> callbackQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<String> queryParamsQueue = new ConcurrentLinkedQueue<>();
 
-    public void getBulkCallsOrWait(Function<String, Flux<T>> callbackConstructor, Set<String> queryParams, Sinks.Many<T> sink) {
+    public void getBulkCallsOrWait(Function<String, Mono<T>> callbackConstructor, Set<String> queryParams, Sinks.Many<T> sink) {
 
         Set<String> tmpQueryParams = new HashSet<>();
         queryParamsQueue.addAll(queryParams);
@@ -40,11 +41,10 @@ public class BulkRequestHandler<T> {
         }
 
         if (callbackQueue.size() >= cap) {
-            List<Flux<T>> callbacksToExecute = new ArrayList<>();
+            List<Mono<T>> callbacksToExecute = new ArrayList<>();
             while (callbackQueue.size() >= cap) {
                 callbacksToExecute.add(callbackQueue.poll());
             }
-
             Flux.concat(callbacksToExecute).subscribe(sink::tryEmitNext);
         }
     }
@@ -56,15 +56,15 @@ public class BulkRequestHandler<T> {
         });
     }
 
-    private void limitParamListPerSingleRequest(Function<String, Flux<T>> callbackConstructor, Set<String> tmpQueryParams) {  // As soon as a cap of 5 calls for an individual API is reached.
+    private void limitParamListPerSingleRequest(Function<String, Mono<T>> callbackConstructor, Set<String> tmpQueryParams) {  // As soon as a cap of 5 calls for an individual API is reached.
         var currentTmpQueryParams =tmpQueryParams.stream().toList().subList(0, 5);
         SingleRequest request = create(currentTmpQueryParams);
-        Flux<T> preparedCall = callbackConstructor.apply(request.getQueryParamString());
+        Mono<T> preparedCall = callbackConstructor.apply(request.getQueryParamString());
         callbackQueue.offer(preparedCall);
         tmpQueryParams.removeAll(new HashSet<>(currentTmpQueryParams));
     }
 
-    public ConcurrentLinkedQueue<Flux<T>> getCallbackQueue() {
+    public ConcurrentLinkedQueue<Mono<T>> getCallbackQueue() {
         return callbackQueue;
     }
 
