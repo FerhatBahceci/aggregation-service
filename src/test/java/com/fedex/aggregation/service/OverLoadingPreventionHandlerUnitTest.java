@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
 import java.util.Objects;
@@ -29,8 +29,6 @@ import static org.mockito.Mockito.*;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 public class OverLoadingPreventionHandlerUnitTest {
-    @LocalServerPort
-    Integer port = 0;
     @Autowired
     private Sinks.Many<PricingResponse> pricingSink;
 
@@ -68,7 +66,6 @@ public class OverLoadingPreventionHandlerUnitTest {
         BulkRequestHandler<PricingResponse> handler = new BulkRequestHandler<>();
         var orderIdsBelowCap = Set.of(ORDER_ID_1, ORDER_ID_2, ORDER_ID_3, ORDER_ID_4).stream().map(Objects::toString).collect(Collectors.toSet());  // queryParam below cap!
 
-
         handler.getBulkCallsOrWait(pricingGatewayMock::getPricing, orderIdsBelowCap, pricingSink);  // 1.
 
         Assertions.assertThat(handler.getQueryParamsQueue().size()).isEqualTo(orderIdsBelowCap.size());
@@ -90,7 +87,10 @@ public class OverLoadingPreventionHandlerUnitTest {
         handler.getBulkCallsOrWait(pricingGatewayMock::getPricing, orderIdsBelowCap, pricingSink); // 7. ---> 7 x 4(queryParams) = 28, 5 queryParam per API call --> cap is reached and executed!
         Assertions.assertThat(handler.getCallbackQueue().size()).isEqualTo(0);
         Assertions.assertThat(handler.getQueryParamsQueue().size()).isEqualTo(3);
-        //TODO subscribe from FLUX and assert?
+
+/*
+        pricingFlux.map(pricingResponse -> Assertions.assertThat(pricingResponse).isEqualTo(PRICING_RESPONSE.block())).blockFirst();
+*/
     }
 
     @Test
@@ -120,6 +120,11 @@ public class OverLoadingPreventionHandlerUnitTest {
         handler.getBulkCallsOrWait(trackGatewayMock::getTracking, orderIdsBelowCap, trackSink); // 7. ---> 7 x 4(queryParams) = 28, 5 queryParam per API call --> cap is reached and executed!
         Assertions.assertThat(handler.getCallbackQueue().size()).isEqualTo(0);
         Assertions.assertThat(handler.getQueryParamsQueue().size()).isEqualTo(3);
+
+/*
+        trackFlux.map(trackResponse -> Assertions.assertThat(trackResponse).isEqualTo(TRACK_RESPONSE.block())).blockFirst();
+*/
+
     }
 
     @Test
@@ -151,5 +156,9 @@ public class OverLoadingPreventionHandlerUnitTest {
         handler.getBulkCallsOrWait(shipmentGatewayMock::getShipment, orderIdsBelowCap, shipmentSink); // 7. ---> 7 x 4(queryParams) = 28, 5 queryParam per API call --> cap is reached and executed!
         Assertions.assertThat(handler.getCallbackQueue().size()).isEqualTo(0);
         Assertions.assertThat(handler.getQueryParamsQueue().size()).isEqualTo(3);
+
+/*
+        shipmentFlux.map(shipmentResponse -> Assertions.assertThat(shipmentResponse).isEqualTo(SHIPMENT_RESPONSE.block())).blockFirst();
+*/
     }
 }
