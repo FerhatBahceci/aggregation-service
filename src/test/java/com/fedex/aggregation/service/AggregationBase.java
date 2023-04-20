@@ -19,16 +19,16 @@ import static org.mockito.Mockito.when;
 abstract class AggregationBase {
 
     @LocalServerPort
-    Integer port = 0;
+    private  Integer port = 0;
 
     @MockBean
-    PricingGateway pricingGateway;
+    private  PricingGateway pricingGateway;
 
     @MockBean
-    TrackGateway trackGateway;
+    private  TrackGateway trackGateway;
 
     @MockBean
-    ShipmentGateway shipmentGateway;
+    private  ShipmentGateway shipmentGateway;
 
     @BeforeEach
     void setUp() {

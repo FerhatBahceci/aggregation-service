@@ -11,14 +11,15 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static com.fedex.aggregation.service.gateway.SingleRequest.create;
+import static java.util.Objects.nonNull;
 
 /*
 The OverLoadingPreventionHandler is per instance of aggregation-service. In production, it is most likely that we would have N amount of instances of aggregation-service's up and running.
 This would not prevent from overloading the exposed provider API (Fedex BE services). For that, we would need to know more details about the amount of instances for both subscribing (downstream) and publishing (upstream), amount of events emitted, processing frequency etc .
 */
 
-abstract class BulkRequestHandler<T> {
-    private static final int cap = 5;
+public class BulkRequestHandler<T> {
+    public static final int cap = 5;
     private final ConcurrentLinkedQueue<Mono<T>> callbackQueue = new ConcurrentLinkedQueue<>();
     private final ConcurrentLinkedQueue<String> queryParamsQueue = new ConcurrentLinkedQueue<>();
 
@@ -33,13 +34,13 @@ abstract class BulkRequestHandler<T> {
 
         if (tmpQueryParams.size() >= cap) {
             while (tmpQueryParams.size() >= cap) { //Ensuring that maximum 5 params are included in the optional q?= per call
-                tmpQueryParams = limitParamListPerSingleRequest(callbackConstructor, tmpQueryParams);
+                limitParamListPerSingleRequest(callbackConstructor, tmpQueryParams);
             }
         } else {
             queryParamsQueue.addAll(tmpQueryParams);
         }
 
-        if (callbackQueue.size() >= cap) {  //Ensuring that we are merging 5 publishers
+        if (callbackQueue.size() >= cap && nonNull(sink)) {  //Ensuring that we are merging 5 publishers
             List<Mono<T>> tmpCallbackHolder = new ArrayList<>();
             IntStream.range(0, cap).boxed().toList().stream().forEach(i -> tmpCallbackHolder.add(callbackQueue.poll()));
             Flux.merge(tmpCallbackHolder).subscribe(sink::tryEmitNext);
@@ -60,5 +61,13 @@ abstract class BulkRequestHandler<T> {
         callbackQueue.offer(preparedCall);
         tmpQueryParams.removeAll(currentTmpQueryParams);
         return tmpQueryParams;
+    }
+
+    public ConcurrentLinkedQueue<Mono<T>> getCallbackQueue() {
+        return callbackQueue;
+    }
+
+    public ConcurrentLinkedQueue<String> getQueryParamsQueue() {
+        return queryParamsQueue;
     }
 }
