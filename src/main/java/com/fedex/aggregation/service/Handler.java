@@ -12,8 +12,8 @@ import reactor.core.publisher.Mono;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.fedex.aggregation.service.util.StringUtil.getList;
-import static com.fedex.aggregation.service.util.StringUtil.getSet;
+import static com.fedex.aggregation.service.util.StringUtil.getLongList;
+import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Component
@@ -44,7 +44,7 @@ public class Handler {
         List<String> validatedOrderIds = new ArrayList<>();
         var orderIdQueryParams = request.queryParam(queryParam).orElse(""); //These parameters are all optional and could be missing
         if (!orderIdQueryParams.isBlank()) {
-            List<Long> orderIds = getList(orderIdQueryParams);
+            List<Long> orderIds = getLongList(orderIdQueryParams);
             validatedOrderIds = validateOrderIds(orderIds);
         }
         return String.join(",", validatedOrderIds);
@@ -54,7 +54,7 @@ public class Handler {
         Set<String> countryCodes = Set.of();
         var pricingQueryParam = request.queryParam("pricing").orElse(""); //These parameters are all optional and could be missing
         if (!pricingQueryParam.isBlank()) {
-            countryCodes = validateCountryCodes(getSet(pricingQueryParam)); // Ensures distinct countryCodes.
+            countryCodes = validateCountryCodes(getStringSet(pricingQueryParam)); // Ensures distinct countryCodes.
         }
         return String.join(",", countryCodes);
     }

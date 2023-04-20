@@ -10,7 +10,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
-import static com.fedex.aggregation.service.util.StringUtil.getSet;
+import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
 public class TrackClientImpl extends BulkRequestHandler<TrackResponse> implements TrackGateway {
@@ -31,7 +31,7 @@ public class TrackClientImpl extends BulkRequestHandler<TrackResponse> implement
 
     @Override
     public Mono<TrackResponse> getTracking(String orderIds) {
-        getBulkCallsOrWait(this::get, getSet(orderIds), trackSink);
+        getBulkCallsOrWait(this::get, getStringSet(orderIds), trackSink);
         return Mono.from(flux);
     }
 

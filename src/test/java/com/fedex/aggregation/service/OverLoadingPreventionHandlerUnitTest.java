@@ -1,13 +1,10 @@
 /*
 package com.fedex.aggregation.service;
 
-import com.fedex.aggregation.service.gateway.OverLoadingPreventionHandler;
 import com.fedex.aggregation.service.gateway.PricingGateway;
 import com.fedex.aggregation.service.gateway.ShipmentGateway;
 import com.fedex.aggregation.service.gateway.TrackGateway;
 import com.fedex.aggregation.service.model.PricingResponse;
-import com.fedex.aggregation.service.model.ShipmentResponse;
-import com.fedex.aggregation.service.model.TrackResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -34,10 +31,6 @@ public class OverLoadingPreventionHandlerUnitTest {
 
     @MockBean
     ShipmentGateway shipmentGateway;
-
-    private final OverLoadingPreventionHandler<PricingResponse> pricingHandler = new OverLoadingPreventionHandler<>();
-    private final OverLoadingPreventionHandler<ShipmentResponse> shipmentHandler = new OverLoadingPreventionHandler<>();
-    private final OverLoadingPreventionHandler<TrackResponse> trackHandler = new OverLoadingPreventionHandler<>();
 
     @Test
     void testOverLoadingPreventionHandler() {

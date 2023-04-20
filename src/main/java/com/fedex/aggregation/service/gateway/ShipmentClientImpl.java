@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
-import static com.fedex.aggregation.service.util.StringUtil.getSet;
+import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
 public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> implements ShipmentGateway {
@@ -28,7 +28,7 @@ public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> imp
 
     @Override
     public Mono<ShipmentResponse> getShipment(String orderIds) {
-        getBulkCallsOrWait(this::get, getSet(orderIds), shipmentSink);
+        getBulkCallsOrWait(this::get, getStringSet(orderIds), shipmentSink);
         return Mono.from(flux);
     }
 

@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
-import static com.fedex.aggregation.service.util.StringUtil.getSet;
+import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
 public class PricingClientImpl extends BulkRequestHandler<PricingResponse> implements PricingGateway {
@@ -29,7 +29,7 @@ public class PricingClientImpl extends BulkRequestHandler<PricingResponse> imple
 
     @Override
     public Mono<PricingResponse> getPricing(String countryCodes) {
-        getBulkCallsOrWait(this::get, getSet(countryCodes), pricingSink);
+        getBulkCallsOrWait(this::get, getStringSet(countryCodes), pricingSink);
         return Mono.from(flux);
     }
 

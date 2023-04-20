@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 
 public class StringUtil {
 
-    public static Set<String> getSet(String string) {
+    public static Set<String> getStringSet(String string) {
         return Arrays.stream(string.split(",")).collect(Collectors.toSet());
     }
 
-    public static List<Long> getList(String string) {
+    public static List<Long> getLongList(String string) {
         return new ArrayList<>(Arrays.stream(string.split(",")).map(Long::valueOf).collect(Collectors.toSet()));
     }
 }
