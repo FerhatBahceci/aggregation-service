@@ -2,8 +2,6 @@ package com.fedex.aggregation.service.gateway;
 
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-import reactor.core.publisher.Sinks.EmitResult;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,9 +39,12 @@ public class BulkRequestHandler<T> {
             queryParamsQueue.addAll(tmpQueryParams);
         }
 
-        var pollCallback = Optional.ofNullable(callbackQueue.poll());
-        pollCallback.ifPresent(callback -> callback.subscribe(sink::tryEmitNext));
+        while (!callbackQueue.isEmpty()) {
+            var pollCallback = Optional.ofNullable(callbackQueue.poll());
+            pollCallback.ifPresent(callback -> callback.subscribe(sink::tryEmitNext));
+        }
     }
+
     private void pollFromQueryParamsQueue(List<String> tmpQueryParams) {
         IntStream.range(0, cap).boxed().toList().stream().forEach(i -> {
             var tmpPollQueryParam = queryParamsQueue.poll();
