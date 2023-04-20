@@ -1,10 +1,12 @@
 package com.fedex.aggregation.service.gateway;
 
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
+import reactor.core.publisher.Sinks.EmitResult;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
@@ -39,13 +41,9 @@ public class BulkRequestHandler<T> {
             queryParamsQueue.addAll(tmpQueryParams);
         }
 
-        if (callbackQueue.size() >= cap) {  //Ensuring that we are merging 5 publishers
-            List<Mono<T>> tmpCallbackHolder = new ArrayList<>();
-            IntStream.range(0, cap).boxed().toList().forEach(i -> tmpCallbackHolder.add(callbackQueue.poll()));
-            Flux.merge(tmpCallbackHolder).subscribe(sink::tryEmitNext);
-        }
+        var pollCallback = Optional.ofNullable(callbackQueue.poll());
+        pollCallback.ifPresent(callback -> callback.subscribe(sink::tryEmitNext));
     }
-
     private void pollFromQueryParamsQueue(List<String> tmpQueryParams) {
         IntStream.range(0, cap).boxed().toList().stream().forEach(i -> {
             var tmpPollQueryParam = queryParamsQueue.poll();
@@ -53,7 +51,7 @@ public class BulkRequestHandler<T> {
         });
     }
 
-    private List<String> limitParamListPerSingleRequest(Function<String, Mono<T>> callbackConstructor, List<String> tmpQueryParams) {
+    private List<String> limitParamListPerSingleRequest(Function<String, Mono<T>> callbackConstructor, List<String> tmpQueryParams) {  // As soon as a cap of 5 calls for an individual API is reached.
         var currentTmpQueryParams = tmpQueryParams.subList(0, 5);
         SingleRequest request = create(currentTmpQueryParams);
         Mono<T> preparedCall = callbackConstructor.apply(request.getQueryParamString());

@@ -16,7 +16,6 @@ public class PricingClientImpl extends BulkRequestHandler<PricingResponse> imple
     private final WebClient client;
     private final Sinks.Many<PricingResponse> pricingSink;
     private final Flux<PricingResponse> flux;
-
     public static final PricingResponse defaultPricingResponse = new PricingResponse(null);
 
     public PricingClientImpl(@Qualifier("pricingClient") WebClient client,
