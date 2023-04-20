@@ -9,12 +9,13 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StringUtilUntilTest {
 
     @Test
     void testGetLongList() {
-        var testString = List.of(ORDER_ID_1, ORDER_ID_2).stream().map(Object::toString).collect(Collectors.joining(","));
+        var testString = Stream.of(ORDER_ID_1, ORDER_ID_2).map(Object::toString).collect(Collectors.joining(","));
         List<Long> listOfStrings = getLongList(testString);
         Assertions.assertThat(listOfStrings).containsOnly(ORDER_ID_1, ORDER_ID_2);
     }

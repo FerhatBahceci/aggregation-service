@@ -1,10 +1,11 @@
 package com.fedex.aggregation.service.gateway;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
@@ -24,7 +25,7 @@ public class BulkRequestHandler<T> {
 
     public void getBulkCallsOrWait(Function<String, Mono<T>> callbackConstructor, Set<String> queryParams, Sinks.Many<T> sink) {
 
-        List<String> tmpQueryParams = new ArrayList<>();
+        Set<String> tmpQueryParams = new HashSet<>();
         queryParamsQueue.addAll(queryParams);
 
         while (queryParamsQueue.size() >= cap) {
@@ -39,26 +40,28 @@ public class BulkRequestHandler<T> {
             queryParamsQueue.addAll(tmpQueryParams);
         }
 
-        while (!callbackQueue.isEmpty()) {
-            var pollCallback = Optional.ofNullable(callbackQueue.poll());
-            pollCallback.ifPresent(callback -> callback.subscribe(sink::tryEmitNext));
+        if (callbackQueue.size() >= cap) {
+            List<Mono<T>> callbacksToExecute = new ArrayList<>();
+            while (callbackQueue.size() >= cap) {
+                callbacksToExecute.add(callbackQueue.poll());
+            }
+            Flux.merge(callbacksToExecute).subscribe(sink::tryEmitNext);
         }
     }
 
-    private void pollFromQueryParamsQueue(List<String> tmpQueryParams) {
-        IntStream.range(0, cap).boxed().toList().stream().forEach(i -> {
+    private void pollFromQueryParamsQueue(Set<String> tmpQueryParams) {
+        IntStream.range(0, cap).boxed().toList().forEach(i -> {
             var tmpPollQueryParam = queryParamsQueue.poll();
             tmpQueryParams.add(tmpPollQueryParam);
         });
     }
 
-    private List<String> limitParamListPerSingleRequest(Function<String, Mono<T>> callbackConstructor, List<String> tmpQueryParams) {  // As soon as a cap of 5 calls for an individual API is reached.
-        var currentTmpQueryParams = tmpQueryParams.subList(0, 5);
+    private void limitParamListPerSingleRequest(Function<String, Mono<T>> callbackConstructor, Set<String> tmpQueryParams) {  // As soon as a cap of 5 calls for an individual API is reached.
+        var currentTmpQueryParams =tmpQueryParams.stream().toList().subList(0, 5);
         SingleRequest request = create(currentTmpQueryParams);
         Mono<T> preparedCall = callbackConstructor.apply(request.getQueryParamString());
         callbackQueue.offer(preparedCall);
-        tmpQueryParams.removeAll(currentTmpQueryParams);
-        return tmpQueryParams;
+        tmpQueryParams.removeAll(new HashSet<>(currentTmpQueryParams));
     }
 
     public ConcurrentLinkedQueue<Mono<T>> getCallbackQueue() {
