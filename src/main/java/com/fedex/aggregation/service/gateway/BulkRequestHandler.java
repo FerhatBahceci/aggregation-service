@@ -11,7 +11,6 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static com.fedex.aggregation.service.gateway.SingleRequest.create;
-import static java.util.Objects.nonNull;
 
 /*
 The OverLoadingPreventionHandler is per instance of aggregation-service. In production, it is most likely that we would have N amount of instances of aggregation-service's up and running.
@@ -40,9 +39,9 @@ public class BulkRequestHandler<T> {
             queryParamsQueue.addAll(tmpQueryParams);
         }
 
-        if (callbackQueue.size() >= cap && nonNull(sink)) {  //Ensuring that we are merging 5 publishers
+        if (callbackQueue.size() >= cap) {  //Ensuring that we are merging 5 publishers
             List<Mono<T>> tmpCallbackHolder = new ArrayList<>();
-            IntStream.range(0, cap).boxed().toList().stream().forEach(i -> tmpCallbackHolder.add(callbackQueue.poll()));
+            IntStream.range(0, cap).boxed().toList().forEach(i -> tmpCallbackHolder.add(callbackQueue.poll()));
             Flux.merge(tmpCallbackHolder).subscribe(sink::tryEmitNext);
         }
     }

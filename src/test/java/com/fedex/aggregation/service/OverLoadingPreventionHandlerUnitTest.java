@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,10 +53,6 @@ public class OverLoadingPreventionHandlerUnitTest {
 
     @MockBean
     private ShipmentGateway shipmentGatewayMock;
-
-    private final BulkRequestHandler<TrackResponse> trackBulkRequestHandler = new BulkRequestHandler<>();
-
-    private final BulkRequestHandler<ShipmentResponse> shipmentBulkRequestHandler = new BulkRequestHandler<>();
 
     @Test
     void testPricingOverLoadingPreventionHandler() {
@@ -147,10 +141,8 @@ public class OverLoadingPreventionHandlerUnitTest {
 
         handler.getBulkCallsOrWait(shipmentGatewayMock::getShipment, orderIdsBelowCap, shipmentSink); // 3.
         handler.getBulkCallsOrWait(shipmentGatewayMock::getShipment, orderIdsBelowCap, shipmentSink); // 4.
-        handler.getBulkCallsOrWait(shipmentGatewayMock::getShipment, orderIdsBelowCap, shipmentSink);
-        ; // 5.
-        handler.getBulkCallsOrWait(shipmentGatewayMock::getShipment, orderIdsBelowCap, shipmentSink);
-        ; // 6. ---> 6 x 4 (queryParams) = 24, therefore 4 API calls should be residing in the queue
+        handler.getBulkCallsOrWait(shipmentGatewayMock::getShipment, orderIdsBelowCap, shipmentSink); // 5.
+        handler.getBulkCallsOrWait(shipmentGatewayMock::getShipment, orderIdsBelowCap, shipmentSink); // 6. ---> 6 x 4 (queryParams) = 24, therefore 4 API calls should be residing in the queue
         Assertions.assertThat(handler.getCallbackQueue().size()).isEqualTo(4);
 
         handler.getBulkCallsOrWait(shipmentGatewayMock::getShipment, orderIdsBelowCap, shipmentSink); // 7. ---> 7 x 4(queryParams) = 28, 5 queryParam per API call --> cap is reached and executed!
