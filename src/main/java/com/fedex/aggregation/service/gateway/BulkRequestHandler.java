@@ -15,7 +15,7 @@ import static java.util.Objects.nonNull;
 
 /*
 The OverLoadingPreventionHandler is per instance of aggregation-service. In production, it is most likely that we would have N amount of instances of aggregation-service's up and running.
-This would not prevent from overloading the exposed provider API (Fedex BE services). For that, we would need to know more details about the amount of instances for both subscribing (downstream) and publishing (upstream), amount of events emitted, processing frequency etc .
+This would not prevent from overloading the exposed provider API (Fedex BE services). For that, we would need to know more details about the amount of instances for both subscribing (downstream) and publishing (upstream), amount of events emitted, processing frequency etc.
 */
 
 public class BulkRequestHandler<T> {
