@@ -1,10 +1,10 @@
 package com.fedex.aggregation.service.gateway;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
@@ -32,15 +32,18 @@ abstract class BulkRequestHandler<T> {
         }
 
         if (tmpQueryParams.size() >= cap) {
-            while (tmpQueryParams.size() >= cap) { //Ensuring that maximum 5 params are included in the optional q?=
+            while (tmpQueryParams.size() >= cap) { //Ensuring that maximum 5 params are included in the optional q?= per call
                 tmpQueryParams = limitParamListPerSingleRequest(callbackConstructor, tmpQueryParams);
             }
         } else {
             queryParamsQueue.addAll(tmpQueryParams);
         }
 
-        var pollCallback = Optional.ofNullable(callbackQueue.poll());
-        pollCallback.ifPresent(callback -> callback.subscribe(sink::tryEmitNext));
+        if (callbackQueue.size() >= cap) {  //Ensuring that we are merging 5 publishers
+            List<Mono<T>> tmpCallbackHolder = new ArrayList<>();
+            IntStream.range(0, cap).boxed().toList().stream().forEach(i -> tmpCallbackHolder.add(callbackQueue.poll()));
+            Flux.merge(tmpCallbackHolder).subscribe(sink::tryEmitNext);
+        }
     }
 
     private void pollFromQueryParamsQueue(List<String> tmpQueryParams) {
