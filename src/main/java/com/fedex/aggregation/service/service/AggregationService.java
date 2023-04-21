@@ -59,17 +59,16 @@ public class AggregationService {
                             .onErrorReturn(defaultShipmentResponse)
                     : Flux.just(defaultShipmentResponse);
 
-            pricingResponseFlux.subscribe(s -> logger.info("PricingResponse={}}", s.getPricing()));
-            trackResponseFlux.subscribe(s -> logger.info("TrackResponse={}}", s.getTrack()));
-            shipmentResponseFlux.subscribe(s -> logger.info("ShipmentResponse={}}", s.getShipments()));
+            return Flux.zip(pricingResponseFlux, trackResponseFlux, shipmentResponseFlux)
+                    .map(response -> {
+                        logger.info("I AM CONSTRUCTING AGGREGATED RESPONSE!");
+                        var agg = new AggregatedResponse();
+                        agg.setPricing(response.getT1().getPricing());
+                        agg.setTrack(response.getT2().getTrack());
+                        agg.setShipments(response.getT3().getShipments());
+                        return agg;
+                    });
 
-            return Flux.just(new AggregatedResponse())
-                    .zipWith(pricingResponseFlux)
-                    .mapNotNull(p -> p.getT1().setPricing(p.getT2().getPricing()))
-                    .zipWith(trackResponseFlux)
-                    .mapNotNull(t -> t.getT1().setTrack(t.getT2().getTrack()))
-                    .zipWith(shipmentResponseFlux)
-                    .map(s -> s.getT1().setShipments(s.getT2().getShipments()));
         } else {
             return Flux.just(defaultAggregatedResponse);
         }
