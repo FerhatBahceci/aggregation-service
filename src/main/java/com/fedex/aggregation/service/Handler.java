@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 @Component
 public class Handler {
 
+    private static final Logger logger = LoggerFactory.getLogger(AggregationService.class);
     private final AggregationService aggregationService;
 
     private static final Set<String> validCountryCodes = Set.of(Locale.getISOCountries());
