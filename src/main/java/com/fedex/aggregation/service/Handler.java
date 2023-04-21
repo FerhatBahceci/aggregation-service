@@ -19,8 +19,6 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 
 @Component
 public class Handler {
-
-    private static final Logger logger = LoggerFactory.getLogger(AggregationService.class);
     private final AggregationService aggregationService;
 
     private static final Set<String> validCountryCodes = Set.of(Locale.getISOCountries());
@@ -32,12 +30,18 @@ public class Handler {
     }
 
     public Mono<ServerResponse> getAggregation(ServerRequest request) {
-        return ok().body(
-                aggregationService.getAggregation(
-                        getPricingParams(request),
-                        getOrderIdParams(request, "track"),
-                        getOrderIdParams(request, "shipments")
-                ), AggregatedResponse.class);
+
+        var list = new ArrayList<>();
+
+        aggregationService.getAggregation(
+                getPricingParams(request),
+                getOrderIdParams(request, "track"),
+                getOrderIdParams(request, "shipments")
+        ).doOnNext((s) -> {
+            log.info("This is the CONSTRUCTED AggregatedResponse:{}", s);
+        }).subscribe();
+
+        return ok().bodyValue(list);
     }
 
     //If the same value is present multiple times in the query, the response will only contain it once --> Using Set for all paramBuilders for ensuring distinct values

@@ -46,7 +46,9 @@ public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> imp
                         .retrieve()
                         .bodyToMono(ShipmentResponse.class)
                         .onErrorReturn(defaultShipmentResponse)
+/*
                         .log()
+*/
                 : Mono.empty());
     }
 }

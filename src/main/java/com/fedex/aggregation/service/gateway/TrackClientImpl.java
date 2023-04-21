@@ -49,7 +49,9 @@ public class TrackClientImpl extends BulkRequestHandler<TrackResponse> implement
                         .retrieve()
                         .bodyToMono(TrackResponse.class)
                         .onErrorReturn(defaultTrackResponse)
+/*
                         .log()
+*/
                 : Mono.empty());
     }
 }

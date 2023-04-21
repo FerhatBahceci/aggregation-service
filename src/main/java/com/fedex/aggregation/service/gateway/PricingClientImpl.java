@@ -47,7 +47,9 @@ public class PricingClientImpl extends BulkRequestHandler<PricingResponse> imple
                         .retrieve()
                         .bodyToMono(PricingResponse.class)
                         .onErrorReturn(defaultPricingResponse)
+/*
                         .log()
+*/
                 : Mono.empty());
     }
 }
