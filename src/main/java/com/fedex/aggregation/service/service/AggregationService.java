@@ -21,8 +21,6 @@ public class AggregationService {
     private final PricingGateway pricingGateway;
     private final ShipmentGateway shipmentGateway;
     private final TrackGateway trackGateway;
-    public static AggregatedResponse defaultAggregatedResponse = new AggregatedResponse();
-
     public AggregationService(@Autowired PricingGateway pricingClient,
                               @Autowired ShipmentGateway shipmentClient,
                               @Autowired TrackGateway trackingClient) {
@@ -36,35 +34,32 @@ public class AggregationService {
             String track,
             String shipments) {
 
-        if (nonNull(pricing) || nonNull(track) || nonNull(shipments)) {
-            final Flux<PricingResponse> pricingResponseFlux = nonNull(pricing) ?
-                    pricingGateway.getPricing(pricing)
-                            .switchIfEmpty(Mono.just(defaultPricingResponse))
-                            .onErrorReturn(defaultPricingResponse)
-                    : Flux.just(defaultPricingResponse);
+        final Flux<PricingResponse> pricingResponseFlux = nonNull(pricing) ?
+                pricingGateway.getPricing(pricing)
+                        .switchIfEmpty(Mono.just(defaultPricingResponse))
+                        .onErrorReturn(defaultPricingResponse)
+                : Flux.just(defaultPricingResponse);
 
-            final Flux<TrackResponse> trackResponseFlux = nonNull(track) ?
-                    trackGateway.getTracking(track)
-                            .switchIfEmpty(Mono.just(defaultTrackResponse))
-                            .onErrorReturn(defaultTrackResponse)
-                    : Flux.just(defaultTrackResponse);
+        final Flux<TrackResponse> trackResponseFlux = nonNull(track) ?
+                trackGateway.getTracking(track)
+                        .switchIfEmpty(Mono.just(defaultTrackResponse))
+                        .onErrorReturn(defaultTrackResponse)
+                : Flux.just(defaultTrackResponse);
 
-            final Flux<ShipmentResponse> shipmentResponseFlux = nonNull(shipments) ?
-                    shipmentGateway.getShipment(shipments)
-                            .switchIfEmpty(Mono.just(defaultShipmentResponse))
-                            .onErrorReturn(defaultShipmentResponse)
-                    : Flux.just(defaultShipmentResponse);
+        final Flux<ShipmentResponse> shipmentResponseFlux = nonNull(shipments) ?
+                shipmentGateway.getShipment(shipments)
+                        .switchIfEmpty(Mono.just(defaultShipmentResponse))
+                        .onErrorReturn(defaultShipmentResponse)
+                : Flux.just(defaultShipmentResponse);
 
-            return Flux.zip(pricingResponseFlux, trackResponseFlux, shipmentResponseFlux)
-                    .mapNotNull(r -> {
-                        var agg = new AggregatedResponse();
-                        agg.setShipments(r.getT3().getShipments());
-                        agg.setTrack(r.getT2().getTrack());
-                        agg.setPricing(r.getT1().getPricing());
-                        return agg;
-                    });
-        } else {
-            return Flux.just(defaultAggregatedResponse);
-        }
+        return Flux.zip(pricingResponseFlux, trackResponseFlux, shipmentResponseFlux)
+                .mapNotNull(r -> {
+                    var agg = new AggregatedResponse();
+                    agg.setShipments(r.getT3().getShipments());
+                    agg.setTrack(r.getT2().getTrack());
+                    agg.setPricing(r.getT1().getPricing());
+                    return agg;
+                });
+
     }
 }

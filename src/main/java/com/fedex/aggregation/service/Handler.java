@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,7 +22,7 @@ public class Handler {
 
     private static final Set<String> validCountryCodes = Set.of(Locale.getISOCountries());
 
-    private static final Logger log = LoggerFactory.getLogger(Handler.class);
+    private static final Logger logger = LoggerFactory.getLogger(Handler.class);
 
     public Handler(@Autowired AggregationService aggregationService) {
         this.aggregationService = aggregationService;
@@ -31,17 +30,28 @@ public class Handler {
 
     public Mono<ServerResponse> getAggregation(ServerRequest request) {
 
-        var list = new ArrayList<>();
+        var pricing = getPricingParams(request);
+        var track = getOrderIdParams(request, "track");
+        var shipments = getOrderIdParams(request, "shipments");
 
-        aggregationService.getAggregation(
-                getPricingParams(request),
-                getOrderIdParams(request, "track"),
-                getOrderIdParams(request, "shipments")
-        ).doOnNext((s) -> {
-            log.info("This is the CONSTRUCTED AggregatedResponse:{}", s);
-        }).subscribe();
+        if (!pricing.isBlank() || !track.isBlank() || !shipments.isBlank()) {
 
-        return ok().bodyValue(list);
+            aggregationService.getAggregation(pricing, track, pricing)
+                    .doOnNext((s) -> {
+                        logger.info("This is the CONSTRUCTED AggregatedResponse:{}", s);
+                    }).subscribe();
+
+
+            return ok().body(
+                    aggregationService.getAggregation(pricing, track, shipments),
+                    AggregatedResponse.class
+            );
+
+
+        }
+
+
+        return Mono.empty();
     }
 
     //If the same value is present multiple times in the query, the response will only contain it once --> Using Set for all paramBuilders for ensuring distinct values
@@ -53,7 +63,7 @@ public class Handler {
             List<Long> orderIds = getLongList(orderIdQueryParams);
             validatedOrderIds = validateOrderIds(orderIds);
         }
-        return String.join(",", validatedOrderIds);
+        return validatedOrderIds.size() > 0 ? String.join(",", validatedOrderIds) : "";
     }
 
     private String getPricingParams(ServerRequest request) {
@@ -62,13 +72,13 @@ public class Handler {
         if (!pricingQueryParam.isBlank()) {
             countryCodes = validateCountryCodes(getStringSet(pricingQueryParam)); // Ensures distinct countryCodes.
         }
-        return String.join(",", countryCodes);
+        return countryCodes.size() > 0 ? String.join(",", countryCodes) : "";
     }
 
     private Set<String> validateCountryCodes(Set<String> countryCodes) {
         countryCodes.forEach(countryCode -> {
             if (!validCountryCodes.contains(countryCode)) {
-                log.info("IllegalArgument, Invalid ISOCountryCode: {}" + countryCode);
+                logger.info("IllegalArgument, Invalid ISOCountryCode: {}" + countryCode);
             }
         });
         return countryCodes;
@@ -77,7 +87,7 @@ public class Handler {
     private List<String> validateOrderIds(List<Long> orderIds) {
         orderIds.forEach(orderId -> {
             if (String.valueOf(orderId).length() != 9) {
-                log.info("IllegalArgument, Invalid OrderIde: {}", orderId);
+                logger.info("IllegalArgument, Invalid OrderIde: {}", orderId);
             }
         });
         return orderIds.stream().map(Object::toString).collect(Collectors.toList());
