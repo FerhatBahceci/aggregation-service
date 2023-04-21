@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,23 +36,13 @@ public class Handler {
         var shipments = getOrderIdParams(request, "shipments");
 
         if (!pricing.isBlank() || !track.isBlank() || !shipments.isBlank()) {
-
-            aggregationService.getAggregation(pricing, track, pricing)
-                    .doOnNext((s) -> {
-                        logger.info("This is the CONSTRUCTED AggregatedResponse:{}", s);
-                    }).subscribe();
-
-
             return ok().body(
                     aggregationService.getAggregation(pricing, track, shipments),
                     AggregatedResponse.class
             );
-
-
+        } else {
+            return Mono.empty();
         }
-
-
-        return Mono.empty();
     }
 
     //If the same value is present multiple times in the query, the response will only contain it once --> Using Set for all paramBuilders for ensuring distinct values

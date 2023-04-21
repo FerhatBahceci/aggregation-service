@@ -32,7 +32,15 @@ public class PricingClient extends BulkRequestHandler<PricingResponse> implement
     @Override
     public Flux<PricingResponse> getPricing(String countryCodes) {
         getBulkCallsOrWait(this::get, getStringSet(countryCodes));
-        return flux;
+        return flux.doOnComplete(() -> {
+                    logger.info("COMPLETED!");
+                    getSink().emitComplete((signalType, emitResult) -> emitResult.isSuccess());
+                })
+                .doOnNext(pricingResponse ->
+                        logger.info("This is the subscribed PricingResponse:{}", pricingResponse)
+
+
+                );
     }
 
     private Mono<PricingResponse> get(String countryCodes) {

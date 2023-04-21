@@ -69,4 +69,8 @@ abstract class BulkRequestHandler<T> {
         callbackQueue.offer(preparedCall);
         tmpQueryParams.removeAll(new HashSet<>(currentTmpQueryParams));
     }
+
+    public Sinks.Many<T> getSink() {
+        return sink;
+    }
 }

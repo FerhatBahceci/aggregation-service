@@ -60,6 +60,5 @@ public class AggregationService {
                     agg.setPricing(r.getT1().getPricing());
                     return agg;
                 });
-
     }
 }

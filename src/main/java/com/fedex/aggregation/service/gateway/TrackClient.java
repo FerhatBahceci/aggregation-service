@@ -19,7 +19,6 @@ import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 public class TrackClient extends BulkRequestHandler<TrackResponse> implements TrackGateway {
     private static final Logger logger = LoggerFactory.getLogger(TrackClient.class);
     private final WebClient client;
-
     private final Flux<TrackResponse> flux;
     public static final TrackResponse defaultTrackResponse = new TrackResponse(null);
 
@@ -34,7 +33,11 @@ public class TrackClient extends BulkRequestHandler<TrackResponse> implements Tr
     @Override
     public Flux<TrackResponse> getTracking(String orderIds) {
         getBulkCallsOrWait(this::get, getStringSet(orderIds));
-        return flux;
+        return flux.doOnComplete(() -> {
+                    logger.info("COMPLETED!");
+                    getSink().emitComplete((signalType, emitResult) -> emitResult.isSuccess());
+                })
+                .doOnNext(pricingResponse -> logger.info("This is the subscribed TrackResponse:{}", pricingResponse));
     }
 
     public Mono<TrackResponse> get(String orderIds) {

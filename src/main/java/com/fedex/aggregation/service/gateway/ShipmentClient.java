@@ -10,6 +10,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
@@ -33,6 +34,11 @@ public class ShipmentClient extends BulkRequestHandler<ShipmentResponse> impleme
     @Override
     public Flux<ShipmentResponse> getShipment(String orderIds) {
         getBulkCallsOrWait(this::get, getStringSet(orderIds));
+        flux.doOnComplete(() -> {
+                    logger.info("COMPLETED!");
+                    getSink().emitComplete((signalType, emitResult) -> emitResult.isSuccess());
+                })
+                .doOnNext(pricingResponse -> logger.info("This is the subscribed ShipmentResponse:{}", pricingResponse));
         return flux;
     }
 
