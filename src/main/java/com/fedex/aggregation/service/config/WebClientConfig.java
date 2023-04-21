@@ -10,17 +10,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class WebClientConfig {
 
-    @Bean("shipmentClient")
+    @Bean("shipmentWebClient")
     public static WebClient shipmentsWebClient(@Value("${provider-api.shipment}") String shipmentsUrl) {
         return WebClientFactory.createWebClient(shipmentsUrl);
     }
 
-    @Bean("trackingClient")
+    @Bean("trackingWebClient")
     public static WebClient trackingWebClient(@Value("${provider-api.tracking}") String trackingUrl) {
         return WebClientFactory.createWebClient(trackingUrl);
     }
 
-    @Bean("pricingClient")
+    @Bean("pricingWebClient")
     public static WebClient pricingWebClient(@Value("${provider-api.pricing}") String pricingUrl) {
         return WebClientFactory.createWebClient(pricingUrl);
     }

@@ -3,8 +3,6 @@ package com.fedex.aggregation.service.gateway;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-import reactor.core.scheduler.Schedulers;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
@@ -17,12 +15,21 @@ The OverLoadingPreventionHandler is per instance of aggregation-service. In prod
 This would not prevent from overloading the exposed provider API (Fedex BE services). For that, we would need to know more details about the amount of instances for both subscribing (downstream) and publishing (upstream), amount of events emitted, processing frequency etc.
 */
 
-public class BulkRequestHandler<T> {
+abstract class BulkRequestHandler<T> {
     public static final int cap = 5;
-    private final ConcurrentLinkedQueue<Mono<T>> callbackQueue = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<String> queryParamsQueue = new ConcurrentLinkedQueue<>();
+    private ConcurrentLinkedQueue<Mono<T>> callbackQueue;
+    private ConcurrentLinkedQueue<String> queryParamsQueue;
+    private Sinks.Many<T> sink;
 
-    public void getBulkCallsOrWait(Function<String, Mono<T>> callbackConstructor, Set<String> queryParams, Sinks.Many<T> sink) {
+    public BulkRequestHandler(ConcurrentLinkedQueue<Mono<T>> callbackQueue,
+                              ConcurrentLinkedQueue<String> queryParamsQueue,
+                              Sinks.Many<T> sink) {
+        this.callbackQueue = callbackQueue;
+        this.queryParamsQueue = queryParamsQueue;
+        this.sink = sink;
+    }
+
+    public void getBulkCallsOrWait(Function<String, Mono<T>> callbackConstructor, Set<String> queryParams) {
 
         Set<String> tmpQueryParams = new HashSet<>();
         queryParamsQueue.addAll(queryParams);
@@ -61,13 +68,5 @@ public class BulkRequestHandler<T> {
         Mono<T> preparedCall = callbackConstructor.apply(request.getQueryParamString());
         callbackQueue.offer(preparedCall);
         tmpQueryParams.removeAll(new HashSet<>(currentTmpQueryParams));
-    }
-
-    public ConcurrentLinkedQueue<Mono<T>> getCallbackQueue() {
-        return callbackQueue;
-    }
-
-    public ConcurrentLinkedQueue<String> getQueryParamsQueue() {
-        return queryParamsQueue;
     }
 }

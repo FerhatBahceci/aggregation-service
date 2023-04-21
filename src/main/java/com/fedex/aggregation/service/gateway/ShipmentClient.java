@@ -11,27 +11,29 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
-public class ShipmentClientImpl extends BulkRequestHandler<ShipmentResponse> implements ShipmentGateway {
-    private static final Logger logger = LoggerFactory.getLogger(ShipmentClientImpl.class);
+public class ShipmentClient extends BulkRequestHandler<ShipmentResponse> implements ShipmentGateway {
+    private static final Logger logger = LoggerFactory.getLogger(ShipmentClient.class);
     private final WebClient client;
-    private final Sinks.Many<ShipmentResponse> shipmentSink;
+
     private final Flux<ShipmentResponse> flux;
     public static final ShipmentResponse defaultShipmentResponse = new ShipmentResponse(null);
 
-    public ShipmentClientImpl(@Qualifier("shipmentClient") WebClient webClient,
-                              @Autowired Sinks.Many<ShipmentResponse> shipmentSink,
-                              @Autowired Flux<ShipmentResponse> flux) {
+    public ShipmentClient(@Qualifier("shipmentWebClient") WebClient webClient,
+                          @Autowired Sinks.Many<ShipmentResponse> shipmentSink,
+                          @Autowired Flux<ShipmentResponse> flux) {
+        super(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), shipmentSink);
         this.client = webClient;
-        this.shipmentSink = shipmentSink;
         this.flux = flux;
     }
 
     @Override
     public Flux<ShipmentResponse> getShipment(String orderIds) {
-        getBulkCallsOrWait(this::get, getStringSet(orderIds), shipmentSink);
+        getBulkCallsOrWait(this::get, getStringSet(orderIds));
         return flux;
     }
 

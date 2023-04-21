@@ -10,28 +10,28 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
-public class PricingClientImpl extends BulkRequestHandler<PricingResponse> implements PricingGateway {
-    private static final Logger logger = LoggerFactory.getLogger(PricingClientImpl.class);
+public class PricingClient extends BulkRequestHandler<PricingResponse> implements PricingGateway {
+    private static final Logger logger = LoggerFactory.getLogger(PricingClient.class);
     private final WebClient client;
-    private final Sinks.Many<PricingResponse> pricingSink;
     private final Flux<PricingResponse> flux;
     public static final PricingResponse defaultPricingResponse = new PricingResponse(null);
 
-    public PricingClientImpl(@Qualifier("pricingClient") WebClient client,
-                             @Autowired Sinks.Many<PricingResponse> pricingSink,
-                             @Autowired Flux<PricingResponse> flux) {
+    public PricingClient(@Qualifier("pricingWebClient") WebClient client,
+                         @Autowired Sinks.Many<PricingResponse> pricingSink,
+                         @Autowired Flux<PricingResponse> flux) {
+        super(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), pricingSink);
         this.client = client;
-        this.pricingSink = pricingSink;
         this.flux = flux;
     }
 
     @Override
     public Flux<PricingResponse> getPricing(String countryCodes) {
-        getBulkCallsOrWait(this::get, getStringSet(countryCodes), pricingSink);
+        getBulkCallsOrWait(this::get, getStringSet(countryCodes));
         return flux;
     }
 

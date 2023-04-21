@@ -11,29 +11,29 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
-public class TrackClientImpl extends BulkRequestHandler<TrackResponse> implements TrackGateway {
-    private static final Logger logger = LoggerFactory.getLogger(TrackClientImpl.class);
+public class TrackClient extends BulkRequestHandler<TrackResponse> implements TrackGateway {
+    private static final Logger logger = LoggerFactory.getLogger(TrackClient.class);
     private final WebClient client;
-    private final Sinks.Many<TrackResponse> trackSink;
 
     private final Flux<TrackResponse> flux;
     public static final TrackResponse defaultTrackResponse = new TrackResponse(null);
 
-    public TrackClientImpl(@Qualifier("shipmentClient") WebClient client,
-                           @Autowired Sinks.Many<TrackResponse> trackSink,
-                           @Autowired Flux<TrackResponse> flux) {
+    public TrackClient(@Qualifier("shipmentWebClient") WebClient client,
+                       @Autowired Sinks.Many<TrackResponse> trackSink,
+                       @Autowired Flux<TrackResponse> flux) {
+        super(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), trackSink);
         this.client = client;
-        this.trackSink = trackSink;
         this.flux = flux;
     }
 
     @Override
     public Flux<TrackResponse> getTracking(String orderIds) {
-        getBulkCallsOrWait(this::get, getStringSet(orderIds), trackSink);
+        getBulkCallsOrWait(this::get, getStringSet(orderIds));
         return flux;
     }
 

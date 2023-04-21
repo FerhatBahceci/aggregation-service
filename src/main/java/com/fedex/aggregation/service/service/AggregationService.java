@@ -11,10 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import static com.fedex.aggregation.service.gateway.PricingClientImpl.defaultPricingResponse;
-import static com.fedex.aggregation.service.gateway.ShipmentClientImpl.defaultShipmentResponse;
-import static com.fedex.aggregation.service.gateway.TrackClientImpl.defaultTrackResponse;
+import static com.fedex.aggregation.service.gateway.PricingClient.defaultPricingResponse;
+import static com.fedex.aggregation.service.gateway.ShipmentClient.defaultShipmentResponse;
+import static com.fedex.aggregation.service.gateway.TrackClient.defaultTrackResponse;
 import static java.util.Objects.nonNull;
 
 @Service
