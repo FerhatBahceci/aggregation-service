@@ -21,6 +21,7 @@ import static java.util.Objects.nonNull;
 
 @Service
 public class AggregationService {
+
     private static final Logger logger = LoggerFactory.getLogger(AggregationService.class);
     private final PricingGateway pricingGateway;
     private final ShipmentGateway shipmentGateway;
@@ -59,24 +60,25 @@ public class AggregationService {
                             .onErrorReturn(defaultShipmentResponse)
                     : Flux.just(defaultShipmentResponse);
 
- /*           return Flux.zip(pricingResponseFlux, trackResponseFlux, shipmentResponseFlux)
-                    .flatMapSequential(response -> {
+            return Flux.zip(pricingResponseFlux, trackResponseFlux, shipmentResponseFlux) // TODO is not working! returning first emitted response only for now!
+                    .map(resp -> {
                         var agg = new AggregatedResponse();
-                        agg.setPricing(response.getT1().getPricing());
-                        agg.setTrack(response.getT2().getTrack());
-                        agg.setShipments(response.getT3().getShipments());
-                        logger.info("I AM CONSTRUCTING AGGREGATED RESPONSE:{}", agg);
-                       return Mono.just(agg);
-                    },8);*/
-
-            return Flux.just(new AggregatedResponse())
+                        agg.setShipments(resp.getT3().getShipments());
+                        agg.setTrack(resp.getT2().getTrack());
+                        agg.setPricing(resp.getT1().getPricing());
+                        return agg;
+                    })
+                    .doOnNext(resp -> logger.info("This is the response:{}", resp))
+                    .doOnComplete(() -> logger.info("Constructed AggregatedResponse!"))
+                    .doOnError((s) -> logger.info("Could not construct AggregatedResponse:{}", s.getMessage()));
+            /*
+            return Flux.just(new AggregatedResponse())      // Only returning first emitted response
                     .zipWith(pricingResponseFlux)
                     .mapNotNull(p -> p.getT1().setPricing(p.getT2().getPricing()))
                     .zipWith(trackResponseFlux)
                     .mapNotNull(t -> t.getT1().setTrack(t.getT2().getTrack()))
                     .zipWith(shipmentResponseFlux)
-                    .map(s -> s.getT1().setShipments(s.getT2().getShipments()))
-                    .log();
+                    .map(s -> s.getT1().setShipments(s.getT2().getShipments()));*/
         } else {
             return Flux.just(defaultAggregatedResponse);
         }
