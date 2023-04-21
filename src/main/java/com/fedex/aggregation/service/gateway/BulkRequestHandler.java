@@ -3,6 +3,8 @@ package com.fedex.aggregation.service.gateway;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
+import reactor.core.scheduler.Schedulers;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -57,7 +59,7 @@ public class BulkRequestHandler<T> {
     }
 
     private void limitParamListPerSingleRequest(Function<String, Mono<T>> callbackConstructor, Set<String> tmpQueryParams) {  // As soon as a cap of 5 calls for an individual API is reached.
-        var currentTmpQueryParams =tmpQueryParams.stream().toList().subList(0, 5);
+        var currentTmpQueryParams = tmpQueryParams.stream().toList().subList(0, 5);
         SingleRequest request = create(currentTmpQueryParams);
         Mono<T> preparedCall = callbackConstructor.apply(request.getQueryParamString());
         callbackQueue.offer(preparedCall);

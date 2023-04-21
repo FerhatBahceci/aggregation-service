@@ -15,10 +15,7 @@ public class AppConfig {
 
     @Bean
     public Sinks.Many<PricingResponse> pricingSink() {
-        return Sinks.unsafe()
-                .many()
-                .replay()
-                .latest();
+        return Sinks.many().multicast().directBestEffort();
     }
 
     @Bean
@@ -28,10 +25,7 @@ public class AppConfig {
 
     @Bean
     public Sinks.Many<ShipmentResponse> shipmentSink() {
-        return Sinks.unsafe()
-                .many()
-                .replay()
-                .latest();
+        return Sinks.many().multicast().directBestEffort();
     }
 
     @Bean
@@ -41,10 +35,7 @@ public class AppConfig {
 
     @Bean
     public Sinks.Many<TrackResponse> trackSink() {
-        return Sinks.unsafe()
-                .many()
-                .replay()
-                .latest();
+        return Sinks.many().multicast().directBestEffort();
     }
 
     @Bean
