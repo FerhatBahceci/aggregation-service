@@ -37,7 +37,7 @@ public class TrackClient extends BulkRequestHandler<TrackResponse> implements Tr
                     logger.info("COMPLETED!");
                     getSink().emitComplete((signalType, emitResult) -> emitResult.isSuccess());
                 })
-                .doOnNext(pricingResponse -> logger.info("This is the subscribed TrackResponse:{}", pricingResponse));
+                .doOnNext(trackResponse -> logger.info("This is the subscribed TrackResponse:{}", trackResponse));
     }
 
     public Mono<TrackResponse> get(String orderIds) {

@@ -43,7 +43,8 @@ public class PricingClient extends BulkRequestHandler<PricingResponse> implement
                 );
     }
 
-    private Mono<PricingResponse> get(String countryCodes) {
+    @Override
+    public Mono<PricingResponse> get(String countryCodes) {
         logger.info("Calling Pricing API with following countryCodes={}", countryCodes);
         return (!countryCodes.isBlank()
                 ?

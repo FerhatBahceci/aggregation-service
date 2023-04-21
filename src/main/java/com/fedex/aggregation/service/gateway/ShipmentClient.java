@@ -34,14 +34,16 @@ public class ShipmentClient extends BulkRequestHandler<ShipmentResponse> impleme
     @Override
     public Flux<ShipmentResponse> getShipment(String orderIds) {
         getBulkCallsOrWait(this::get, getStringSet(orderIds));
-        flux.doOnComplete(() -> {
+        return flux.doOnComplete(() -> {
                     logger.info("COMPLETED!");
                     getSink().emitComplete((signalType, emitResult) -> emitResult.isSuccess());
                 })
-                .doOnNext(pricingResponse -> logger.info("This is the subscribed ShipmentResponse:{}", pricingResponse));
-        return flux;
+                .doOnNext(shipmentResponse ->
+                        logger.info("This is the subscribed ShipmentResponse:{}", shipmentResponse)
+                );
     }
 
+    @Override
     public Mono<ShipmentResponse> get(String orderIds) {
         logger.info("Calling Shipment API with following orderIds={}", orderIds);
         return (!orderIds.isBlank() ?

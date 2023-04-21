@@ -15,7 +15,7 @@ The OverLoadingPreventionHandler is per instance of aggregation-service. In prod
 This would not prevent from overloading the exposed provider API (Fedex BE services). For that, we would need to know more details about the amount of instances for both subscribing (downstream) and publishing (upstream), amount of events emitted, processing frequency etc.
 */
 
-abstract class BulkRequestHandler<T> {
+public class BulkRequestHandler<T> {
     public static final int cap = 5;
     private ConcurrentLinkedQueue<Mono<T>> callbackQueue;
     private ConcurrentLinkedQueue<String> queryParamsQueue;
@@ -72,5 +72,13 @@ abstract class BulkRequestHandler<T> {
 
     public Sinks.Many<T> getSink() {
         return sink;
+    }
+
+    public ConcurrentLinkedQueue<Mono<T>> getCallbackQueue() {
+        return callbackQueue;
+    }
+
+    public ConcurrentLinkedQueue<String> getQueryParamsQueue() {
+        return queryParamsQueue;
     }
 }
