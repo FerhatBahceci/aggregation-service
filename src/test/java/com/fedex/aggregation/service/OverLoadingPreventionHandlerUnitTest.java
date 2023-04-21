@@ -53,7 +53,7 @@ public class OverLoadingPreventionHandlerUnitTest {
     void testPricingOverLoadingPreventionHandler() {
 
         when(pricingGatewayMock.getPricing(any())).thenReturn(PRICING_RESPONSE);
-        BulkRequestHandler<PricingResponse> handler = new BulkRequestHandler<>(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), pricingSink);
+        BulkRequestHandler<PricingResponse> handler = new BulkRequestHandler<>(pricingSink);
         var orderIdsBelowCap = Set.of(ORDER_ID_1, ORDER_ID_2, ORDER_ID_3, ORDER_ID_4).stream().map(Objects::toString).collect(Collectors.toSet());  // queryParam below cap!
 
         handler.getBulkCallsOrWait(pricingGatewayMock::get, orderIdsBelowCap);  // 1.
@@ -73,7 +73,7 @@ public class OverLoadingPreventionHandlerUnitTest {
     void testTrackingOverLoadingPreventionHandler() {
 
         when(trackGatewayMock.getTracking(any())).thenReturn(TRACK_RESPONSE);
-        BulkRequestHandler<TrackResponse> handler = new BulkRequestHandler<>(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), trackSink);
+        BulkRequestHandler<TrackResponse> handler = new BulkRequestHandler<>(trackSink);
         var orderIdsBelowCap = Set.of(ORDER_ID_1, ORDER_ID_2, ORDER_ID_3, ORDER_ID_4).stream().map(Objects::toString).collect(Collectors.toSet());  // queryParam below cap!
 
         handler.getBulkCallsOrWait(trackGatewayMock::get, orderIdsBelowCap);  // 1.
@@ -93,7 +93,7 @@ public class OverLoadingPreventionHandlerUnitTest {
     void testShipmentOverLoadingPreventionHandler() {
 
         when(shipmentGatewayMock.getShipment(any())).thenReturn(SHIPMENT_RESPONSE);
-        BulkRequestHandler<ShipmentResponse> handler = new BulkRequestHandler<>(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), shipmentSink);
+        BulkRequestHandler<ShipmentResponse> handler = new BulkRequestHandler<>(shipmentSink);
         var orderIdsBelowCap = Set.of(ORDER_ID_1, ORDER_ID_2, ORDER_ID_3, ORDER_ID_4).stream().map(Objects::toString).collect(Collectors.toSet());  // queryParam below cap!
 
         handler.getBulkCallsOrWait(shipmentGatewayMock::get, orderIdsBelowCap);  // 1.

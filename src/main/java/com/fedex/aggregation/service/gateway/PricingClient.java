@@ -10,8 +10,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
@@ -24,7 +22,7 @@ public class PricingClient extends BulkRequestHandler<PricingResponse> implement
     public PricingClient(@Qualifier("pricingWebClient") WebClient client,
                          @Autowired Sinks.Many<PricingResponse> pricingSink,
                          @Autowired Flux<PricingResponse> flux) {
-        super(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), pricingSink);
+        super(pricingSink);
         this.client = client;
         this.flux = flux;
     }

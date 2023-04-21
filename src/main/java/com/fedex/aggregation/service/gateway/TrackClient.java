@@ -11,8 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
@@ -25,7 +23,7 @@ public class TrackClient extends BulkRequestHandler<TrackResponse> implements Tr
     public TrackClient(@Qualifier("shipmentWebClient") WebClient client,
                        @Autowired Sinks.Many<TrackResponse> trackSink,
                        @Autowired Flux<TrackResponse> flux) {
-        super(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), trackSink);
+        super(trackSink);
         this.client = client;
         this.flux = flux;
     }
