@@ -59,7 +59,7 @@ public class AggregationService {
         // TODO suspend zip until all responses has returned, if any API throws error that should be considered as empty/null response
         return Mono.from(Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
                 .mapNotNull(r -> {
-                    if (!r.getT1().isEmpty() && !r.getT2().isEmpty() && !r.getT3().isEmpty()) {
+                    if (!r.getT1().isEmpty() || !r.getT2().isEmpty() || !r.getT3().isEmpty()) {
                         var agg = new AggregatedResponse();
                         agg.setPricing(mergePricing(r.getT1()));
                         agg.setShipments(mergeShipments(r.getT2()));
