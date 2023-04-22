@@ -1,6 +1,7 @@
 package com.fedex.aggregation.service.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,6 +28,8 @@ public class ShipmentResponse {
         return responseList.stream().map(ShipmentResponse::getShipments)
                 .reduce((shipmentMap1, shipmentMap2) ->
                         Stream.concat(shipmentMap1.entrySet().stream(), shipmentMap2.entrySet().stream())
-                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))).orElse(Map.of());
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                                        (shipment1, shipment2) -> shipment1.size() > shipment2.size() ? shipment1 : shipment2)))
+                .orElse(Map.of());
     }
 }

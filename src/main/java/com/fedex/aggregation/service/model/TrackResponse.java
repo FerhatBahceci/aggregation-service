@@ -2,6 +2,7 @@ package com.fedex.aggregation.service.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,8 +38,9 @@ public class TrackResponse {
 
     public static Map<Long, Status> mergeTrack(List<TrackResponse> responseList) {
         return responseList.stream().map(TrackResponse::getTrack)
-                .reduce((pricingMap1, pricingMap2) ->
-                        Stream.concat(pricingMap1.entrySet().stream(), pricingMap2.entrySet().stream())
-                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))).orElse(Map.of());
+                .reduce((trackMap1, trackMap2) ->
+                        Stream.concat(trackMap1.entrySet().stream(), trackMap2.entrySet().stream())
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                                        (track1, track2) -> track2))).orElse(Map.of());
     }
 }

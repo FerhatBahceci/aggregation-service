@@ -57,6 +57,7 @@ public class AggregationService {
                         .onErrorReturn(defaultShipmentResponse)
                 : Flux.just(defaultShipmentResponse);
 
+        // TODO suspend zip until all responses has returned, if any API throws error that should be considered as empty/null response
         return Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
                 .mapNotNull(r -> {
                     var agg = new AggregatedResponse();
