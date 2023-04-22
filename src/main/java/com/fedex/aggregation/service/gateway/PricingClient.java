@@ -26,20 +26,11 @@ public class PricingClient extends QueryParamsCreator implements PricingGateway 
     @Override
     public Flux<List<PricingResponse>> getPricing(String countryCodes) {
         var executables = super.getExecutableRequests(countryCodes);
-
-        if (!executables.isEmpty()) {
-
-            return Flux.just(executables.toArray(new String[executables.size()]))
-                    .windowTimeout(1, Duration.ofSeconds(5))                // 1 single request contains q=1,2,3,4,5. The window in question buffers max 5 requests up to 5s from that the window was opened
-                    .flatMap(stringFlux -> stringFlux.flatMap(this::get).collectList());
-        } else {
-            return Flux.just(executables.toArray(new String[executables.size()]))
-                    .windowTimeout(1, Duration.ofSeconds(5))
-                    /*  .delayUntil() */   // DelayUntil predicate of checking !executables.isEmpty() .delayUntil(-> predicate is matched)
-                    .flatMap(stringFlux -> stringFlux.flatMap(this::get).collectList());
-        }
+        return Flux.just(executables.toArray(new String[executables.size()]))
+                .windowTimeout(5, Duration.ofSeconds(5))                // 1 single request contains q=1,2,3,4,5. The window need to contain 5xq before firing of the calls, The window in question buffers max 5 requests up to 5s from that the window was opened
+                .flatMap(stringFlux -> stringFlux.flatMap(this::get).collectList())
+                .doOnNext((pricingResponses) -> logger.info("Fetched PricingResponses:{}", pricingResponses));  //TODO Ensure that we are suspending this call until !queryParams.isEmpty()
     }
-
 
     public Mono<PricingResponse> get(String countryCodes) {
         logger.info("Calling Pricing API with following countryCodes={}", countryCodes);
