@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 import java.util.List;
+
 import static com.fedex.aggregation.service.gateway.PricingClient.defaultPricingResponse;
 import static com.fedex.aggregation.service.gateway.ShipmentClient.defaultShipmentResponse;
 import static com.fedex.aggregation.service.gateway.TrackClient.defaultTrackResponse;
@@ -34,37 +36,38 @@ public class AggregationService {
         this.trackGateway = trackingClient;
     }
 
-    public Flux<AggregatedResponse> getAggregation(
+    public Mono<AggregatedResponse> getAggregation(
             String pricing,
             String track,
             String shipments) {
 
         final Flux<List<PricingResponse>> pricingResponseFlux = nonNull(pricing) ?
                 pricingGateway.getPricing(pricing)
-                        .switchIfEmpty(Mono.just(defaultPricingResponse))
                         .onErrorReturn(defaultPricingResponse)
-                : Flux.just(defaultPricingResponse);
+                : Flux.empty();
 
         final Flux<List<TrackResponse>> trackResponseFlux = nonNull(track) ?
                 trackGateway.getTracking(track)
-                        .switchIfEmpty(Mono.just(defaultTrackResponse))
                         .onErrorReturn(defaultTrackResponse)
-                : Flux.just(defaultTrackResponse);
+                : Flux.empty();
 
         final Flux<List<ShipmentResponse>> shipmentResponseFlux = nonNull(shipments) ?
                 shipmentGateway.getShipment(shipments)
-                        .switchIfEmpty(Mono.just(defaultShipmentResponse))
                         .onErrorReturn(defaultShipmentResponse)
-                : Flux.just(defaultShipmentResponse);
+                : Flux.empty();
 
         // TODO suspend zip until all responses has returned, if any API throws error that should be considered as empty/null response
-        return Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
+        return Mono.from(Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
                 .mapNotNull(r -> {
-                    var agg = new AggregatedResponse();
-                    agg.setPricing(mergePricing(r.getT1()));
-                    agg.setShipments(mergeShipments(r.getT2()));
-                    agg.setTrack(mergeTrack(r.getT3()));
-                    return agg;
-                });
+                    if (!r.getT1().isEmpty() && !r.getT2().isEmpty() && !r.getT3().isEmpty()) {
+                        var agg = new AggregatedResponse();
+                        agg.setPricing(mergePricing(r.getT1()));
+                        agg.setShipments(mergeShipments(r.getT2()));
+                        agg.setTrack(mergeTrack(r.getT3()));
+                        return agg;
+                    } else {
+                        return null;
+                    }
+                }));
     }
 }
