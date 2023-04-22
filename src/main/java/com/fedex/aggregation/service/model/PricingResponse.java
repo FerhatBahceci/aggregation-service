@@ -1,8 +1,10 @@
 package com.fedex.aggregation.service.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PricingResponse {
     private final Map<String, Double> pricing;
@@ -21,4 +23,10 @@ public class PricingResponse {
         return "PricingResponse={pricing=" + pricing + "}";
     }
 
+    public static Map<String, Double> mergePricing(List<PricingResponse> responseList) {
+        return responseList.stream().map(PricingResponse::getPricing)
+                .reduce((pricingMap1, pricingMap2) ->
+                        Stream.concat(pricingMap1.entrySet().stream(), pricingMap2.entrySet().stream())
+                                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))).orElse(Map.of());
+    }
 }

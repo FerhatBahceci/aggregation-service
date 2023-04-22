@@ -3,50 +3,38 @@ package com.fedex.aggregation.service.gateway;
 import com.fedex.aggregation.service.model.ShipmentResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.Sinks;
-
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
+import java.util.List;
+import java.util.Map;
 
 @Component
-public class ShipmentClient extends BulkRequestHandler<ShipmentResponse> implements ShipmentGateway {
+public class ShipmentClient implements ShipmentGateway {
     private static final Logger logger = LoggerFactory.getLogger(ShipmentClient.class);
     private final WebClient client;
-    private ConcurrentLinkedQueue<ShipmentResponse> callbackQueue;
-    private final Flux<ShipmentResponse> flux;
-    public static final ShipmentResponse defaultShipmentResponse = new ShipmentResponse(null);
+    public static final List<ShipmentResponse> defaultShipmentResponse = List.of();
 
-    public ShipmentClient(@Qualifier("shipmentWebClient") WebClient webClient,
-                          @Autowired Sinks.Many<ShipmentResponse> shipmentSink,
-                          @Autowired Flux<ShipmentResponse> flux,
-                          @Autowired ConcurrentLinkedQueue<ShipmentResponse> callbackQueue) {
-        super(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), shipmentSink);
+    public ShipmentClient(@Qualifier("shipmentWebClient") WebClient webClient) {
         this.client = webClient;
-        this.flux = flux;
-        this.callbackQueue = callbackQueue;
     }
 
     @Override
-    public Flux<ShipmentResponse> getShipment(String orderIds) {
-        getBulkCallsOrWait(this::get, getStringSet(orderIds));
-        return flux.doOnComplete(() -> {
+    public Flux<List<ShipmentResponse>> getShipment(String orderIds) {
+        return Flux.empty();
+
+        /*flux.doOnComplete(() -> {
                     logger.info("COMPLETED!");
-                    getSink().emitComplete((signalType, emitResult) -> emitResult.isSuccess());
                 })
                 .doOnNext(shipmentResponse -> {
-/*
+*//*
                             callbackQueue.add(shipmentResponse);
-*/
+*//*
                             logger.info("This is the subscribed ShipmentResponse:{}", shipmentResponse);
                         }
-                );
+                );*/
     }
 
     @Override
@@ -60,7 +48,7 @@ public class ShipmentClient extends BulkRequestHandler<ShipmentResponse> impleme
                         )
                         .retrieve()
                         .bodyToMono(ShipmentResponse.class)
-                        .onErrorReturn(defaultShipmentResponse)
+                        .onErrorReturn(new ShipmentResponse(Map.of()))
 /*
                         .log()
 */

@@ -3,53 +3,41 @@ package com.fedex.aggregation.service.gateway;
 import com.fedex.aggregation.service.model.TrackResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.Sinks;
+import java.util.List;
+import java.util.Map;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
-
-import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
-public class TrackClient extends BulkRequestHandler<TrackResponse> implements TrackGateway {
+public class TrackClient implements TrackGateway {
     private static final Logger logger = LoggerFactory.getLogger(TrackClient.class);
     private final WebClient client;
-    private ConcurrentLinkedQueue<TrackResponse> callbackQueue;
-    private final Flux<TrackResponse> flux;
-    public static final TrackResponse defaultTrackResponse = new TrackResponse(null);
+    public static final List<TrackResponse> defaultTrackResponse = List.of();
 
-    public TrackClient(@Qualifier("shipmentWebClient") WebClient client,
-                       @Autowired Sinks.Many<TrackResponse> trackSink,
-                       @Autowired Flux<TrackResponse> flux,
-                       @Autowired ConcurrentLinkedQueue<TrackResponse> callbackQueue
-    ) {
-        super(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), trackSink);
+    public TrackClient(@Qualifier("shipmentWebClient") WebClient client) {
         this.client = client;
-        this.flux = flux;
-        this.callbackQueue = callbackQueue;
     }
 
     @Override
-    public Flux<TrackResponse> getTracking(String orderIds) {
-        getBulkCallsOrWait(this::get, getStringSet(orderIds));
-        return flux.doOnComplete(() -> {
+    public Flux<List<TrackResponse>> getTracking(String orderIds) {
+        return Flux.empty();
+
+        /*flux.doOnComplete(() -> {
                     logger.info("COMPLETED!");
-                    getSink().emitComplete((signalType, emitResult) -> emitResult.isSuccess());
                 })
                 .doOnNext(trackResponse ->
                         {
-/*
+*//*
                             callbackQueue.add(trackResponse);
-*/
+*//*
                             logger.info("This is the subscribed TrackResponse:{}", trackResponse);
                         }
-                );
+                );*/
     }
 
     public Mono<TrackResponse> get(String orderIds) {
@@ -63,7 +51,7 @@ public class TrackClient extends BulkRequestHandler<TrackResponse> implements Tr
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .retrieve()
                         .bodyToMono(TrackResponse.class)
-                        .onErrorReturn(defaultTrackResponse)
+                        .onErrorReturn(new TrackResponse(Map.of()))
 /*
                         .log()
 */
