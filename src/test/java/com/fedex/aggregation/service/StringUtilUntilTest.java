@@ -1,7 +1,5 @@
 package com.fedex.aggregation.service;
 
-import static com.fedex.aggregation.service.TestData.ORDER_ID_1;
-import static com.fedex.aggregation.service.TestData.ORDER_ID_2;
 import static com.fedex.aggregation.service.util.StringUtil.getLongList;
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 import org.assertj.core.api.Assertions;
@@ -12,6 +10,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StringUtilUntilTest {
+    private static final Long ORDER_ID_1 = 109347263L;
+    private static final Long ORDER_ID_2 = 123456891L;
 
     @Test
     void testGetLongList() {

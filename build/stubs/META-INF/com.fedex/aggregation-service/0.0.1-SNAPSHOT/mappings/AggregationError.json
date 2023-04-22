@@ -1,0 +1,24 @@
+{
+  "id" : "9499fc99-8e5d-4c29-bd25-f006523d4505",
+  "request" : {
+    "urlPath" : "/aggregation",
+    "method" : "GET",
+    "queryParameters" : {
+      "pricing" : {
+        "equalTo" : "CN,NL"
+      },
+      "track" : {
+        "equalTo" : "123456789,123456799"
+      },
+      "shipments" : {
+        "equalTo" : "123456789,123456799"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"pricing\":null,\"track\":null,\"shipments\":null}",
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "9499fc99-8e5d-4c29-bd25-f006523d4505"
+}

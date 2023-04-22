@@ -7,12 +7,6 @@ public class AggregatedResponse {
     private Map<String, Double> pricing;
     private Map<Long, TrackResponse.Status> track;
 
-    public AggregatedResponse(Map<String, Double> pricing, Map<Long, TrackResponse.Status> track, Map<Long, List<String>> shipments) {
-        this.pricing = pricing;
-        this.track = track;
-        this.shipments = shipments;
-    }
-
     public AggregatedResponse() {
     }
 

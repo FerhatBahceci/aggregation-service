@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.fedex.aggregation.service.ContractVerifierTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-04-19T19:54:53" hostname="Ferhats-MacBook-Pro.local" time="0.67">
+  <properties/>
+  <testcase name="validate_aggregationError()" classname="com.fedex.aggregation.service.ContractVerifierTest" time="0.67"/>
+  <system-out><![CDATA[21:54:52.187 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Neither @ContextConfiguration nor @ContextHierarchy found for test class [ContractVerifierTest]: using SpringBootContextLoader
+21:54:52.190 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader -- Could not detect default resource locations for test class [com.fedex.aggregation.service.ContractVerifierTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+21:54:52.346 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using ContextCustomizers for test class [ContractVerifierTest]: [MockkContextCustomizer, DisableObservabilityContextCustomizer, PropertyMappingContextCustomizer, Customizer, ExcludeFilterContextCustomizer, DuplicateJsonObjectContextCustomizer, MockitoContextCustomizer, TestRestTemplateContextCustomizer, WebTestClientContextCustomizer]
+21:54:52.392 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: [jakarta/servlet/ServletContext]
+21:54:52.394 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.transaction.TransactionalTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: [org/springframework/transaction/interceptor/TransactionAttributeSource]
+21:54:52.395 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: [org/springframework/transaction/interceptor/TransactionAttribute]
+21:54:52.396 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using TestExecutionListeners for test class [ContractVerifierTest]: [DirtiesContextBeforeModesTestExecutionListener, ApplicationEventsTestExecutionListener, MockkTestExecutionListener, MockitoTestExecutionListener, DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener, EventPublishingTestExecutionListener, ClearMocksTestExecutionListener, RestDocsTestExecutionListener, MockRestServiceServerResetTestExecutionListener, MockMvcPrintOnlyOnFailureTestExecutionListener, WebDriverTestExecutionListener, MockWebServiceServerTestExecutionListener, ResetMocksTestExecutionListener]
+21:54:52.396 [Test worker] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener -- Before test class: class [ContractVerifierTest], class annotated with @DirtiesContext [false] with mode [null]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.0.5)
+
+2023-04-19T21:54:52.614+02:00  INFO 43399 --- [    Test worker] c.f.a.service.ContractVerifierTest       : Starting ContractVerifierTest using Java 17.0.6 with PID 43399 (started by ferhatbahceci in /Users/ferhatbahceci/projects/private/tmp/aggregation-service)
+2023-04-19T21:54:52.614+02:00  INFO 43399 --- [    Test worker] c.f.a.service.ContractVerifierTest       : No active profile set, falling back to 1 default profile: "default"
+2023-04-19T21:54:53.523+02:00  INFO 43399 --- [    Test worker] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 52776
+2023-04-19T21:54:53.528+02:00  INFO 43399 --- [    Test worker] c.f.a.service.ContractVerifierTest       : Started ContractVerifierTest in 1.046 seconds (process running for 1.742)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

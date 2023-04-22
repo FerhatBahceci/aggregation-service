@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
 @Component
-public class PricingClient implements PricingGateway {
+public class PricingClient extends QueryParamsCreator implements PricingGateway {
     private static final Logger logger = LoggerFactory.getLogger(PricingClient.class);
     private final WebClient client;
     public static final List<PricingResponse> defaultPricingResponse = List.of();
@@ -23,18 +25,19 @@ public class PricingClient implements PricingGateway {
 
     @Override
     public Flux<List<PricingResponse>> getPricing(String countryCodes) {
-        return Flux.empty();
+        var executables = super.getExecutableRequests(countryCodes);
 
-        /*flux.doOnComplete(() -> {
-                    logger.info("COMPLETED!");
-                })
-                .doOnNext(pricingResponse -> {
-*//*
-                            callbackQueue.add(pricingResponse);
-*//*
-                            logger.info("This is the subscribed PricingResponse:{}", pricingResponse);
-                        }
-                );*/
+        if (!executables.isEmpty()) {
+
+            return Flux.just(executables.toArray(new String[executables.size()]))
+                    .windowTimeout(1, Duration.ofSeconds(5))                // 1 single request contains q=1,2,3,4,5. The window in question buffers max 5 requests up to 5s from that the window was opened
+                    .flatMap(stringFlux -> stringFlux.flatMap(this::get).collectList());
+        } else {
+            return Flux.just(executables.toArray(new String[executables.size()]))
+                    .windowTimeout(1, Duration.ofSeconds(5))
+                    /*  .delayUntil() */   // DelayUntil predicate of checking !executables.isEmpty() .delayUntil(-> predicate is matched)
+                    .flatMap(stringFlux -> stringFlux.flatMap(this::get).collectList());
+        }
     }
 
 
