@@ -17,12 +17,15 @@ This would not prevent from overloading the exposed provider API (Fedex BE servi
 
 public class BulkRequestHandler<T> {
     public static final int cap = 5;
-    private ConcurrentLinkedQueue<Mono<T>> callbackQueue = new ConcurrentLinkedQueue<>();
-    private ConcurrentLinkedQueue<String> queryParamsQueue = new ConcurrentLinkedQueue<>();
-    private ConcurrentLinkedQueue<SingleRequest> singleRequestQueue = new ConcurrentLinkedQueue<>();
+    private ConcurrentLinkedQueue<Mono<T>> callbackQueue;
+    private ConcurrentLinkedQueue<String> queryParamsQueue;
     private Sinks.Many<T> sink;
 
-    public BulkRequestHandler(Sinks.Many<T> sink) {
+    public BulkRequestHandler(ConcurrentLinkedQueue<Mono<T>> callbackQueue,
+                              ConcurrentLinkedQueue<String> queryParamsQueue,
+                              Sinks.Many<T> sink) {
+        this.callbackQueue = callbackQueue;
+        this.queryParamsQueue = queryParamsQueue;
         this.sink = sink;
     }
 

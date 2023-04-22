@@ -11,21 +11,28 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
 public class TrackClient extends BulkRequestHandler<TrackResponse> implements TrackGateway {
     private static final Logger logger = LoggerFactory.getLogger(TrackClient.class);
     private final WebClient client;
+    private ConcurrentLinkedQueue<TrackResponse> callbackQueue;
     private final Flux<TrackResponse> flux;
     public static final TrackResponse defaultTrackResponse = new TrackResponse(null);
 
     public TrackClient(@Qualifier("shipmentWebClient") WebClient client,
                        @Autowired Sinks.Many<TrackResponse> trackSink,
-                       @Autowired Flux<TrackResponse> flux) {
-        super(trackSink);
+                       @Autowired Flux<TrackResponse> flux,
+                       @Autowired ConcurrentLinkedQueue<TrackResponse> callbackQueue
+    ) {
+        super(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), trackSink);
         this.client = client;
         this.flux = flux;
+        this.callbackQueue = callbackQueue;
     }
 
     @Override
@@ -35,7 +42,14 @@ public class TrackClient extends BulkRequestHandler<TrackResponse> implements Tr
                     logger.info("COMPLETED!");
                     getSink().emitComplete((signalType, emitResult) -> emitResult.isSuccess());
                 })
-                .doOnNext(trackResponse -> logger.info("This is the subscribed TrackResponse:{}", trackResponse));
+                .doOnNext(trackResponse ->
+                        {
+/*
+                            callbackQueue.add(trackResponse);
+*/
+                            logger.info("This is the subscribed TrackResponse:{}", trackResponse);
+                        }
+                );
     }
 
     public Mono<TrackResponse> get(String orderIds) {

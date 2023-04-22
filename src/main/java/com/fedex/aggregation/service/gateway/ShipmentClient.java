@@ -10,22 +10,27 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
+
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
 
 @Component
 public class ShipmentClient extends BulkRequestHandler<ShipmentResponse> implements ShipmentGateway {
     private static final Logger logger = LoggerFactory.getLogger(ShipmentClient.class);
     private final WebClient client;
-
+    private ConcurrentLinkedQueue<ShipmentResponse> callbackQueue;
     private final Flux<ShipmentResponse> flux;
     public static final ShipmentResponse defaultShipmentResponse = new ShipmentResponse(null);
 
     public ShipmentClient(@Qualifier("shipmentWebClient") WebClient webClient,
                           @Autowired Sinks.Many<ShipmentResponse> shipmentSink,
-                          @Autowired Flux<ShipmentResponse> flux) {
-        super(shipmentSink);
+                          @Autowired Flux<ShipmentResponse> flux,
+                          @Autowired ConcurrentLinkedQueue<ShipmentResponse> callbackQueue) {
+        super(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), shipmentSink);
         this.client = webClient;
         this.flux = flux;
+        this.callbackQueue = callbackQueue;
     }
 
     @Override
@@ -35,8 +40,12 @@ public class ShipmentClient extends BulkRequestHandler<ShipmentResponse> impleme
                     logger.info("COMPLETED!");
                     getSink().emitComplete((signalType, emitResult) -> emitResult.isSuccess());
                 })
-                .doOnNext(shipmentResponse ->
-                        logger.info("This is the subscribed ShipmentResponse:{}", shipmentResponse)
+                .doOnNext(shipmentResponse -> {
+/*
+                            callbackQueue.add(shipmentResponse);
+*/
+                            logger.info("This is the subscribed ShipmentResponse:{}", shipmentResponse);
+                        }
                 );
     }
 
