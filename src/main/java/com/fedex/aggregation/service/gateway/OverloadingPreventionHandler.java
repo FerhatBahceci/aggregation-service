@@ -39,7 +39,7 @@ public abstract class OverloadingPreventionHandler {
                         .windowTimeout(cap, Duration.ofSeconds(5))                                                  // 1 single request contains q=1,2,3,4,5. The window need to contain 5xq before firing of the calls, The window in question buffers max 5 requests up to 5s from that the window was opened for preventing overloading of provider service
                         .flatMap(windowedQueryParams -> windowedQueryParams.flatMap(getCallback).collectList())
                         .map(Response::merge)
-                        .map(responseConstructor::apply)
+                        .map(responseConstructor)
                 :
                 Flux.just(getCurrentExecutables(executables))
                         .buffer(Duration.ofSeconds(5))
