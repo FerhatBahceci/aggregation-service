@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.List;
 import java.util.Map;
 
-public class Shipment extends Response<Shipment, Long, List<String>> {
+public class Shipment extends Response<Long, List<String>> {
     @JsonCreator
     public Shipment(Map<Long, List<String>> shipments) {
         super(shipments);

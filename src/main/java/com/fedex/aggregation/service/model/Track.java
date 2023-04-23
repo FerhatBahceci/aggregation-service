@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-public class Track extends Response<Track, Long, Track.Status> {
+public class Track extends Response<Long, Track.Status> {
 
     @JsonCreator
     public Track(Map<Long, Status> track) {

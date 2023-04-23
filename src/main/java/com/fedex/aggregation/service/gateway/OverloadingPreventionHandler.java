@@ -31,7 +31,7 @@ public abstract class OverloadingPreventionHandler {
     private static final int cap = 5;
     private ConcurrentLinkedQueue<String> queryParamsQueue = new ConcurrentLinkedQueue<>();
 
-    public <R extends Response<R, K, V>, K, V> Flux<R> get(String queryParams, Function<String, Mono<R>> getCallback, Function<Map<K, V>, R> responseConstructor) {
+    public <R extends Response<K, V>, K, V> Flux<R> get(String queryParams, Function<String, Mono<R>> getCallback, Function<Map<K, V>, R> responseConstructor) {
         var executables = getExecutableRequests(queryParams);
         return !executables.isEmpty()
                 ?

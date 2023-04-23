@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class Response<T, K, V> extends OverloadingPreventionHandler {
+public abstract class Response<K, V> extends OverloadingPreventionHandler {
     private Map<K, V> responseMap;
 
     @JsonCreator
@@ -16,7 +16,7 @@ public abstract class Response<T, K, V> extends OverloadingPreventionHandler {
         this.responseMap = responseMap;
     }
 
-    public static <R extends Response<R, K, V>, K, V> Map<K, V> merge(List<R> responseList) {
+    public static <R extends Response<K, V>, K, V> Map<K, V> merge(List<R> responseList) {
         return responseList.stream().map(Response::getResponseMap)
                 .reduce((map1, map2) ->
                         Stream.concat(map1.entrySet().stream(), map2.entrySet().stream())
