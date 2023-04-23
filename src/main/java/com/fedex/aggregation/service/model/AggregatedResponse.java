@@ -1,7 +1,5 @@
 package com.fedex.aggregation.service.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +8,6 @@ public class AggregatedResponse {
     private Map<Long, Track.Status> track;
 
     private Map<Long, List<String>> shipments;
-
-    @JsonCreator
-    public AggregatedResponse() {
-    }
 
     public AggregatedResponse setPricing(Map<String, Double> pricing) {
         this.pricing = pricing;
@@ -28,6 +22,18 @@ public class AggregatedResponse {
     public AggregatedResponse setShipments(Map<Long, List<String>> shipments) {
         this.shipments = shipments;
         return this;
+    }
+
+    public Map<String, Double> getPricing() {
+        return pricing;
+    }
+
+    public Map<Long, Track.Status> getTrack() {
+        return track;
+    }
+
+    public Map<Long, List<String>> getShipments() {
+        return shipments;
     }
 
     @Override
