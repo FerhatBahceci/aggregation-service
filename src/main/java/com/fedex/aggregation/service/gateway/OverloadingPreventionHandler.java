@@ -13,6 +13,20 @@ import java.util.stream.Collectors;
 
 import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
 
+/* .buffer()
+        Collect incoming values into multiple List buffers that will be emitted by the returned Flux every bufferingTimespan.
+        Discard Support: This operator discards the currently open buffer upon cancellation or error triggered by a data signal.
+        Params:
+        bufferingTimespan – the duration from buffer creation until a buffer is closed and emitted
+        Returns:
+        a microbatched Flux of List delimited by the given time span
+
+    .window()
+        Split this Flux sequence into multiple Flux windows containing maxSize elements (or less for the final window) and starting
+        from the first item. Each Flux window will onComplete once it contains maxSize elements OR it has been open for the given Duration (as measured on the parallel Scheduler).
+*/
+
+
 public abstract class OverloadingPreventionHandler {
     private static final int cap = 5;
     private ConcurrentLinkedQueue<String> queryParamsQueue = new ConcurrentLinkedQueue<>();
@@ -29,7 +43,6 @@ public abstract class OverloadingPreventionHandler {
                 :
                 Flux.just(getCurrentExecutables(executables))
                         .buffer(Duration.ofSeconds(5))
-                        .delayElements(Duration.ofSeconds(5))
                         .flatMap(bufferedQueryParams -> getCallback.apply(StringUtil.getConcatenatedStringFromList(bufferedQueryParams)));
     }
 
