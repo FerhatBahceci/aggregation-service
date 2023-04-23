@@ -36,7 +36,9 @@ public class Handler {
         var track = getOrderIdParams(request, "track");
         var shipments = getOrderIdParams(request, "shipments");
 
-        if ((nonNull(pricing) && !pricing.isBlank()) || (nonNull(track) && !track.isBlank()) || (nonNull(shipments) && !shipments.isBlank())) {
+        if ((nonNull(pricing) && !pricing.isBlank())
+                || (nonNull(track) && !track.isBlank())
+                || (nonNull(shipments) && !shipments.isBlank())) {
             return ok().body(
                     aggregationService.getAggregation(pricing, track, shipments),
                     AggregatedResponse.class
