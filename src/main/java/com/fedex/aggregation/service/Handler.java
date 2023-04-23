@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import static com.fedex.aggregation.service.util.StringUtil.getLongListFromString;
 import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
+import static java.util.Objects.nonNull;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Component
@@ -35,7 +36,7 @@ public class Handler {
         var track = getOrderIdParams(request, "track");
         var shipments = getOrderIdParams(request, "shipments");
 
-        if (!pricing.isBlank() || !track.isBlank() || !shipments.isBlank()) {
+        if ((nonNull(pricing) && !pricing.isBlank()) || (nonNull(track) && !track.isBlank()) || (nonNull(shipments) && !shipments.isBlank())) {
             return ok().body(
                     aggregationService.getAggregation(pricing, track, shipments),
                     AggregatedResponse.class
