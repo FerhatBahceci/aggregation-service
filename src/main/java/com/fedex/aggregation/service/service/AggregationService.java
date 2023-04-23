@@ -35,7 +35,6 @@ public class AggregationService {
             String pricing,
             String track,
             String shipments) {
-
         return pricingGateway.getPricing(pricing)
                 .onErrorReturn(DEFAULT_PRICING)
                 .flatMap(p -> trackGateway.getTracking(track)

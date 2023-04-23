@@ -44,18 +44,13 @@ public abstract class OverloadingPreventionHandler {
                 tmpExecutables.removeAll(singleRequest);
             }
         } else {
+            List<String> tmpExecutables = new ArrayList<>();
             while (!queryParamsQueue.isEmpty()) {
-                executables.add(queryParamsQueue.poll());
+                tmpExecutables.add(queryParamsQueue.poll());
             }
+            String lessThanCapInOneGo = getConcatenatedStringFromList(tmpExecutables);
+            executables.add(lessThanCapInOneGo);
         }
         return executables;
-    }
-
-    private Set<String> pollAllQueryParams() {
-        List<String> tmpExecutables = new ArrayList<>();
-        while (!queryParamsQueue.isEmpty()) {
-            tmpExecutables.add(queryParamsQueue.poll());
-        }
-        return new HashSet<>(tmpExecutables);
     }
 }
