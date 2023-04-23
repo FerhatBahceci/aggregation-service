@@ -19,41 +19,36 @@ public abstract class OverloadingPreventionHandler {
 
     public <R extends Response<K, V>, K, V> Flux<R> get(String queryParams, Function<String, Mono<R>> getCallback, Function<Map<K, V>, R> responseConstructor) {
         var executables = getExecutableRequests(queryParams);
-        return !executables.isEmpty()
-                ?
-                Flux.just(executables.toArray(new String[executables.size()]))                                      // It is unclear from the task description if it should actually be 5x5 q=1,2,3,4,5   5x1 = or q1=1, q2=2 q3=3, q4=4, q5=5.
-                        .windowTimeout(cap, Duration.ofSeconds(5))                                                  // 1 single request contains q=1,2,3,4,5. The window need to contain 5xq before firing of the calls, The window in question buffers max 5 requests up to 5s from that the window was opened for preventing overloading of provider service
-                        .flatMap(windowedQueryParams -> windowedQueryParams.flatMap(getCallback).collectList())
-                        .map(Response::merge)
-                        .map(responseConstructor)
-                :
-                Flux.just(getCurrentExecutables(executables))
-                        .buffer(Duration.ofSeconds(5))
-                        .flatMap(bufferedQueryParams -> getCallback.apply(getConcatenatedStringFromList(bufferedQueryParams)));
+        return Flux.just(executables.toArray(new String[executables.size()]))                                      // It is unclear from the task description if it should actually be 5x5 q=1,2,3,4,5   5x1 = or q1=1, q2=2 q3=3, q4=4, q5=5.
+                .windowTimeout(cap, Duration.ofSeconds(5))                                                  // 1 single request contains q=1,2,3,4,5. The window need to contain 5xq before firing of the calls, The window in question buffers max 5 requests up to 5s from that the window was opened for preventing overloading of provider service
+                .flatMap(windowedQueryParams -> windowedQueryParams.flatMap(getCallback).collectList())
+                .map(Response::merge)
+                .map(responseConstructor);
     }
 
-    private Set<String> getExecutableRequests(String ids) {
-        queryParamsQueue.addAll(getStringSetFromString(ids));               // Splits the q= queryParam into multiple elements, String set ensures distinct values for the request
-        List<String> tmpExecutables = new ArrayList<>();
-
-        while (queryParamsQueue.size() >= cap) {
-            tmpExecutables.add(queryParamsQueue.poll());                    //Adds all comma separated request values, one by one to tmpExecutables until cap is reached
-        }
-
+    private Set<String> getExecutableRequests(String queryParams) {
+        queryParamsQueue.addAll(getStringSetFromString(queryParams));               // Splits the q= queryParam into multiple elements, String set ensures distinct values for the request
         Set<String> executables = new HashSet<>();
-        while (tmpExecutables.size() >= cap) {                              // Request calls that are not complete are stored on local instance of aggregation-service in ConcurrentLinkedQueue<String> queryParamsQueue
-            List<String> singleRequest = tmpExecutables.subList(0, cap);    //  1 single request contains q=1,2,3,4,5
-            String request = getConcatenatedStringFromList(singleRequest);   // Concatenates into a single request with 5 deli-metered values
-            executables.add(request);
-            tmpExecutables.removeAll(singleRequest);
+
+        if (queryParamsQueue.size() >= cap) {
+            List<String> tmpExecutables = new ArrayList<>();
+
+            while (queryParamsQueue.size() >= cap) {
+                tmpExecutables.add(queryParamsQueue.poll());                    //Adds all comma separated request values, one by one to tmpExecutables until cap is reached
+            }
+
+            while (tmpExecutables.size() >= cap) {                              // Request calls that are not complete are stored on local instance of aggregation-service in ConcurrentLinkedQueue<String> queryParamsQueue
+                List<String> singleRequest = tmpExecutables.subList(0, cap);    //  1 single request contains q=1,2,3,4,5
+                String request = getConcatenatedStringFromList(singleRequest);   // Concatenates into a single request with 5 deli-metered values
+                executables.add(request);
+                tmpExecutables.removeAll(singleRequest);
+            }
+        } else {
+            while (!queryParamsQueue.isEmpty()) {
+                executables.add(queryParamsQueue.poll());
+            }
         }
-
         return executables;
-    }
-
-    private String[] getCurrentExecutables(Set<String> executables) {
-        executables.addAll(pollAllQueryParams());
-        return executables.toArray(new String[executables.size()]);
     }
 
     private Set<String> pollAllQueryParams() {

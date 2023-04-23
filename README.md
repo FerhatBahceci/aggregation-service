@@ -23,20 +23,6 @@ from the first item. Each Flux window will onComplete once it contains maxSize e
 <br/>
 <br/>
 
-```
- Flux<List<T>> buffer(Duration bufferingTimespan) 
-```
-
-Collect incoming values into multiple List buffers that will be emitted by the returned Flux every bufferingTimespan.
-Discard Support: This operator discards the currently open buffer upon cancellation or error triggered by a data signal.
-
--> We are here scheduling the emissions to upstream publisher by buffering all calls on a duration of 5s. Once buffer is expired, all calls from the shared map will be submitted. It can occur 
-that the incoming request exceeds our cap within the buffer life cycle. The overloading functionality will probably not work as expected in such case. Further configurations could possibly be made to hande this.
-<br/>
-<br/>
-<br/>
-<br/>
-
 aggregation-service structure is constructed with SOLID principles in mind.
 1. Single responsibility. Methods and classes has been tried to be kept minimal, concise and straightforward format. A class should have one, and only one, reason to change.
 2. Open for extension, closed for modification. Feel free to implement new Response classes containing a map as well new APIs to hit by extending OverloadingPreventionHandler.
