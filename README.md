@@ -5,18 +5,30 @@
  For solving this assessment, a reactive non-blocking API has been implemented with Spring Web Flux to meet and fulfill the demands and the criteria mentioned
 in the assessment document.
 
-Utilising and leveraging reactor.core.publisher.Flux for solving the criterias mentioned in T2,T3
+Utilising and leveraging reactor.core.publisher.Flux for solving the criteria mentioned in T2,T3.
 
 - window() <br/>
 <br/>For splitting the source Flux into windows, criteria of size and subscribing from these publishers in a regulated manner.
 Flux sequence is split into multiple Flux windows containing maxSize elements (or less for the final window) and starting
-from the first item. Each Flux window will onComplete once it contains maxSize elements OR it has been open for the given Duration (as measured on the parallel Scheduler).
+from the first item. Each Flux window will onComplete once it contains maxSize elements OR it has been open for the given Duration (as measured on the parallel Scheduler).<br/>
+  <br/>
+
+We are here gathering emissions until our cap is reached and then executing this merged reactive sequence instead of doing calls one by one to the upstream publisher.
 
 - buffer() <br/>
 <br/>  Collect incoming values into multiple List buffers that will be emitted by the returned Flux every bufferingTimespan.
 Discard Support: This operator discards the currently open buffer upon cancellation or error triggered by a data signal.
 
+We are here scheduling the emissions to upstream publisher by buffering all calls on a duration of 5s. Once buffer is expired, all calls from the shared map will be submitted.
 
+
+aggregation-service structure is constructed with SOLID principles in mind.
+
+1. Single responsibility. Methods and classes has been tried to be kept minimal, concise and straightforward format.
+2. Open for extension, closed for modification. Feel free to implement new Response classes containing a map as well new APIs to hit by extending OverloadingPreventionHandler.
+3. Liskov principle is applied by utilising multiple inheritance of type and building generic utility-method instead of repeating code for constructing cold publishers.
+4. Interface segregation is applied by separating interfaces one by one, for instance PricingGateway, ShipmentGateway, TrackGateway. Today, we have a client. Tomorrow we might have some other source for retrieving this data.
+5. Dependency inversion is applied by not allowing high-level details depend on low-level details but on abstractions instead. This makes it a lot easier for testing as well as 
 ## Reference Documentation
 For further reference, please consider the following sections:
 
