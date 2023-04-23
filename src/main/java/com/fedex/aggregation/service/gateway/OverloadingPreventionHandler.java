@@ -18,24 +18,19 @@ public abstract class OverloadingPreventionHandler {
     private ConcurrentLinkedQueue<String> queryParamsQueue = new ConcurrentLinkedQueue<>();
 
     public <R extends Response<R, K, V>, K, V> Flux<R> get(String queryParams, Function<String, Mono<R>> getCallback, Function<Map<K, V>, R> responseConstructor) {
-        Flux<R> response;
         var executables = getExecutableRequests(queryParams);
-        if (executables.size() >= cap) {                                                                              // Entering overloading prevention
-            response = Flux.just(executables.toArray(new String[executables.size()]))
-                    .windowTimeout(5, Duration.ofSeconds(5))                                                  // 1 single request contains q=1,2,3,4,5. The window need to contain 5xq before firing of the calls, The window in question buffers max 5 requests up to 5s from that the window was opened for preventing overloading of provider service
-                    .flatMap(windowedQueryParams -> windowedQueryParams.flatMap(getCallback).collectList())
-                    .map(Response::merge)
-                    .map(responseConstructor::apply);
-        } else {                                                                                                       // Entering ensuring that calls are buffered and executed within 5s from initial call
-            executables = executables.isEmpty()
-                    ? Arrays.stream(pollAllQueryParams().toArray()).map(Object::toString).collect(Collectors.toSet()) // In case of any other thread populating the queryParamsQueue, we will ensure to load these params again (hopefully they have not exceeded the cap limit)
-                    : executables;
-            response = Flux.just(executables.toArray(new String[executables.size()]))
-                    .buffer(Duration.ofSeconds(5))
-                    .delayElements(Duration.ofSeconds(5))
-                    .flatMap(bufferedQueryParams -> getCallback.apply(StringUtil.getConcatenatedStringFromList(bufferedQueryParams)));
-        }
-        return response;
+        return executables.size() >= cap
+                ?
+                Flux.just(executables.toArray(new String[executables.size()]))
+                        .windowTimeout(5, Duration.ofSeconds(5))                                                  // 1 single request contains q=1,2,3,4,5. The window need to contain 5xq before firing of the calls, The window in question buffers max 5 requests up to 5s from that the window was opened for preventing overloading of provider service
+                        .flatMap(windowedQueryParams -> windowedQueryParams.flatMap(getCallback).collectList())
+                        .map(Response::merge)
+                        .map(responseConstructor::apply)
+                :
+                Flux.just(getCurrentExecutables(executables))
+                        .buffer(Duration.ofSeconds(5))
+                        .delayElements(Duration.ofSeconds(5))
+                        .flatMap(bufferedQueryParams -> getCallback.apply(StringUtil.getConcatenatedStringFromList(bufferedQueryParams)));
     }
 
     private Set<String> getExecutableRequests(String ids) {
@@ -55,6 +50,13 @@ public abstract class OverloadingPreventionHandler {
         }
 
         return executables;
+    }
+
+    private String[] getCurrentExecutables(Set<String> executables) {
+        var currentExecutables = executables.isEmpty()
+                ? Arrays.stream(pollAllQueryParams().toArray()).map(Object::toString).collect(Collectors.toSet()) // In case of any other thread populating the queryParamsQueue, we will ensure to load these params again (hopefully they have not exceeded the cap limit)
+                : executables;
+        return currentExecutables.toArray(new String[currentExecutables.size()]);
     }
 
     private Set<String> pollAllQueryParams() {
