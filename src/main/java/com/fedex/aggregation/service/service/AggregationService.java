@@ -52,7 +52,7 @@ public class AggregationService {
                 : Flux.empty();
 
         return Mono.from(Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
-                .mapNotNull(r -> {
+                .map(r -> {
                     var agg = new AggregatedResponse();
                     agg.setPricing(r.getT1().getResponseMap());
                     agg.setShipments(r.getT2().getResponseMap());

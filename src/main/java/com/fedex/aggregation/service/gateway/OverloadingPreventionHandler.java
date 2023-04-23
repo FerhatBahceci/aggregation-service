@@ -7,8 +7,6 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import static com.fedex.aggregation.service.util.StringUtil.getConcatenatedStringFromList;
 import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
 
@@ -34,7 +32,7 @@ public abstract class OverloadingPreventionHandler {
         var executables = getExecutableRequests(queryParams);
         return !executables.isEmpty()
                 ?
-                Flux.just(executables.toArray(new String[executables.size()]))
+                Flux.just(executables.toArray(new String[executables.size()]))                                      // It is unclear from the task description if it should actually be 5x5 q=1,2,3,4,5   5x1 = or q1=1, q2=2 q3=3, q4=4, q5=5.
                         .windowTimeout(cap, Duration.ofSeconds(5))                                                  // 1 single request contains q=1,2,3,4,5. The window need to contain 5xq before firing of the calls, The window in question buffers max 5 requests up to 5s from that the window was opened for preventing overloading of provider service
                         .flatMap(windowedQueryParams -> windowedQueryParams.flatMap(getCallback).collectList())
                         .map(Response::merge)
@@ -55,8 +53,8 @@ public abstract class OverloadingPreventionHandler {
 
         Set<String> executables = new HashSet<>();
         while (tmpExecutables.size() >= cap) {                              // Request calls that are not complete are stored on local instance of aggregation-service in ConcurrentLinkedQueue<String> queryParamsQueue
-            List<String> singleRequest = tmpExecutables.subList(0, cap);
-            String request = getConcatenatedStringFromList(singleRequest);       // Concatenates into a single request with 5 deli-metered values
+            List<String> singleRequest = tmpExecutables.subList(0, cap);    //  1 single request contains q=1,2,3,4,5
+            String request = getConcatenatedStringFromList(singleRequest);   // Concatenates into a single request with 5 deli-metered values
             executables.add(request);
             tmpExecutables.removeAll(singleRequest);
         }
@@ -65,10 +63,8 @@ public abstract class OverloadingPreventionHandler {
     }
 
     private String[] getCurrentExecutables(Set<String> executables) {
-        var currentExecutables = executables.isEmpty()
-                ? Arrays.stream(pollAllQueryParams().toArray()).map(Object::toString).collect(Collectors.toSet()) // In case of any other thread populating the queryParamsQueue, we will ensure to load these params again (hopefully they have not exceeded the cap limit)
-                : executables;
-        return currentExecutables.toArray(new String[currentExecutables.size()]);
+        executables.addAll(pollAllQueryParams());
+        return executables.toArray(new String[executables.size()]);
     }
 
     private Set<String> pollAllQueryParams() {

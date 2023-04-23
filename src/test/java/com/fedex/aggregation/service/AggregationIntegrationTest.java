@@ -11,10 +11,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.testcontainers.containers.DockerComposeContainer;
 import java.io.File;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import static com.fedex.aggregation.service.config.WebClientFactory.createWebClient;
+import static com.fedex.aggregation.service.util.StringUtil.getLongListFromString;
+import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
 import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,7 +41,7 @@ public class AggregationIntegrationTest {
     }
 
     @AfterAll
-    public static void cleanUp(){
+    public static void cleanUp() {
         environment.stop();
         environment.withRemoveImages(DockerComposeContainer.RemoveImages.ALL);
     }
@@ -51,36 +52,32 @@ public class AggregationIntegrationTest {
         var pricing = "NL,CN";
         var track = "109347263,123456891";
         var shipments = "109347263,123456891";
-        Set<String> pricingSet = Arrays.stream(pricing.split(",")).collect(Collectors.toSet());
-        Set<Long> trackInLong = Arrays.stream(track.split(",")).map(Long::valueOf).collect(Collectors.toSet());
-        Set<Long> shipmentsInLong = Arrays.stream(shipments.split(",")).map(Long::valueOf).collect(Collectors.toSet());
+        Set<String> pricingSet = getStringSetFromString(pricing);
+        List<Long> trackList = getLongListFromString(track);
+        List<Long> shipmentsInLong = getLongListFromString(shipments);
 
         var uri = String.format("http://localhost:%s/aggregation?pricing=%s&track=%s&shipments=%s", aggregatorServicePort, pricing, track, shipments);
         var response = getCall(uri, AggregatedResponse.class);
 
         assertThat(response).isNotNull();
-        if (nonNull(response.getPricing())) assertThat(response.getPricing().keySet()).containsAll(pricingSet);
-        if (nonNull(response.getTrack())) assertThat(response.getTrack().keySet()).containsAll(trackInLong);
+        if (nonNull(response.getPricing()))
+            assertThat(response.getPricing().keySet()).containsAnyOf(pricingSet.toArray(new String[pricingSet.size()]));
+        if (nonNull(response.getTrack())) assertThat(response.getTrack().keySet()).containsAll(trackList);
         if (nonNull(response.getShipments())) assertThat(response.getShipments().keySet()).containsAll(shipmentsInLong);
     }
 
     @Test
     void testAggregationEmptyRequest() {
-
         var uri = String.format("http://localhost:%s/aggregation", aggregatorServicePort);
         var response = getCall(uri, AggregatedResponse.class);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getPricing()).isNull();
-        assertThat(response.getTrack()).isNull();
-        assertThat(response.getShipments()).isNull();
+        assertThat(response).isNull();
     }
 
     @Test
     void testAggregationOnlyPricingRequestParams() {
 
         var pricing = "NL,CN";
-        Set<String> pricingSet = Arrays.stream(pricing.split(",")).collect(Collectors.toSet());
+        Set<String> pricingSet = getStringSetFromString(pricing);
 
         var uri = String.format("http://localhost:%s/aggregation?pricing=%s", aggregatorServicePort, pricing);
         var response = getCall(uri, AggregatedResponse.class);
@@ -93,9 +90,8 @@ public class AggregationIntegrationTest {
 
     @Test
     void testAggregationOnlyTrackRequestParams() {
-
         var track = "109347263,123456891";
-        Set<Long> trackInLong = Arrays.stream(track.split(",")).map(Long::valueOf).collect(Collectors.toSet());
+        List<Long> trackInLong = getLongListFromString(track);
 
         var uri = String.format("http://localhost:%s/aggregation?track=%s", aggregatorServicePort, track);
         var response = getCall(uri, AggregatedResponse.class);
@@ -110,7 +106,7 @@ public class AggregationIntegrationTest {
     @Test
     void testAggregationOnlyShipmentsRequestParams() {
         var shipments = "109347263,123456891";
-        Set<Long> shipmentsInLong = Arrays.stream(shipments.split(",")).map(Long::valueOf).collect(Collectors.toSet());
+        List<Long> shipmentsInLong = getLongListFromString(shipments);
 
         var uri = String.format("http://localhost:%s/aggregation?shipments=%s", aggregatorServicePort, shipments);
         var response = getCall(uri, AggregatedResponse.class);

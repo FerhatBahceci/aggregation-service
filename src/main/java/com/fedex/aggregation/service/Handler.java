@@ -52,7 +52,7 @@ public class Handler {
             List<Long> orderIds = getLongListFromString(orderIdQueryParams);
             validatedOrderIds = validateOrderIds(orderIds);
         }
-        return validatedOrderIds.size() > 0 ? String.join(",", validatedOrderIds) : "";
+        return validatedOrderIds.size() > 0 ? String.join(",", validatedOrderIds) : null;
     }
 
     private String getPricingParams(ServerRequest request) {
@@ -61,7 +61,7 @@ public class Handler {
         if (!pricingQueryParam.isBlank()) {
             countryCodes = validateCountryCodes(getStringSetFromString(pricingQueryParam));         // Ensures distinct countryCodes.
         }
-        return countryCodes.size() > 0 ? String.join(",", countryCodes) : "";
+        return countryCodes.size() > 0 ? String.join(",", countryCodes) : null;
     }
 
     private Set<String> validateCountryCodes(Set<String> countryCodes) {

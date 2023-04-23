@@ -26,7 +26,7 @@ public class ShipmentClient extends OverloadingPreventionHandler implements Ship
                 .doOnNext(shipmentResponse -> logger.info("Fetched ShipmentResponse:{}", shipmentResponse));
     }
 
-    public Mono<Shipment> get(String orderIds) {                             // It is unclear from the task description if it should actually be 5x5 q=1,2,3,4,5   5x1 = or q1=1, q2=2 q3=3, q4=4, q5=5.
+    public Mono<Shipment> get(String orderIds) {
         logger.info("Calling Shipment API with following orderIds={}", orderIds);
         return (!orderIds.isEmpty() ?
                 client
