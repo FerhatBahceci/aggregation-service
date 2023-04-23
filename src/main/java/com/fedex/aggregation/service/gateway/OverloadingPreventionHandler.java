@@ -1,16 +1,15 @@
 package com.fedex.aggregation.service.gateway;
 
 import com.fedex.aggregation.service.model.Response;
-import com.fedex.aggregation.service.util.StringUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.fedex.aggregation.service.util.StringUtil.getConcatenatedStringFromList;
 import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
 
 /* .buffer()
@@ -43,7 +42,7 @@ public abstract class OverloadingPreventionHandler {
                 :
                 Flux.just(getCurrentExecutables(executables))
                         .buffer(Duration.ofSeconds(5))
-                        .flatMap(bufferedQueryParams -> getCallback.apply(StringUtil.getConcatenatedStringFromList(bufferedQueryParams)));
+                        .flatMap(bufferedQueryParams -> getCallback.apply(getConcatenatedStringFromList(bufferedQueryParams)));
     }
 
     private Set<String> getExecutableRequests(String ids) {
@@ -57,7 +56,7 @@ public abstract class OverloadingPreventionHandler {
         Set<String> executables = new HashSet<>();
         while (tmpExecutables.size() >= cap) {                              // Request calls that are not complete are stored on local instance of aggregation-service in ConcurrentLinkedQueue<String> queryParamsQueue
             List<String> singleRequest = tmpExecutables.subList(0, cap);
-            String request = String.join(",", singleRequest);       // Concatenates into a single request with 5 deli-metered values
+            String request = getConcatenatedStringFromList(singleRequest);       // Concatenates into a single request with 5 deli-metered values
             executables.add(request);
             tmpExecutables.removeAll(singleRequest);
         }
