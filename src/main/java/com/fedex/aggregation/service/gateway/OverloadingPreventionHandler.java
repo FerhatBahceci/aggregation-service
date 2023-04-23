@@ -33,10 +33,10 @@ public abstract class OverloadingPreventionHandler {
 
     public <R extends Response<R, K, V>, K, V> Flux<R> get(String queryParams, Function<String, Mono<R>> getCallback, Function<Map<K, V>, R> responseConstructor) {
         var executables = getExecutableRequests(queryParams);
-        return executables.size() >= cap
+        return !executables.isEmpty()
                 ?
                 Flux.just(executables.toArray(new String[executables.size()]))
-                        .windowTimeout(5, Duration.ofSeconds(5))                                                  // 1 single request contains q=1,2,3,4,5. The window need to contain 5xq before firing of the calls, The window in question buffers max 5 requests up to 5s from that the window was opened for preventing overloading of provider service
+                        .windowTimeout(cap, Duration.ofSeconds(5))                                                  // 1 single request contains q=1,2,3,4,5. The window need to contain 5xq before firing of the calls, The window in question buffers max 5 requests up to 5s from that the window was opened for preventing overloading of provider service
                         .flatMap(windowedQueryParams -> windowedQueryParams.flatMap(getCallback).collectList())
                         .map(Response::merge)
                         .map(responseConstructor::apply)
