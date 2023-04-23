@@ -5,6 +5,17 @@ import java.util.Map;
 
 public class AggregatedResponse {
     private Map<String, Double> pricing;
+
+    public AggregatedResponse(Map<String, Double> pricing, Map<Long, Track.Status> track, Map<Long, List<String>> shipments) {
+        this.pricing = pricing;
+        this.track = track;
+        this.shipments = shipments;
+    }
+
+    public AggregatedResponse() {
+
+    }
+
     private Map<Long, Track.Status> track;
 
     private Map<Long, List<String>> shipments;

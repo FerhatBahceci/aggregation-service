@@ -31,33 +31,18 @@ public class AggregationService {
         this.trackGateway = trackingClient;
     }
 
-    public Mono<AggregatedResponse> getAggregation(
+    public Flux<AggregatedResponse> getAggregation(
             String pricing,
             String track,
             String shipments) {
 
-        final Flux<Pricing> pricingResponseFlux = nonNull(pricing) ?
-                pricingGateway.getPricing(pricing)
-                        .onErrorReturn(DEFAULT_PRICING)
-                : Flux.empty();
-
-        final Flux<Track> trackResponseFlux = nonNull(track) ?
-                trackGateway.getTracking(track)
+        return pricingGateway.getPricing(pricing)
+                .onErrorReturn(DEFAULT_PRICING)
+                .flatMap(p -> trackGateway.getTracking(track)
                         .onErrorReturn(DEFAULT_TRACK)
-                : Flux.empty();
-
-        final Flux<Shipment> shipmentResponseFlux = nonNull(shipments) ?
-                shipmentGateway.getShipment(shipments)
-                        .onErrorReturn(DEFAULT_SHIPMENT)
-                : Flux.empty();
-
-        return Mono.from(Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
-                .map(r -> {
-                    var agg = new AggregatedResponse();
-                    agg.setPricing(r.getT1().getResponseMap());
-                    agg.setShipments(r.getT2().getResponseMap());
-                    agg.setTrack(r.getT3().getResponseMap());
-                    return agg;
-                }));
+                        .flatMap(t -> shipmentGateway.getShipment(shipments)
+                                .onErrorReturn(DEFAULT_SHIPMENT)
+                                .map(s -> new AggregatedResponse(p.getResponseMap(), t.getResponseMap(), s.getResponseMap())))
+                );
     }
 }
