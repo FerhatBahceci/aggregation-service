@@ -54,8 +54,9 @@ public class TrackClient extends QueryParamsCreator implements TrackGateway {
                     : executables;
             return Flux.just(executables.toArray(new String[executables.size()]))
                     .buffer(Duration.ofSeconds(5))
+                    .delayElements(Duration.ofSeconds(5))
                     .flatMap(bufferedQueryParams -> get(StringUtil.getString(bufferedQueryParams)))
-                    .doOnNext(shipmentResponse -> logger.info("Fetched ShipmentResponses:{}", shipmentResponse));
+                    .doOnNext(shipmentResponse -> logger.info("Fetched TrackResponses:{}", shipmentResponse));
         }
     }
 

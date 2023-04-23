@@ -10,6 +10,8 @@ import com.fedex.aggregation.service.model.TrackResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import static com.fedex.aggregation.service.gateway.PricingClient.defaultPricingResponse;
 import static com.fedex.aggregation.service.gateway.ShipmentClient.defaultShipmentResponse;
 import static com.fedex.aggregation.service.gateway.TrackClient.defaultTrackResponse;
@@ -29,7 +31,7 @@ public class AggregationService {
         this.trackGateway = trackingClient;
     }
 
-    public Flux<AggregatedResponse> getAggregation(
+    public Mono<AggregatedResponse> getAggregation(
             String pricing,
             String track,
             String shipments) {
@@ -49,13 +51,13 @@ public class AggregationService {
                         .onErrorReturn(defaultShipmentResponse)
                 : Flux.empty();
 
-        return Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
+        return Mono.from(Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
                 .mapNotNull(r -> {
-                        var agg = new AggregatedResponse();
-                        agg.setPricing(r.getT1().getPricing());
-                        agg.setShipments(r.getT2().getShipments());
-                        agg.setTrack(r.getT3().getTrack());
-                        return agg;
-                });
+                    var agg = new AggregatedResponse();
+                    agg.setPricing(r.getT1().getPricing());
+                    agg.setShipments(r.getT2().getShipments());
+                    agg.setTrack(r.getT3().getTrack());
+                    return agg;
+                }));
     }
 }
