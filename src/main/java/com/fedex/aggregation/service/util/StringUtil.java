@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 public class StringUtil {
 
-    public static Set<String> getStringSet(String string) {
+    public static Set<String> getStringSetFromString(String string) {
         return Arrays.stream(string.split(",")).collect(Collectors.toSet());
     }
-    public static String getString(List<String> strings) {
-        return String.join(", ", strings);
+    public static String getConcatenatedStringFromList(List<String> strings) {
+        return String.join(",", strings);
     }
 
-    public static List<Long> getLongList(String string) {
+    public static List<Long> getLongListFromString(String string) {
         return new ArrayList<>(Arrays.stream(string.split(",")).map(Long::valueOf).collect(Collectors.toSet()));
     }
 }

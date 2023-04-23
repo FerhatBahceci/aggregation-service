@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
+import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
 
 abstract class QueryParamsCreator {
 
@@ -14,7 +14,7 @@ abstract class QueryParamsCreator {
     private ConcurrentLinkedQueue<String> queryParamsQueue = new ConcurrentLinkedQueue<>();
 
     public Set<String> getExecutableRequests(String ids) {
-        queryParamsQueue.addAll(getStringSet(ids));  // Splits the q= queryParam into multiple elements, String set ensures distinct values for the request
+        queryParamsQueue.addAll(getStringSetFromString(ids));  // Splits the q= queryParam into multiple elements, String set ensures distinct values for the request
         List<String> tmpExecutables = new ArrayList<>();
 
         while (queryParamsQueue.size() >= cap) {

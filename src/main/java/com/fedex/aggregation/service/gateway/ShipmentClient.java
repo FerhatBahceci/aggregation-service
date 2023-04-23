@@ -54,7 +54,7 @@ public class ShipmentClient extends QueryParamsCreator implements ShipmentGatewa
             return Flux.just(executables.toArray(new String[executables.size()]))
                     .buffer(Duration.ofSeconds(5))
                     .delayElements(Duration.ofSeconds(5))
-                    .flatMap(bufferedQueryParams -> get(StringUtil.getString(bufferedQueryParams)))
+                    .flatMap(bufferedQueryParams -> get(StringUtil.getConcatenatedStringFromList(bufferedQueryParams)))
                     .doOnNext(shipmentResponse -> logger.info("Fetched ShipmentResponses:{}", shipmentResponse));
         }
     }

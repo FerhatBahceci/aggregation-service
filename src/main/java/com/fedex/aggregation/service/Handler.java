@@ -13,8 +13,8 @@ import reactor.core.publisher.Mono;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.fedex.aggregation.service.util.StringUtil.getLongList;
-import static com.fedex.aggregation.service.util.StringUtil.getStringSet;
+import static com.fedex.aggregation.service.util.StringUtil.getLongListFromString;
+import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 @Component
@@ -51,7 +51,7 @@ public class Handler {
         List<String> validatedOrderIds = new ArrayList<>();
         var orderIdQueryParams = request.queryParam(queryParam).orElse(""); //These parameters are all optional and could be missing
         if (!orderIdQueryParams.isBlank()) {
-            List<Long> orderIds = getLongList(orderIdQueryParams);
+            List<Long> orderIds = getLongListFromString(orderIdQueryParams);
             validatedOrderIds = validateOrderIds(orderIds);
         }
         return validatedOrderIds.size() > 0 ? String.join(",", validatedOrderIds) : "";
@@ -61,7 +61,7 @@ public class Handler {
         Set<String> countryCodes = Set.of();
         var pricingQueryParam = request.queryParam("pricing").orElse(""); //These parameters are all optional and could be missing
         if (!pricingQueryParam.isBlank()) {
-            countryCodes = validateCountryCodes(getStringSet(pricingQueryParam)); // Ensures distinct countryCodes.
+            countryCodes = validateCountryCodes(getStringSetFromString(pricingQueryParam)); // Ensures distinct countryCodes.
         }
         return countryCodes.size() > 0 ? String.join(",", countryCodes) : "";
     }
