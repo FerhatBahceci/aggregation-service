@@ -3,25 +3,14 @@ package com.fedex.aggregation.service.gateway;
 import com.fedex.aggregation.service.model.Response;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
+
 import static com.fedex.aggregation.service.util.StringUtil.getConcatenatedStringFromList;
 import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
-
-/* .buffer()
-        Collect incoming values into multiple List buffers that will be emitted by the returned Flux every bufferingTimespan.
-        Discard Support: This operator discards the currently open buffer upon cancellation or error triggered by a data signal.
-        Params:
-        bufferingTimespan – the duration from buffer creation until a buffer is closed and emitted
-        Returns:
-        a microbatched Flux of List delimited by the given time span
-
-    .window()
-        Split this Flux sequence into multiple Flux windows containing maxSize elements (or less for the final window) and starting
-        from the first item. Each Flux window will onComplete once it contains maxSize elements OR it has been open for the given Duration (as measured on the parallel Scheduler).
-*/
 
 
 public abstract class OverloadingPreventionHandler {

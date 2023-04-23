@@ -1,5 +1,21 @@
 # Getting Started
 
+## Design decisions
+
+ For solving this assessment, a reactive non-blocking API has been implemented with Spring Web Flux to meet and fulfill the demands and the criteria mentioned
+in the assessment document.
+
+Utilising and leveraging reactor.core.publisher.Flux for solving the criterias mentioned in T2,T3
+
+- window() <br/>
+<br/>For splitting the source Flux into windows, criteria of size and subscribing from these publishers in a regulated manner.
+Flux sequence is split into multiple Flux windows containing maxSize elements (or less for the final window) and starting
+from the first item. Each Flux window will onComplete once it contains maxSize elements OR it has been open for the given Duration (as measured on the parallel Scheduler).
+
+- buffer() <br/>
+<br/>  Collect incoming values into multiple List buffers that will be emitted by the returned Flux every bufferingTimespan.
+Discard Support: This operator discards the currently open buffer upon cancellation or error triggered by a data signal.
+
 
 ## Reference Documentation
 For further reference, please consider the following sections:
@@ -37,7 +53,6 @@ feel free to boot aggregation-service and call (either curl or PostMan API tool)
 ```
 http://localhost:8081/aggregation?pricing=NL,CN,SE,DK,ES&track=109347263,123456891,123456892,123456895,123456894&shipments=109347263,123456891,123456892,123456895,123456894
 ```
-
 
 ##### Docker cleanup commands in case of issues
 
