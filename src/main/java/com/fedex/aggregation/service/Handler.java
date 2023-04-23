@@ -45,11 +45,9 @@ public class Handler {
         }
     }
 
-    //If the same value is present multiple times in the query, the response will only contain it once --> Using Set for all paramBuilders for ensuring distinct values
-
-    private String getOrderIdParams(ServerRequest request, String queryParam) {
+    private String getOrderIdParams(ServerRequest request, String queryParam) {                   //If the same value is present multiple times in the query, the response will only contain it once --> Using Set for all paramBuilders for ensuring distinct values
         List<String> validatedOrderIds = new ArrayList<>();
-        var orderIdQueryParams = request.queryParam(queryParam).orElse(""); //These parameters are all optional and could be missing
+        var orderIdQueryParams = request.queryParam(queryParam).orElse("");                 //These parameters are all optional and could be missing
         if (!orderIdQueryParams.isBlank()) {
             List<Long> orderIds = getLongListFromString(orderIdQueryParams);
             validatedOrderIds = validateOrderIds(orderIds);
@@ -59,9 +57,9 @@ public class Handler {
 
     private String getPricingParams(ServerRequest request) {
         Set<String> countryCodes = Set.of();
-        var pricingQueryParam = request.queryParam("pricing").orElse(""); //These parameters are all optional and could be missing
+        var pricingQueryParam = request.queryParam("pricing").orElse("");               //These parameters are all optional and could be missing
         if (!pricingQueryParam.isBlank()) {
-            countryCodes = validateCountryCodes(getStringSetFromString(pricingQueryParam)); // Ensures distinct countryCodes.
+            countryCodes = validateCountryCodes(getStringSetFromString(pricingQueryParam));         // Ensures distinct countryCodes.
         }
         return countryCodes.size() > 0 ? String.join(",", countryCodes) : "";
     }
@@ -78,7 +76,7 @@ public class Handler {
     private List<String> validateOrderIds(List<Long> orderIds) {
         orderIds.forEach(orderId -> {
             if (String.valueOf(orderId).length() != 9) {
-                logger.info("IllegalArgument, Invalid OrderIde: {}", orderId);
+                logger.info("IllegalArgument, Invalid OrderId: {}", orderId);
             }
         });
         return orderIds.stream().map(Object::toString).collect(Collectors.toList());
