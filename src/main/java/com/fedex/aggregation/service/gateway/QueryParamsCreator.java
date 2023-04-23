@@ -22,7 +22,7 @@ abstract class QueryParamsCreator {
         }
 
         Set<String> executables = new HashSet<>();
-        while (tmpExecutables.size() >= cap) {   // Request calls that are not complete are stored on local instance of aggregation-service
+        while (tmpExecutables.size() >= cap) {   // Request calls that are not complete are stored on local instance of aggregation-service in ConcurrentLinkedQueue<String> queryParamsQueue
             List<String> singleRequest = tmpExecutables.subList(0, cap);
             String request = String.join(",", singleRequest); // Concatenates into a single request with 5 deli-metered values
             executables.add(request);
@@ -30,5 +30,12 @@ abstract class QueryParamsCreator {
         }
 
         return executables;
+    }
+    public Set<String> pollAllQueryParams() {
+        List<String> tmpExecutables = new ArrayList<>();
+        while (!queryParamsQueue.isEmpty()){
+            tmpExecutables.add(queryParamsQueue.poll());
+        }
+        return new HashSet<>(tmpExecutables);
     }
 }

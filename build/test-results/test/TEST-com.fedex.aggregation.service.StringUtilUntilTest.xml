@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.fedex.aggregation.service.StringUtilUntilTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2023-04-22T11:57:23" hostname="Ferhats-MacBook-Pro.local" time="0.032">
-  <properties/>
-  <testcase name="testGetLongList()" classname="com.fedex.aggregation.service.StringUtilUntilTest" time="0.031"/>
-  <testcase name="testGetStringSet()" classname="com.fedex.aggregation.service.StringUtilUntilTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
