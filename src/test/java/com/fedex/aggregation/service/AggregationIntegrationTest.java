@@ -10,9 +10,11 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.testcontainers.containers.DockerComposeContainer;
+
 import java.io.File;
 import java.util.List;
 import java.util.Set;
+
 import static com.fedex.aggregation.service.config.WebClientFactory.createWebClient;
 import static com.fedex.aggregation.service.util.StringUtil.getLongListFromString;
 import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
@@ -118,11 +120,13 @@ public class AggregationIntegrationTest {
     }
 
     private <T> T getCall(String uri, Class<T> clazz) {
-        return webClient
+        var response = webClient
                 .get()
                 .uri(uri)
                 .retrieve()
                 .bodyToFlux(clazz)
-                .blockFirst();
+                .collectList()
+                .block();
+        return nonNull(response) ? response.stream().findFirst().orElse(null) : null;
     }
 }

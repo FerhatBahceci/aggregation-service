@@ -16,6 +16,9 @@ public class AggregatedResponse {
         this.shipments = shipments;
     }
 
+    public AggregatedResponse() {
+    }
+
     public Map<String, Double> getPricing() {
         return pricing;
     }

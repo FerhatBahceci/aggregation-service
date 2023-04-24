@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static com.fedex.aggregation.service.util.StringUtil.getConcatenatedStringFromList;
 import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
@@ -28,25 +29,20 @@ public abstract class OverloadingPreventionHandler {
     }
 
     private Set<String> getExecutableRequests(String queryParams) {
-        queryParamsQueue.addAll(getStringSetFromString(queryParams));               // Splits the q= queryParam into multiple elements, String set ensures distinct values for the request
+        queryParamsQueue.addAll(getStringSetFromString(queryParams));                               // Splits the q= queryParam into multiple elements, String set ensures distinct values for the request
         Set<String> executables = new HashSet<>();
+        List<String> tmpExecutables = new ArrayList<>();
 
         if (queryParamsQueue.size() >= cap) {
-            List<String> tmpExecutables = new ArrayList<>();
-
-            while (queryParamsQueue.size() >= cap) {
-                tmpExecutables.add(queryParamsQueue.poll());                    //Adds all comma separated request values, one by one to tmpExecutables until cap is reached
-            }
-
-            while (tmpExecutables.size() >= cap) {                              // Request calls that are not complete are stored on local instance of aggregation-service in ConcurrentLinkedQueue<String> queryParamsQueue
-                List<String> singleRequest = tmpExecutables.subList(0, cap);    //  1 single request contains q=1,2,3,4,5
-                String request = getConcatenatedStringFromList(singleRequest);  // Concatenates into a single request with 5 deli-metered values
+            while (queryParamsQueue.size() >= cap && executables.size() <= cap) {                       // 5 x q(q1,q2,q3,q4,q5) = 25 queryParams in q=
+                IntStream.range(0, cap).forEach(i -> tmpExecutables.add(queryParamsQueue.poll()));   //Adds all comma separated request values, one by one to tmpExecutables until cap is reached
+                List<String> singleRequest = tmpExecutables.subList(0, cap);                        //  1 single request contains q=1,2,3,4,5
+                String request = getConcatenatedStringFromList(singleRequest);                      // Concatenates into a single request with 5 deli-metered values
                 executables.add(request);
                 tmpExecutables.removeAll(singleRequest);
             }
-            queryParamsQueue.addAll(tmpExecutables);  // If any queryParams does not manage to get included in the executables, we will put them back for next Call. The result will however not be delivered to the initial subscriber in question.
+            queryParamsQueue.addAll(tmpExecutables);                // If any queryParams does not manage to get included in the executables, we will put them back for next Call. The result will however not be delivered to the initial subscriber in question.
         } else {
-            List<String> tmpExecutables = new ArrayList<>();
             while (!queryParamsQueue.isEmpty()) {
                 tmpExecutables.add(queryParamsQueue.poll());
             }
