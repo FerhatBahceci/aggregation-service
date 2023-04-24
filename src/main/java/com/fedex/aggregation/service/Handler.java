@@ -68,20 +68,27 @@ public class Handler {
     }
 
     private Set<String> validateCountryCodes(Set<String> countryCodes) {
-        countryCodes.forEach(countryCode -> {
-            if (!validCountryCodes.contains(countryCode)) {
-                logger.info("IllegalArgument, Invalid ISOCountryCode: {}" + countryCode);
+        countryCodes = countryCodes.stream().filter(countryCode -> {
+            boolean isValidCountryCode = validCountryCodes.contains(countryCode);
+            if (!isValidCountryCode) {
+                logger.info("IllegalArgument, Invalid ISOCountryCode: {}", countryCode);
             }
-        });
+            return isValidCountryCode;
+        }).collect(Collectors.toSet());
         return countryCodes;
     }
 
     private List<String> validateOrderIds(List<Long> orderIds) {
-        orderIds.forEach(orderId -> {
-            if (nonNull(orderId) && String.valueOf(orderId).length() != 9) {
+        orderIds = orderIds.stream().filter(orderId -> {
+            boolean isValidOrderId = false;
+            try {
+                isValidOrderId = nonNull(orderId) && String.valueOf(orderId).length() == 9;
+                if (!isValidOrderId) throw new IllegalArgumentException("IllegalArgument, Invalid OrderId");
+            } catch (Exception e) {
                 logger.info("IllegalArgument, Invalid OrderId: {}", orderId);
             }
-        });
+            return isValidOrderId;
+        }).collect(Collectors.toList());
         return orderIds.stream().map(Object::toString).collect(Collectors.toList());
     }
 }
