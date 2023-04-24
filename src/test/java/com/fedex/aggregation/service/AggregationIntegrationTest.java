@@ -61,11 +61,12 @@ public class AggregationIntegrationTest {
         var uri = String.format("http://localhost:%s/aggregation?pricing=%s&track=%s&shipments=%s", aggregatorServicePort, pricing, track, shipments);
         var response = getCall(uri, AggregatedResponse.class);
 
-        if(nonNull(response)){   // It can happen that we get null here and the assertion fails
+        if (nonNull(response)) {   // It can happen that we get null here and the assertion fails
             if (nonNull(response.getPricing()))
                 assertThat(response.getPricing().keySet()).containsAnyOf(pricingSet.toArray(new String[pricingSet.size()]));
             if (nonNull(response.getTrack())) assertThat(response.getTrack().keySet()).containsAll(trackList);
-            if (nonNull(response.getShipments())) assertThat(response.getShipments().keySet()).containsAll(shipmentsInLong);
+            if (nonNull(response.getShipments()))
+                assertThat(response.getShipments().keySet()).containsAll(shipmentsInLong);
         }
     }
 
@@ -127,13 +128,11 @@ public class AggregationIntegrationTest {
     }
 
     private <T> T getCall(String uri, Class<T> clazz) {
-        var response = webClient
+        return webClient
                 .get()
                 .uri(uri)
                 .retrieve()
-                .bodyToFlux(clazz)
-                .collectList()
+                .bodyToMono(clazz)
                 .block();
-        return nonNull(response) ? response.stream().findFirst().orElse(null) : null;
     }
 }

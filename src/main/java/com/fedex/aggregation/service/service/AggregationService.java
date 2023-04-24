@@ -10,6 +10,7 @@ import com.fedex.aggregation.service.model.Track;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class AggregationService {
         this.trackGateway = trackingClient;
     }
 
-    public Flux<AggregatedResponse> getAggregation(
+    public Mono<AggregatedResponse> getAggregation(
             String pricing,
             String track,
             String shipments) {
@@ -42,33 +43,20 @@ public class AggregationService {
         final Flux<Pricing> pricingResponseFlux = nonNull(pricing) ?
                 pricingGateway.getPricing(pricing)
                         .onErrorReturn(DEFAULT_PRICING)
-                : Flux.empty();
+                : Flux.just(DEFAULT_PRICING).onErrorComplete();
 
         final Flux<Track> trackResponseFlux = nonNull(track) ?
                 trackGateway.getTracking(track)
                         .onErrorReturn(DEFAULT_TRACK)
-                : Flux.empty();
+                : Flux.just(DEFAULT_TRACK).onErrorComplete();
 
         final Flux<Shipment> shipmentResponseFlux = nonNull(shipments) ?
                 shipmentGateway.getShipment(shipments)
                         .onErrorReturn(DEFAULT_SHIPMENT)
-                : Flux.empty();
+                : Flux.just(DEFAULT_SHIPMENT).onErrorComplete();
 
-        return Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
-                .mapNotNull(r -> {
-                    var p = r.getT1().getResponseMap();
-                    var s = r.getT2().getResponseMap();
-                    var t = r.getT3().getResponseMap();
-                    if ((nonNull(p) && !p.isEmpty()) || (nonNull(s) && !s.isEmpty()) || (nonNull(t) && !t.isEmpty())) {
-                        var agg = new AggregatedResponse();
-                        agg.setPricing(p);
-                        agg.setShipments(s);
-                        agg.setTrack(t);
-                        return agg;
-                    } else {
-                        return null;
-                    }
-                });
+        return Mono.from(Flux.zip(pricingResponseFlux, shipmentResponseFlux, trackResponseFlux)
+                .mapNotNull(r -> createAggregatedResponse(r.getT1().getResponseMap(), r.getT3().getResponseMap(), r.getT2().getResponseMap())));
     }
 
     private AggregatedResponse createAggregatedResponse(Map<String, Double> p, Map<Long, Track.Status> t, Map<Long, List<String>> s) {

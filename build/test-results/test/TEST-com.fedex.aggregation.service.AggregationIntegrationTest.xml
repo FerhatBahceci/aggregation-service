@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.fedex.aggregation.service.AggregationIntegrationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2023-04-24T15:28:04" hostname="Ferhats-MacBook-Pro.local" time="48.717">
+<testsuite name="com.fedex.aggregation.service.AggregationIntegrationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2023-04-24T17:10:51" hostname="Ferhats-MacBook-Pro.local" time="41.401">
   <properties/>
-  <testcase name="testAggregationOnlyTrackRequestParams()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="32.664"/>
-  <testcase name="testAggregationEmptyRequest()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="3.993"/>
-  <testcase name="testAggregationOnlyPricingRequestParams()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="3.999"/>
-  <testcase name="testAggregation()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="4.1"/>
-  <testcase name="testAggregationOnlyShipmentsRequestParams()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="3.939"/>
-  <system-out><![CDATA[17:28:03.400 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Neither @ContextConfiguration nor @ContextHierarchy found for test class [AggregationIntegrationTest]: using SpringBootContextLoader
-17:28:03.404 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader -- Could not detect default resource locations for test class [com.fedex.aggregation.service.AggregationIntegrationTest]: no resource found for suffixes {-context.xml, Context.groovy}.
-17:28:03.405 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.fedex.aggregation.service.AggregationIntegrationTest]: AggregationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-17:28:03.569 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using ContextCustomizers for test class [AggregationIntegrationTest]: [MockkContextCustomizer, DisableObservabilityContextCustomizer, PropertyMappingContextCustomizer, Customizer, ExcludeFilterContextCustomizer, DuplicateJsonObjectContextCustomizer, MockitoContextCustomizer, TestRestTemplateContextCustomizer, WebTestClientContextCustomizer]
-17:28:03.598 [Test worker] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider -- Identified candidate component class: file [/Users/ferhatbahceci/projects/private/tmp/aggregation-service/build/classes/java/main/com/fedex/aggregation/service/Application.class]
-17:28:03.600 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.fedex.aggregation.service.Application for test class com.fedex.aggregation.service.AggregationIntegrationTest
-17:28:03.641 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: [jakarta/servlet/ServletContext]
-17:28:03.643 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.transaction.TransactionalTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: [org/springframework/transaction/interceptor/TransactionAttributeSource]
-17:28:03.643 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: [org/springframework/transaction/interceptor/TransactionAttribute]
-17:28:03.644 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using TestExecutionListeners for test class [AggregationIntegrationTest]: [DirtiesContextBeforeModesTestExecutionListener, ApplicationEventsTestExecutionListener, MockkTestExecutionListener, MockitoTestExecutionListener, DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener, EventPublishingTestExecutionListener, ClearMocksTestExecutionListener, RestDocsTestExecutionListener, MockRestServiceServerResetTestExecutionListener, MockMvcPrintOnlyOnFailureTestExecutionListener, WebDriverTestExecutionListener, MockWebServiceServerTestExecutionListener, ResetMocksTestExecutionListener]
-17:28:03.645 [Test worker] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener -- Before test class: class [AggregationIntegrationTest], class annotated with @DirtiesContext [false] with mode [null]
-17:28:03.660 [Test worker] DEBUG org.testcontainers.utility.TestcontainersConfiguration -- Testcontainers configuration overrides will be loaded from file:/Users/ferhatbahceci/.testcontainers.properties
-17:28:03.662 [Test worker] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
-17:28:03.683 [Test worker] DEBUG org.testcontainers.containers.ParsedDockerComposeFile -- Resolved dependency image for Docker Compose in /Users/ferhatbahceci/projects/private/tmp/aggregation-service/docker-compose.yml: xyzassessment/backend-services
-17:28:03.697 [Test worker] DEBUG reactor.util.Loggers -- Using Slf4j logging framework
-17:28:03.708 [Test worker] DEBUG io.netty.util.internal.logging.InternalLoggerFactory -- Using SLF4J as the default logging framework
-17:28:03.709 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- -Dio.netty.noUnsafe: false
-17:28:03.709 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- Java version: 17
-17:28:03.710 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- sun.misc.Unsafe.theUnsafe: available
-17:28:03.710 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- sun.misc.Unsafe.copyMemory: available
-17:28:03.710 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- sun.misc.Unsafe.storeFence: available
-17:28:03.710 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- java.nio.Buffer.address: available
-17:28:03.711 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- direct buffer constructor: unavailable: Reflective setAccessible(true) disabled
-17:28:03.711 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- java.nio.Bits.unaligned: available, true
-17:28:03.711 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- jdk.internal.misc.Unsafe.allocateUninitializedArray(int): unavailable: class io.netty.util.internal.PlatformDependent0$7 cannot access class jdk.internal.misc.Unsafe (in module java.base) because module java.base does not export jdk.internal.misc to unnamed module @4a00d9cf
-17:28:03.712 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- java.nio.DirectByteBuffer.<init>(long, int): unavailable
-17:28:03.712 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- sun.misc.Unsafe: available
-17:28:03.717 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- maxDirectMemory: 536870912 bytes (maybe)
-17:28:03.717 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.tmpdir: /var/folders/mr/khzp_70s0210rwm6hnyv0kq80000gn/T (java.io.tmpdir)
-17:28:03.717 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.bitMode: 64 (sun.arch.data.model)
-17:28:03.717 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- Platform: MacOS
-17:28:03.717 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.maxDirectMemory: -1 bytes
-17:28:03.717 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.uninitializedArrayAllocationThreshold: -1
-17:28:03.718 [Test worker] DEBUG io.netty.util.internal.CleanerJava9 -- java.nio.ByteBuffer.cleaner(): available
-17:28:03.718 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.noPreferDirect: false
-17:28:03.730 [Test worker] DEBUG io.netty.util.internal.InternalThreadLocalMap -- -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
-17:28:03.730 [Test worker] DEBUG io.netty.util.internal.InternalThreadLocalMap -- -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
-17:28:03.741 [Test worker] DEBUG io.netty.util.ResourceLeakDetector -- -Dio.netty.leakDetection.level: simple
-17:28:03.741 [Test worker] DEBUG io.netty.util.ResourceLeakDetector -- -Dio.netty.leakDetection.targetRecords: 4
-17:28:03.943 [Test worker] DEBUG org.springframework.test.context.support.DependencyInjectionTestExecutionListener -- Performing dependency injection for test class com.fedex.aggregation.service.AggregationIntegrationTest
+  <testcase name="testAggregationOnlyTrackRequestParams()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="24.795"/>
+  <testcase name="testAggregationEmptyRequest()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="4.104"/>
+  <testcase name="testAggregationOnlyPricingRequestParams()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="4.175"/>
+  <testcase name="testAggregation()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="4.079"/>
+  <testcase name="testAggregationOnlyShipmentsRequestParams()" classname="com.fedex.aggregation.service.AggregationIntegrationTest" time="4.226"/>
+  <system-out><![CDATA[19:10:50.627 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Neither @ContextConfiguration nor @ContextHierarchy found for test class [AggregationIntegrationTest]: using SpringBootContextLoader
+19:10:50.631 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader -- Could not detect default resource locations for test class [com.fedex.aggregation.service.AggregationIntegrationTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+19:10:50.631 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.fedex.aggregation.service.AggregationIntegrationTest]: AggregationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+19:10:50.791 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using ContextCustomizers for test class [AggregationIntegrationTest]: [MockkContextCustomizer, DisableObservabilityContextCustomizer, PropertyMappingContextCustomizer, Customizer, ExcludeFilterContextCustomizer, DuplicateJsonObjectContextCustomizer, MockitoContextCustomizer, TestRestTemplateContextCustomizer, WebTestClientContextCustomizer]
+19:10:50.822 [Test worker] DEBUG org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider -- Identified candidate component class: file [/Users/ferhatbahceci/projects/private/tmp/aggregation-service/build/classes/java/main/com/fedex/aggregation/service/Application.class]
+19:10:50.823 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.fedex.aggregation.service.Application for test class com.fedex.aggregation.service.AggregationIntegrationTest
+19:10:50.863 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: [jakarta/servlet/ServletContext]
+19:10:50.867 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.transaction.TransactionalTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: [org/springframework/transaction/interceptor/TransactionAttributeSource]
+19:10:50.868 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: [org/springframework/transaction/interceptor/TransactionAttribute]
+19:10:50.869 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using TestExecutionListeners for test class [AggregationIntegrationTest]: [DirtiesContextBeforeModesTestExecutionListener, ApplicationEventsTestExecutionListener, MockkTestExecutionListener, MockitoTestExecutionListener, DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener, EventPublishingTestExecutionListener, ClearMocksTestExecutionListener, RestDocsTestExecutionListener, MockRestServiceServerResetTestExecutionListener, MockMvcPrintOnlyOnFailureTestExecutionListener, WebDriverTestExecutionListener, MockWebServiceServerTestExecutionListener, ResetMocksTestExecutionListener]
+19:10:50.870 [Test worker] DEBUG org.springframework.test.context.support.AbstractDirtiesContextTestExecutionListener -- Before test class: class [AggregationIntegrationTest], class annotated with @DirtiesContext [false] with mode [null]
+19:10:50.886 [Test worker] DEBUG org.testcontainers.utility.TestcontainersConfiguration -- Testcontainers configuration overrides will be loaded from file:/Users/ferhatbahceci/.testcontainers.properties
+19:10:50.888 [Test worker] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+19:10:50.909 [Test worker] DEBUG org.testcontainers.containers.ParsedDockerComposeFile -- Resolved dependency image for Docker Compose in /Users/ferhatbahceci/projects/private/tmp/aggregation-service/docker-compose.yml: xyzassessment/backend-services
+19:10:50.924 [Test worker] DEBUG reactor.util.Loggers -- Using Slf4j logging framework
+19:10:50.934 [Test worker] DEBUG io.netty.util.internal.logging.InternalLoggerFactory -- Using SLF4J as the default logging framework
+19:10:50.935 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- -Dio.netty.noUnsafe: false
+19:10:50.936 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- Java version: 17
+19:10:50.936 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- sun.misc.Unsafe.theUnsafe: available
+19:10:50.937 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- sun.misc.Unsafe.copyMemory: available
+19:10:50.937 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- sun.misc.Unsafe.storeFence: available
+19:10:50.937 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- java.nio.Buffer.address: available
+19:10:50.937 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- direct buffer constructor: unavailable: Reflective setAccessible(true) disabled
+19:10:50.938 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- java.nio.Bits.unaligned: available, true
+19:10:50.938 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- jdk.internal.misc.Unsafe.allocateUninitializedArray(int): unavailable: class io.netty.util.internal.PlatformDependent0$7 cannot access class jdk.internal.misc.Unsafe (in module java.base) because module java.base does not export jdk.internal.misc to unnamed module @4a00d9cf
+19:10:50.939 [Test worker] DEBUG io.netty.util.internal.PlatformDependent0 -- java.nio.DirectByteBuffer.<init>(long, int): unavailable
+19:10:50.939 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- sun.misc.Unsafe: available
+19:10:50.943 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- maxDirectMemory: 536870912 bytes (maybe)
+19:10:50.943 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.tmpdir: /var/folders/mr/khzp_70s0210rwm6hnyv0kq80000gn/T (java.io.tmpdir)
+19:10:50.944 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.bitMode: 64 (sun.arch.data.model)
+19:10:50.944 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- Platform: MacOS
+19:10:50.944 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.maxDirectMemory: -1 bytes
+19:10:50.944 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.uninitializedArrayAllocationThreshold: -1
+19:10:50.945 [Test worker] DEBUG io.netty.util.internal.CleanerJava9 -- java.nio.ByteBuffer.cleaner(): available
+19:10:50.945 [Test worker] DEBUG io.netty.util.internal.PlatformDependent -- -Dio.netty.noPreferDirect: false
+19:10:50.957 [Test worker] DEBUG io.netty.util.internal.InternalThreadLocalMap -- -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+19:10:50.957 [Test worker] DEBUG io.netty.util.internal.InternalThreadLocalMap -- -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+19:10:50.969 [Test worker] DEBUG io.netty.util.ResourceLeakDetector -- -Dio.netty.leakDetection.level: simple
+19:10:50.969 [Test worker] DEBUG io.netty.util.ResourceLeakDetector -- -Dio.netty.leakDetection.targetRecords: 4
+19:10:51.176 [Test worker] DEBUG org.springframework.test.context.support.DependencyInjectionTestExecutionListener -- Performing dependency injection for test class com.fedex.aggregation.service.AggregationIntegrationTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -55,155 +55,118 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.0.5)
 
-2023-04-24T17:28:04.072+02:00  INFO 80540 --- [    Test worker] c.f.a.s.AggregationIntegrationTest       : Starting AggregationIntegrationTest using Java 17.0.6 with PID 80540 (started by ferhatbahceci in /Users/ferhatbahceci/projects/private/tmp/aggregation-service)
-2023-04-24T17:28:04.073+02:00  INFO 80540 --- [    Test worker] c.f.a.s.AggregationIntegrationTest       : The following 1 profile is active: "local"
-2023-04-24T17:28:04.635+02:00  INFO 80540 --- [    Test worker] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 56598
-2023-04-24T17:28:04.641+02:00  INFO 80540 --- [    Test worker] c.f.a.s.AggregationIntegrationTest       : Started AggregationIntegrationTest in 0.687 seconds (process running for 1.646)
-2023-04-24T17:28:04.887+02:00  INFO 80540 --- [    Test worker] o.t.d.DockerClientProviderStrategy       : Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
-2023-04-24T17:28:05.014+02:00  INFO 80540 --- [    Test worker] o.t.d.DockerClientProviderStrategy       : Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
-2023-04-24T17:28:05.015+02:00  INFO 80540 --- [    Test worker] org.testcontainers.DockerClientFactory   : Docker host IP address is localhost
-2023-04-24T17:28:05.030+02:00  INFO 80540 --- [    Test worker] org.testcontainers.DockerClientFactory   : Connected to docker: 
+2023-04-24T19:10:51.319+02:00  INFO 83376 --- [    Test worker] c.f.a.s.AggregationIntegrationTest       : Starting AggregationIntegrationTest using Java 17.0.6 with PID 83376 (started by ferhatbahceci in /Users/ferhatbahceci/projects/private/tmp/aggregation-service)
+2023-04-24T19:10:51.320+02:00  INFO 83376 --- [    Test worker] c.f.a.s.AggregationIntegrationTest       : The following 1 profile is active: "local"
+2023-04-24T19:10:51.891+02:00  INFO 83376 --- [    Test worker] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 57374
+2023-04-24T19:10:51.897+02:00  INFO 83376 --- [    Test worker] c.f.a.s.AggregationIntegrationTest       : Started AggregationIntegrationTest in 0.709 seconds (process running for 1.683)
+2023-04-24T19:10:52.146+02:00  INFO 83376 --- [    Test worker] o.t.d.DockerClientProviderStrategy       : Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+2023-04-24T19:10:52.275+02:00  INFO 83376 --- [    Test worker] o.t.d.DockerClientProviderStrategy       : Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+2023-04-24T19:10:52.275+02:00  INFO 83376 --- [    Test worker] org.testcontainers.DockerClientFactory   : Docker host IP address is localhost
+2023-04-24T19:10:52.292+02:00  INFO 83376 --- [    Test worker] org.testcontainers.DockerClientFactory   : Connected to docker: 
   Server Version: 20.10.23
   API Version: 1.41
   Operating System: Docker Desktop
   Total Memory: 7851 MB
-2023-04-24T17:28:05.030+02:00  INFO 80540 --- [    Test worker] o.t.utility.RyukResourceReaper           : Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
-2023-04-24T17:28:05.030+02:00  INFO 80540 --- [    Test worker] org.testcontainers.DockerClientFactory   : Checking the system...
-2023-04-24T17:28:05.030+02:00  INFO 80540 --- [    Test worker] org.testcontainers.DockerClientFactory   : ✔︎ Docker server version should be at least 1.6.0
-2023-04-24T17:28:05.040+02:00  INFO 80540 --- [    Test worker] tc.testcontainers/ryuk:0.4.0             : Pulling docker image: testcontainers/ryuk:0.4.0. Please be patient; this may take some time but only needs to be done once.
-2023-04-24T17:28:07.255+02:00  INFO 80540 --- [tream-279325628] tc.testcontainers/ryuk:0.4.0             : Starting to pull image
-2023-04-24T17:28:07.274+02:00  INFO 80540 --- [tream-279325628] tc.testcontainers/ryuk:0.4.0             : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
-2023-04-24T17:28:08.337+02:00  INFO 80540 --- [tream-279325628] tc.testcontainers/ryuk:0.4.0             : Pulling image layers:  2 pending,  1 downloaded,  0 extracted, (331 KB/? MB)
-2023-04-24T17:28:08.447+02:00  INFO 80540 --- [tream-279325628] tc.testcontainers/ryuk:0.4.0             : Pulling image layers:  1 pending,  2 downloaded,  0 extracted, (2 MB/? MB)
-2023-04-24T17:28:08.527+02:00  INFO 80540 --- [tream-279325628] tc.testcontainers/ryuk:0.4.0             : Pulling image layers:  1 pending,  2 downloaded,  1 extracted, (3 MB/? MB)
-2023-04-24T17:28:08.579+02:00  INFO 80540 --- [tream-279325628] tc.testcontainers/ryuk:0.4.0             : Pulling image layers:  1 pending,  2 downloaded,  2 extracted, (4 MB/? MB)
-2023-04-24T17:28:08.656+02:00  INFO 80540 --- [tream-279325628] tc.testcontainers/ryuk:0.4.0             : Pulling image layers:  1 pending,  2 downloaded,  3 extracted, (5 MB/? MB)
-2023-04-24T17:28:08.665+02:00  INFO 80540 --- [tream-279325628] tc.testcontainers/ryuk:0.4.0             : Pull complete. 3 layers, pulled in 1s (downloaded 5 MB at 5 MB/s)
-2023-04-24T17:28:08.678+02:00  INFO 80540 --- [    Test worker] tc.testcontainers/ryuk:0.4.0             : Creating container for image: testcontainers/ryuk:0.4.0
-2023-04-24T17:28:08.734+02:00  INFO 80540 --- [    Test worker] tc.testcontainers/ryuk:0.4.0             : Container testcontainers/ryuk:0.4.0 is starting: a3136209bc887949916d5014a0224367ed15dc9027dcf480f79dfe91339d7855
-2023-04-24T17:28:08.956+02:00  INFO 80540 --- [    Test worker] tc.testcontainers/ryuk:0.4.0             : Container testcontainers/ryuk:0.4.0 started in PT3.925676S
-2023-04-24T17:28:08.960+02:00  INFO 80540 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
-2023-04-24T17:28:08.963+02:00  INFO 80540 --- [    Test worker] t.xyzassessment/backend-services:latest  : Pulling docker image: xyzassessment/backend-services:latest. Please be patient; this may take some time but only needs to be done once.
-2023-04-24T17:28:10.233+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Starting to pull image
-2023-04-24T17:28:10.236+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
-2023-04-24T17:28:11.107+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  8 pending,  1 downloaded,  0 extracted, (19 MB/? MB)
-2023-04-24T17:28:11.173+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  7 pending,  2 downloaded,  0 extracted, (19 MB/? MB)
-2023-04-24T17:28:11.791+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  6 pending,  3 downloaded,  0 extracted, (56 MB/? MB)
-2023-04-24T17:28:11.792+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  5 pending,  4 downloaded,  0 extracted, (56 MB/? MB)
-2023-04-24T17:28:11.953+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  4 pending,  5 downloaded,  0 extracted, (60 MB/? MB)
-2023-04-24T17:28:12.415+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  4 pending,  5 downloaded,  1 extracted, (61 MB/? MB)
-2023-04-24T17:28:12.535+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  3 pending,  6 downloaded,  1 extracted, (72 MB/? MB)
-2023-04-24T17:28:12.607+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  3 pending,  6 downloaded,  2 extracted, (72 MB/? MB)
-2023-04-24T17:28:12.691+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  3 pending,  6 downloaded,  3 extracted, (79 MB/? MB)
-2023-04-24T17:28:12.729+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  2 pending,  7 downloaded,  3 extracted, (79 MB/? MB)
-2023-04-24T17:28:12.808+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  2 pending,  7 downloaded,  4 extracted, (83 MB/? MB)
-2023-04-24T17:28:12.846+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  2 pending,  7 downloaded,  5 extracted, (89 MB/? MB)
-2023-04-24T17:28:13.184+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  1 pending,  8 downloaded,  5 extracted, (102 MB/? MB)
-2023-04-24T17:28:13.310+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  0 pending,  9 downloaded,  5 extracted, (108 MB/118 MB)
-2023-04-24T17:28:13.794+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  0 pending,  9 downloaded,  6 extracted, (115 MB/118 MB)
-2023-04-24T17:28:13.909+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  0 pending,  9 downloaded,  7 extracted, (118 MB/118 MB)
-2023-04-24T17:28:13.946+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  0 pending,  9 downloaded,  8 extracted, (118 MB/118 MB)
-2023-04-24T17:28:13.987+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pulling image layers:  0 pending,  9 downloaded,  9 extracted, (118 MB/118 MB)
-2023-04-24T17:28:13.991+02:00  INFO 80540 --- [eam--1684142538] t.xyzassessment/backend-services:latest  : Pull complete. 9 layers, pulled in 3s (downloaded 118 MB at 39 MB/s)
-2023-04-24T17:28:13.998+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Pulling docker image: docker/compose:1.29.2. Please be patient; this may take some time but only needs to be done once.
-2023-04-24T17:28:15.214+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Starting to pull image
-2023-04-24T17:28:15.216+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
-2023-04-24T17:28:15.704+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  3 pending,  1 downloaded,  0 extracted, (505 bytes/? MB)
-2023-04-24T17:28:15.904+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  2 pending,  2 downloaded,  0 extracted, (4 MB/? MB)
-2023-04-24T17:28:15.982+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  2 pending,  2 downloaded,  1 extracted, (5 MB/? MB)
-2023-04-24T17:28:16.022+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  2 pending,  2 downloaded,  2 extracted, (7 MB/? MB)
-2023-04-24T17:28:16.236+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  1 pending,  3 downloaded,  2 extracted, (16 MB/? MB)
-2023-04-24T17:28:16.491+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  0 pending,  4 downloaded,  2 extracted, (23 MB/27 MB)
-2023-04-24T17:28:16.507+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  0 pending,  4 downloaded,  3 extracted, (25 MB/27 MB)
-2023-04-24T17:28:16.577+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  0 pending,  4 downloaded,  4 extracted, (27 MB/27 MB)
-2023-04-24T17:28:16.581+02:00  INFO 80540 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pull complete. 4 layers, pulled in 1s (downloaded 27 MB at 27 MB/s)
-2023-04-24T17:28:16.584+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
-2023-04-24T17:28:16.587+02:00  INFO 80540 --- [    Test worker] tc.alpine:3.16                           : Pulling docker image: alpine:3.16. Please be patient; this may take some time but only needs to be done once.
-2023-04-24T17:28:17.811+02:00  INFO 80540 --- [tream--75096759] tc.alpine:3.16                           : Starting to pull image
-2023-04-24T17:28:17.813+02:00  INFO 80540 --- [tream--75096759] tc.alpine:3.16                           : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
-2023-04-24T17:28:18.501+02:00  INFO 80540 --- [tream--75096759] tc.alpine:3.16                           : Pulling image layers:  0 pending,  1 downloaded,  0 extracted, (1 MB/2 MB)
-2023-04-24T17:28:18.591+02:00  INFO 80540 --- [tream--75096759] tc.alpine:3.16                           : Pulling image layers:  0 pending,  1 downloaded,  1 extracted, (2 MB/2 MB)
-2023-04-24T17:28:19.123+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: f24c950df416452f64c7d16d59e4a23075345d56ca66b0f591fcebc045812f00
-2023-04-24T17:28:19.300+02:00  WARN 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
-2023-04-24T17:28:23.270+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT6.685499S
-2023-04-24T17:28:23.271+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
-2023-04-24T17:28:23.276+02:00  INFO 80540 --- [eam--2024190449] tc.docker/compose:1.29.2                 : STDERR: Creating network "swestvsrtizo_default" with the default driver
-2023-04-24T17:28:23.276+02:00  INFO 80540 --- [eam--2024190449] tc.docker/compose:1.29.2                 : STDERR: Creating swestvsrtizo_fedex_1 ... 
-2023-04-24T17:28:23.277+02:00  INFO 80540 --- [eam--2024190449] tc.docker/compose:1.29.2                 : STDERR: Creating swestvsrtizo_fedex_1 ... done
-2023-04-24T17:28:23.278+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
-2023-04-24T17:28:23.285+02:00  INFO 80540 --- [    Test worker] tc.alpine/socat:1.7.4.3-r0               : Pulling docker image: alpine/socat:1.7.4.3-r0. Please be patient; this may take some time but only needs to be done once.
-2023-04-24T17:28:25.061+02:00  INFO 80540 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Starting to pull image
-2023-04-24T17:28:25.062+02:00  INFO 80540 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
-2023-04-24T17:28:26.157+02:00  INFO 80540 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  1 pending,  1 downloaded,  0 extracted, (33 KB/? MB)
-2023-04-24T17:28:26.261+02:00  INFO 80540 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  0 pending,  2 downloaded,  0 extracted, (1 MB/3 MB)
-2023-04-24T17:28:26.398+02:00  INFO 80540 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  0 pending,  2 downloaded,  1 extracted, (2 MB/3 MB)
-2023-04-24T17:28:26.466+02:00  INFO 80540 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  0 pending,  2 downloaded,  2 extracted, (3 MB/3 MB)
-2023-04-24T17:28:26.472+02:00  INFO 80540 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pull complete. 2 layers, pulled in 1s (downloaded 3 MB at 3 MB/s)
-2023-04-24T17:28:26.485+02:00  INFO 80540 --- [    Test worker] tc.alpine/socat:1.7.4.3-r0               : Creating container for image: alpine/socat:1.7.4.3-r0
-2023-04-24T17:28:26.530+02:00  INFO 80540 --- [    Test worker] tc.alpine/socat:1.7.4.3-r0               : Container alpine/socat:1.7.4.3-r0 is starting: 5aec5198224ba5c5284725313b656f37d6f2c09cf1d8bf586bb105d8dd3f71c6
-2023-04-24T17:28:26.823+02:00  INFO 80540 --- [    Test worker] tc.alpine/socat:1.7.4.3-r0               : Container alpine/socat:1.7.4.3-r0 started in PT3.540556S
-2023-04-24T17:28:36.386+02:00 ERROR 80540 --- [    Test worker] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
-2023-04-24T17:28:36.481+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Fetched PricingResponse:PricingResponse={pricing={}}
-2023-04-24T17:28:36.482+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Calling Track API with following orderIds=109347263,123456891
-2023-04-24T17:28:37.262+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Fetched TrackResponse:TrackResponse={track={109347263=DELIVERING, 123456891=DELIVERED}}
-2023-04-24T17:28:37.264+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Fetched ShipmentResponse:ShipmentResponse={shipments={}}
-2023-04-24T17:28:37.319+02:00  INFO 80540 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
-2023-04-24T17:28:37.320+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
-2023-04-24T17:28:37.347+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: b9be6e73b6f40ec49acf07e95d1e48eec12556c44031b9b1301b06d8ef031fce
-2023-04-24T17:28:37.528+02:00  WARN 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
-2023-04-24T17:28:41.206+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT3.885961S
-2023-04-24T17:28:41.206+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
-2023-04-24T17:28:41.209+02:00  INFO 80540 --- [eam--1899796473] tc.docker/compose:1.29.2                 : STDERR: swestvsrtizo_fedex_1 is up-to-date
-2023-04-24T17:28:41.211+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
-2023-04-24T17:28:41.313+02:00  INFO 80540 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
-2023-04-24T17:28:41.313+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
-2023-04-24T17:28:41.338+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: 1fc6d36ebf261b4527c83adf2a8e665e5c32442f9534af8fa12e242008dd2681
-2023-04-24T17:28:41.517+02:00  WARN 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
-2023-04-24T17:28:45.114+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT3.800718S
-2023-04-24T17:28:45.115+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
-2023-04-24T17:28:45.116+02:00  INFO 80540 --- [ream-1946193976] tc.docker/compose:1.29.2                 : STDERR: swestvsrtizo_fedex_1 is up-to-date
-2023-04-24T17:28:45.118+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
-2023-04-24T17:28:45.217+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Calling Pricing API with following countryCodes=CN,NL
-2023-04-24T17:28:45.306+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Fetched PricingResponse:PricingResponse={pricing={CN=31.20576420360027, NL=1.3841027779500803}}
-2023-04-24T17:28:45.307+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Fetched TrackResponse:TrackResponse={track={}}
-2023-04-24T17:28:45.307+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Fetched ShipmentResponse:ShipmentResponse={shipments={}}
-2023-04-24T17:28:45.313+02:00  INFO 80540 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
-2023-04-24T17:28:45.314+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
-2023-04-24T17:28:45.338+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: bdcdab3046a96e502332a0cd879ab51374fdd05fe5b7cddd7365368254c67f9a
-2023-04-24T17:28:45.528+02:00  WARN 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
-2023-04-24T17:28:49.194+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT3.879996S
-2023-04-24T17:28:49.195+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
-2023-04-24T17:28:49.197+02:00  INFO 80540 --- [ream--929817161] tc.docker/compose:1.29.2                 : STDERR: swestvsrtizo_fedex_1 is up-to-date
-2023-04-24T17:28:49.199+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
-2023-04-24T17:28:49.294+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Calling Pricing API with following countryCodes=CN,NL
-2023-04-24T17:28:49.320+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Fetched PricingResponse:PricingResponse={pricing={CN=5.5341022178173045, NL=93.76112021387016}}
-2023-04-24T17:28:49.321+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Calling Track API with following orderIds=109347263,123456891
-2023-04-24T17:28:49.352+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Fetched TrackResponse:TrackResponse={track={109347263=DELIVERED, 123456891=NEW}}
-2023-04-24T17:28:49.352+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Calling Shipment API with following orderIds=109347263,123456891
-2023-04-24T17:28:49.406+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Fetched ShipmentResponse:ShipmentResponse={shipments={109347263=[pallet, envelope, box], 123456891=[envelope]}}
-2023-04-24T17:28:49.424+02:00  INFO 80540 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
-2023-04-24T17:28:49.424+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
-2023-04-24T17:28:49.452+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: b87183325a1a8917b3e51d83f27f59d3ec876c5410265bfa07b04ff3e6d4480c
-2023-04-24T17:28:49.626+02:00  WARN 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
-2023-04-24T17:28:53.236+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT3.811613S
-2023-04-24T17:28:53.236+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
-2023-04-24T17:28:53.239+02:00  INFO 80540 --- [tream-739540989] tc.docker/compose:1.29.2                 : STDERR: swestvsrtizo_fedex_1 is up-to-date
-2023-04-24T17:28:53.240+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
-2023-04-24T17:28:53.342+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Fetched PricingResponse:PricingResponse={pricing={}}
-2023-04-24T17:28:53.343+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Fetched TrackResponse:TrackResponse={track={}}
-2023-04-24T17:28:53.343+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Calling Shipment API with following orderIds=109347263,123456891
-2023-04-24T17:28:53.356+02:00  INFO 80540 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Fetched ShipmentResponse:ShipmentResponse={shipments={109347263=[pallet, box, box], 123456891=[box]}}
-2023-04-24T17:28:53.482+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
-2023-04-24T17:28:53.508+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: 6db272c703743da92b659c561e566d9921ac09ad0dda9950a9703f6b6e105258
-2023-04-24T17:28:53.667+02:00  WARN 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
-2023-04-24T17:28:58.056+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT4.574321S
-2023-04-24T17:28:58.057+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: down -v
-2023-04-24T17:28:58.059+02:00  INFO 80540 --- [ream-1608193373] tc.docker/compose:1.29.2                 : STDERR: Stopping swestvsrtizo_fedex_1 ... 
-2023-04-24T17:28:58.059+02:00  INFO 80540 --- [ream-1608193373] tc.docker/compose:1.29.2                 : STDERR: Stopping swestvsrtizo_fedex_1 ... done
-2023-04-24T17:28:58.059+02:00  INFO 80540 --- [ream-1608193373] tc.docker/compose:1.29.2                 : STDERR: Removing swestvsrtizo_fedex_1 ... 
-2023-04-24T17:28:58.059+02:00  INFO 80540 --- [ream-1608193373] tc.docker/compose:1.29.2                 : STDERR: Removing swestvsrtizo_fedex_1 ... done
-2023-04-24T17:28:58.059+02:00  INFO 80540 --- [ream-1608193373] tc.docker/compose:1.29.2                 : STDERR: Removing network swestvsrtizo_default
-2023-04-24T17:28:58.060+02:00  INFO 80540 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
+2023-04-24T19:10:52.292+02:00  INFO 83376 --- [    Test worker] o.t.utility.RyukResourceReaper           : Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2023-04-24T19:10:52.292+02:00  INFO 83376 --- [    Test worker] org.testcontainers.DockerClientFactory   : Checking the system...
+2023-04-24T19:10:52.293+02:00  INFO 83376 --- [    Test worker] org.testcontainers.DockerClientFactory   : ✔︎ Docker server version should be at least 1.6.0
+2023-04-24T19:10:52.301+02:00  INFO 83376 --- [    Test worker] tc.testcontainers/ryuk:0.4.0             : Creating container for image: testcontainers/ryuk:0.4.0
+2023-04-24T19:10:52.490+02:00  INFO 83376 --- [    Test worker] tc.testcontainers/ryuk:0.4.0             : Container testcontainers/ryuk:0.4.0 is starting: 12b1ec891c4ab4b041eba8379279f1c499f244fef12068bbf7edfa1b00291bfb
+2023-04-24T19:10:52.714+02:00  INFO 83376 --- [    Test worker] tc.testcontainers/ryuk:0.4.0             : Container testcontainers/ryuk:0.4.0 started in PT0.420817S
+2023-04-24T19:10:52.718+02:00  INFO 83376 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
+2023-04-24T19:10:52.725+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Pulling docker image: docker/compose:1.29.2. Please be patient; this may take some time but only needs to be done once.
+2023-04-24T19:10:54.146+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Starting to pull image
+2023-04-24T19:10:54.153+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2023-04-24T19:10:54.688+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  3 pending,  1 downloaded,  0 extracted, (505 bytes/? MB)
+2023-04-24T19:10:54.900+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  2 pending,  2 downloaded,  0 extracted, (1 MB/? MB)
+2023-04-24T19:10:54.986+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  2 pending,  2 downloaded,  1 extracted, (5 MB/? MB)
+2023-04-24T19:10:55.031+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  2 pending,  2 downloaded,  2 extracted, (5 MB/? MB)
+2023-04-24T19:10:55.181+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  1 pending,  3 downloaded,  2 extracted, (16 MB/? MB)
+2023-04-24T19:10:55.466+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  1 pending,  3 downloaded,  3 extracted, (21 MB/? MB)
+2023-04-24T19:10:55.482+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  0 pending,  4 downloaded,  3 extracted, (27 MB/27 MB)
+2023-04-24T19:10:55.553+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pulling image layers:  0 pending,  4 downloaded,  4 extracted, (27 MB/27 MB)
+2023-04-24T19:10:55.559+02:00  INFO 83376 --- [ream--102233613] tc.docker/compose:1.29.2                 : Pull complete. 4 layers, pulled in 1s (downloaded 27 MB at 27 MB/s)
+2023-04-24T19:10:55.563+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
+2023-04-24T19:10:55.565+02:00  INFO 83376 --- [    Test worker] tc.alpine:3.16                           : Pulling docker image: alpine:3.16. Please be patient; this may take some time but only needs to be done once.
+2023-04-24T19:10:56.876+02:00  INFO 83376 --- [tream--75096759] tc.alpine:3.16                           : Starting to pull image
+2023-04-24T19:10:56.879+02:00  INFO 83376 --- [tream--75096759] tc.alpine:3.16                           : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2023-04-24T19:10:57.507+02:00  INFO 83376 --- [tream--75096759] tc.alpine:3.16                           : Pulling image layers:  0 pending,  1 downloaded,  0 extracted, (2 MB/2 MB)
+2023-04-24T19:10:57.590+02:00  INFO 83376 --- [tream--75096759] tc.alpine:3.16                           : Pulling image layers:  0 pending,  1 downloaded,  1 extracted, (2 MB/2 MB)
+2023-04-24T19:10:57.979+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: b18db5355524f0abe1a1ab3ab1a22b337815e03640a839cb3034a75442fddead
+2023-04-24T19:10:58.170+02:00  WARN 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
+2023-04-24T19:11:02.399+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT6.836614S
+2023-04-24T19:11:02.400+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
+2023-04-24T19:11:02.402+02:00  INFO 83376 --- [eam--2069958991] tc.docker/compose:1.29.2                 : STDERR: Creating network "wpzbewo8hx8m_default" with the default driver
+2023-04-24T19:11:02.403+02:00  INFO 83376 --- [eam--2069958991] tc.docker/compose:1.29.2                 : STDERR: Creating wpzbewo8hx8m_fedex_1 ... 
+2023-04-24T19:11:02.403+02:00  INFO 83376 --- [eam--2069958991] tc.docker/compose:1.29.2                 : STDERR: Creating wpzbewo8hx8m_fedex_1 ... done
+2023-04-24T19:11:02.404+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
+2023-04-24T19:11:02.410+02:00  INFO 83376 --- [    Test worker] tc.alpine/socat:1.7.4.3-r0               : Pulling docker image: alpine/socat:1.7.4.3-r0. Please be patient; this may take some time but only needs to be done once.
+2023-04-24T19:11:03.940+02:00  INFO 83376 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Starting to pull image
+2023-04-24T19:11:03.941+02:00  INFO 83376 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2023-04-24T19:11:04.935+02:00  INFO 83376 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  1 pending,  1 downloaded,  0 extracted, (591 KB/? MB)
+2023-04-24T19:11:04.976+02:00  INFO 83376 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  0 pending,  2 downloaded,  0 extracted, (3 MB/3 MB)
+2023-04-24T19:11:05.068+02:00  INFO 83376 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  0 pending,  2 downloaded,  1 extracted, (3 MB/3 MB)
+2023-04-24T19:11:05.118+02:00  INFO 83376 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pulling image layers:  0 pending,  2 downloaded,  2 extracted, (3 MB/3 MB)
+2023-04-24T19:11:05.124+02:00  INFO 83376 --- [eam--1155755250] tc.alpine/socat:1.7.4.3-r0               : Pull complete. 2 layers, pulled in 1s (downloaded 3 MB at 3 MB/s)
+2023-04-24T19:11:05.127+02:00  INFO 83376 --- [    Test worker] tc.alpine/socat:1.7.4.3-r0               : Creating container for image: alpine/socat:1.7.4.3-r0
+2023-04-24T19:11:05.164+02:00  INFO 83376 --- [    Test worker] tc.alpine/socat:1.7.4.3-r0               : Container alpine/socat:1.7.4.3-r0 is starting: c2412370af5bc5fae6bb2ccb01788a4a0d38808ccc2cce339c70fea0bb5cb48d
+2023-04-24T19:11:05.469+02:00  INFO 83376 --- [    Test worker] tc.alpine/socat:1.7.4.3-r0               : Container alpine/socat:1.7.4.3-r0 started in PT3.061502S
+2023-04-24T19:11:15.797+02:00 ERROR 83376 --- [    Test worker] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2023-04-24T19:11:15.882+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Calling Track API with following orderIds=109347263,123456891
+2023-04-24T19:11:16.652+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Fetched TrackResponse:TrackResponse={track={109347263=IN_TRANSIT, 123456891=COLLECTED}}
+2023-04-24T19:11:16.705+02:00  INFO 83376 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
+2023-04-24T19:11:16.705+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
+2023-04-24T19:11:16.733+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: daa2a467a433954e97368136cc58a9283c1cbf039c37fa2ff005e5d0d60f4cb0
+2023-04-24T19:11:16.912+02:00  WARN 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
+2023-04-24T19:11:20.694+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT3.988303S
+2023-04-24T19:11:20.694+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
+2023-04-24T19:11:20.696+02:00  INFO 83376 --- [ream-1066938129] tc.docker/compose:1.29.2                 : STDERR: wpzbewo8hx8m_fedex_1 is up-to-date
+2023-04-24T19:11:20.698+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
+2023-04-24T19:11:20.819+02:00  INFO 83376 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
+2023-04-24T19:11:20.819+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
+2023-04-24T19:11:20.844+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: 3d16917199b0973d64e73550918dd35a920fc9c854efe28d0e98a2b8fd45b321
+2023-04-24T19:11:21.025+02:00  WARN 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
+2023-04-24T19:11:24.796+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT3.977019S
+2023-04-24T19:11:24.797+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
+2023-04-24T19:11:24.799+02:00  INFO 83376 --- [eam--1792901511] tc.docker/compose:1.29.2                 : STDERR: wpzbewo8hx8m_fedex_1 is up-to-date
+2023-04-24T19:11:24.801+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
+2023-04-24T19:11:24.901+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Calling Pricing API with following countryCodes=CN,NL
+2023-04-24T19:11:24.988+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Fetched PricingResponse:PricingResponse={pricing={CN=65.18421112042128, NL=75.20619187299215}}
+2023-04-24T19:11:24.995+02:00  INFO 83376 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
+2023-04-24T19:11:24.996+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
+2023-04-24T19:11:25.020+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: 86e42b15bc299b88fda9d39c24da6b4efb0ba93fe8542a35bc94264cd43732ca
+2023-04-24T19:11:25.187+02:00  WARN 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
+2023-04-24T19:11:28.880+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT3.884136S
+2023-04-24T19:11:28.882+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
+2023-04-24T19:11:28.885+02:00  INFO 83376 --- [tream-826672654] tc.docker/compose:1.29.2                 : STDERR: wpzbewo8hx8m_fedex_1 is up-to-date
+2023-04-24T19:11:28.885+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
+2023-04-24T19:11:28.984+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Calling Pricing API with following countryCodes=CN,NL
+2023-04-24T19:11:28.985+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Calling Shipment API with following orderIds=109347263,123456891
+2023-04-24T19:11:28.986+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Calling Track API with following orderIds=109347263,123456891
+2023-04-24T19:11:29.022+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.PricingClient      : Fetched PricingResponse:PricingResponse={pricing={CN=96.90809966622051, NL=5.220246200797741}}
+2023-04-24T19:11:29.029+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.TrackClient        : Fetched TrackResponse:TrackResponse={track={109347263=COLLECTING, 123456891=DELIVERING}}
+2023-04-24T19:11:29.069+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Fetched ShipmentResponse:ShipmentResponse={shipments={109347263=[pallet, pallet, box], 123456891=[pallet]}}
+2023-04-24T19:11:29.075+02:00  INFO 83376 --- [    Test worker] o.t.containers.DockerComposeContainer    : Preemptively checking local images for 'xyzassessment/backend-services:latest', referenced via a compose file or transitive Dockerfile. If not available, it will be pulled.
+2023-04-24T19:11:29.076+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
+2023-04-24T19:11:29.101+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: b25ebc07bacb02abfdcd8e769cec1765e2e95692dc98dbfc195454f47020cf52
+2023-04-24T19:11:29.276+02:00  WARN 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
+2023-04-24T19:11:33.182+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT4.106475S
+2023-04-24T19:11:33.183+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: up -d
+2023-04-24T19:11:33.185+02:00  INFO 83376 --- [tream-521723431] tc.docker/compose:1.29.2                 : STDERR: wpzbewo8hx8m_fedex_1 is up-to-date
+2023-04-24T19:11:33.186+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
+2023-04-24T19:11:33.285+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Calling Shipment API with following orderIds=109347263,123456891
+2023-04-24T19:11:33.297+02:00  INFO 83376 --- [ctor-http-nio-4] c.f.a.service.gateway.ShipmentClient     : Fetched ShipmentResponse:ShipmentResponse={shipments={109347263=[envelope, box, pallet], 123456891=[envelope]}}
+2023-04-24T19:11:33.407+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Creating container for image: docker/compose:1.29.2
+2023-04-24T19:11:33.430+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 is starting: e73f89556b9c8337bcb3039626f1b28987ee65feb1ef7c7e08e1cc0c4c1ff001
+2023-04-24T19:11:33.608+02:00  WARN 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : The architecture 'amd64' for image 'docker/compose:1.29.2' (ID sha256:32d8a4638cd83922fdd94cadf4f1850b595d29757488c73adf05f4b99ebd1318) does not match the Docker server architecture 'arm64'. This will cause the container to execute much more slowly due to emulation and may lead to timeout failures.
+2023-04-24T19:11:38.259+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Container docker/compose:1.29.2 started in PT4.851684S
+2023-04-24T19:11:38.259+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose container is running for command: down -v
+2023-04-24T19:11:38.261+02:00  INFO 83376 --- [ream-1969051773] tc.docker/compose:1.29.2                 : STDERR: Stopping wpzbewo8hx8m_fedex_1 ... 
+2023-04-24T19:11:38.261+02:00  INFO 83376 --- [ream-1969051773] tc.docker/compose:1.29.2                 : STDERR: Stopping wpzbewo8hx8m_fedex_1 ... done
+2023-04-24T19:11:38.261+02:00  INFO 83376 --- [ream-1969051773] tc.docker/compose:1.29.2                 : STDERR: Removing wpzbewo8hx8m_fedex_1 ... 
+2023-04-24T19:11:38.261+02:00  INFO 83376 --- [ream-1969051773] tc.docker/compose:1.29.2                 : STDERR: Removing wpzbewo8hx8m_fedex_1 ... done
+2023-04-24T19:11:38.261+02:00  INFO 83376 --- [ream-1969051773] tc.docker/compose:1.29.2                 : STDERR: Removing network wpzbewo8hx8m_default
+2023-04-24T19:11:38.263+02:00  INFO 83376 --- [    Test worker] tc.docker/compose:1.29.2                 : Docker Compose has finished running
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
