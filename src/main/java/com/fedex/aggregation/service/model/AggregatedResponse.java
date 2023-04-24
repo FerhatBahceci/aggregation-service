@@ -35,4 +35,16 @@ public class AggregatedResponse {
     public String toString() {
         return "AggregatedResponse={pricing=" + pricing + ", track=" + track + ", shipments=" + shipments + "}";
     }
+
+    public void setPricing(Map<String, Double> pricing) {
+        this.pricing = pricing;
+    }
+
+    public void setTrack(Map<Long, Track.Status> track) {
+        this.track = track;
+    }
+
+    public void setShipments(Map<Long, List<String>> shipments) {
+        this.shipments = shipments;
+    }
 }
