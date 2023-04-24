@@ -69,7 +69,7 @@ public class Handler {
 
     private Set<String> validateCountryCodes(Set<String> countryCodes) {
         countryCodes.forEach(countryCode -> {
-            if (nonNull(countryCodes) && !validCountryCodes.contains(countryCode)) {
+            if (!validCountryCodes.contains(countryCode)) {
                 logger.info("IllegalArgument, Invalid ISOCountryCode: {}" + countryCode);
             }
         });

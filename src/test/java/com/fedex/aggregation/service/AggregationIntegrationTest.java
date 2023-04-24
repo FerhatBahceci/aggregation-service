@@ -122,7 +122,7 @@ public class AggregationIntegrationTest {
                 .get()
                 .uri(uri)
                 .retrieve()
-                .bodyToMono(clazz)
-                .block();
+                .bodyToFlux(clazz)
+                .blockFirst();
     }
 }
