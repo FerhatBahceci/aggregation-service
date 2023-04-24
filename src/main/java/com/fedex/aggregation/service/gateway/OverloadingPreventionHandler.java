@@ -34,10 +34,10 @@ public abstract class OverloadingPreventionHandler {
         List<String> tmpExecutables = new ArrayList<>();
 
         if (queryParamsQueue.size() >= cap) {
-            while (queryParamsQueue.size() >= cap && executables.size() <= cap) {                       // 5 x q(q1,q2,q3,q4,q5) = 25 queryParams in q=
+            while (queryParamsQueue.size() >= cap && executables.size() <= cap) {                    // 5 x q(q1,q2,q3,q4,q5) = 25 queryParams in q=
                 IntStream.range(0, cap).forEach(i -> tmpExecutables.add(queryParamsQueue.poll()));   //Adds all comma separated request values, one by one to tmpExecutables until cap is reached
-                List<String> singleRequest = tmpExecutables.subList(0, cap);                        //  1 single request contains q=1,2,3,4,5
-                String request = getConcatenatedStringFromList(singleRequest);                      // Concatenates into a single request with 5 deli-metered values
+                List<String> singleRequest = tmpExecutables.subList(0, cap);                         //  1 single request contains q=1,2,3,4,5
+                String request = getConcatenatedStringFromList(singleRequest);                       // Concatenates into a single request with 5 deli-metered values
                 executables.add(request);
                 tmpExecutables.removeAll(singleRequest);
             }

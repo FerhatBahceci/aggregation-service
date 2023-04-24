@@ -59,7 +59,7 @@ For further reference, please consider the following sections:
 src/test/java/com/fedex/aggregation/service/AggregationIntegrationTest.java 
 ```
 
-2. Mock test throwing error from all provider APIs are established with Spring Cloud Contract. Please have a look
+2. Mock test throwing error from provider API are established with Spring Cloud Contract. Please have a look
 ``` build/generated-test-source ``` for the actual test. <br/>
 
 Springboot InjectMock setup class throwing exceptions are defined in:
