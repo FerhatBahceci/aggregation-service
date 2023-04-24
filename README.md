@@ -59,8 +59,10 @@ For further reference, please consider the following sections:
 src/test/java/com/fedex/aggregation/service/AggregationIntegrationTest.java 
 ```
 
-2. Mock test throwing error from provider API are established with Spring Cloud Contract. Please have a look
-``` build/generated-test-source ``` for the actual test. <br/>
+2. Mock test throwing error from provider API are established with Spring Cloud Contract. Please have a look at the generated ContractVerifierTest``` build/generated-test-source ``` for the actual test. <br/>
+
+The actual Contract specification can be found:
+``` src/contractTest/resources/contracts/AggregationError.groovy ``` . <br/>
 
 Springboot InjectMock setup class throwing exceptions are defined in:
 ``` src/test/java/com/fedex/aggregation/service/AggregationBase.java ```
