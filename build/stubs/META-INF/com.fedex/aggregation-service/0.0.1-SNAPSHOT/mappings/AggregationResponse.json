@@ -1,0 +1,24 @@
+{
+  "id" : "0fdf43f3-19e2-4916-a7e9-0cdab84e185c",
+  "request" : {
+    "urlPath" : "/aggregation",
+    "method" : "GET",
+    "queryParameters" : {
+      "pricing" : {
+        "equalTo" : "CN,NL"
+      },
+      "track" : {
+        "equalTo" : "123456789,123456799"
+      },
+      "shipments" : {
+        "equalTo" : "123456789,123456799"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "[{\"pricing\":{\"CN\":20.503467806384,\"NL\":14.242090605778},\"track\":null,\"shipments\":{\"123456891\":null,\"109347263\":[\"box\",\"box\",\"pallet\"]}}]",
+    "transformers" : [ "response-template", "spring-cloud-contract" ]
+  },
+  "uuid" : "0fdf43f3-19e2-4916-a7e9-0cdab84e185c"
+}
