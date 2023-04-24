@@ -11,6 +11,7 @@ import java.util.function.Function;
 
 import static com.fedex.aggregation.service.util.StringUtil.getConcatenatedStringFromList;
 import static com.fedex.aggregation.service.util.StringUtil.getStringSetFromString;
+import static java.util.Objects.nonNull;
 
 
 public abstract class OverloadingPreventionHandler {
@@ -50,7 +51,9 @@ public abstract class OverloadingPreventionHandler {
                 tmpExecutables.add(queryParamsQueue.poll());
             }
             String lessThanCapInOneGo = getConcatenatedStringFromList(tmpExecutables);
-            executables.add(lessThanCapInOneGo);
+            if (nonNull(lessThanCapInOneGo)) {
+                executables.add(lessThanCapInOneGo);
+            }
         }
         return executables;
     }

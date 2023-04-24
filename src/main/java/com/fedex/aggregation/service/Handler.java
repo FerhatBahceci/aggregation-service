@@ -69,7 +69,7 @@ public class Handler {
 
     private Set<String> validateCountryCodes(Set<String> countryCodes) {
         countryCodes.forEach(countryCode -> {
-            if (!validCountryCodes.contains(countryCode)) {
+            if (nonNull(countryCodes) && !validCountryCodes.contains(countryCode)) {
                 logger.info("IllegalArgument, Invalid ISOCountryCode: {}" + countryCode);
             }
         });
@@ -78,7 +78,7 @@ public class Handler {
 
     private List<String> validateOrderIds(List<Long> orderIds) {
         orderIds.forEach(orderId -> {
-            if (String.valueOf(orderId).length() != 9) {
+            if (nonNull(orderId) && String.valueOf(orderId).length() != 9) {
                 logger.info("IllegalArgument, Invalid OrderId: {}", orderId);
             }
         });

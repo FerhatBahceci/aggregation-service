@@ -34,4 +34,26 @@ public class StringUtilUntilTest {
         Set<String> setOfStrings = getStringSetFromString(testString);
         Assertions.assertThat(setOfStrings).containsOnly(orderId1, orderId2);
     }
+
+    @Test
+    void testNull() {
+        String concatenatedStrings = getConcatenatedStringFromList(null);
+        Set<String> setOfStrings = getStringSetFromString(null);
+        List<Long> listOfLongs = getLongListFromString(null);
+
+        Assertions.assertThat(concatenatedStrings).isNull();
+        Assertions.assertThat(setOfStrings).isEmpty();
+        Assertions.assertThat(listOfLongs).isEmpty();
+    }
+
+    @Test
+    void testEmpty() {
+        String concatenatedStrings = getConcatenatedStringFromList(List.of());
+        Set<String> setOfStrings = getStringSetFromString("");
+        List<Long> listOfLongs = getLongListFromString("");
+
+        Assertions.assertThat(concatenatedStrings).isNull();
+        Assertions.assertThat(setOfStrings).isEmpty();
+        Assertions.assertThat(listOfLongs).isEmpty();
+    }
 }
