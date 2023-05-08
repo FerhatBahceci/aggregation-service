@@ -34,12 +34,12 @@ public class ContractVerifierTest extends AggregationBase {
 
 		// and:
 			DocumentContext parsedJson = JsonPath.parse(response.getBody().asString());
-			assertThatJson(parsedJson).array().field("['pricing']").field("['CN']").isEqualTo(20.503467806384);
-			assertThatJson(parsedJson).array().field("['pricing']").field("['NL']").isEqualTo(14.242090605778);
-			assertThatJson(parsedJson).array().contains("['track']").isNull();
-			assertThatJson(parsedJson).array().field("['shipments']").field("['123456891']").isNull();
-			assertThatJson(parsedJson).array().field("['shipments']").array("['109347263']").arrayField().isEqualTo("box").value();
-			assertThatJson(parsedJson).array().field("['shipments']").array("['109347263']").arrayField().isEqualTo("pallet").value();
+			assertThatJson(parsedJson).field("['pricing']").field("['CN']").isEqualTo(20.503467806384);
+			assertThatJson(parsedJson).field("['pricing']").field("['NL']").isEqualTo(14.242090605778);
+			assertThatJson(parsedJson).field("['track']").isNull();
+			assertThatJson(parsedJson).field("['shipments']").field("['123456891']").isNull();
+			assertThatJson(parsedJson).field("['shipments']").array("['109347263']").arrayField().isEqualTo("box").value();
+			assertThatJson(parsedJson).field("['shipments']").array("['109347263']").arrayField().isEqualTo("pallet").value();
 	}
 
 }
